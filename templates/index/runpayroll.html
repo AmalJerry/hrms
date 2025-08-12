@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html>
+{% load static %}
+
+<head>
+    <!-- Basic Page Info -->
+    <meta charset="utf-8">
+    <title>HRMS</title>
+    <link rel="icon" href="/static/logo/apple-touch-icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <!-- Site favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="static/index/vendors/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="static/index/vendors/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="static/index/vendors/images/favicon-16x16.png">
+
+    <!-- Mobile Specific Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="/static/index/vendors/styles/core.css">
+    <link rel="stylesheet" type="text/css" href="/static/index/vendors/styles/icon-font.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/index/vendors/styles/style.css">
+
+    <!-- AG Grid CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/ag-grid-community@32.1.0/styles/ag-grid.css">
+    <link rel="stylesheet" href="https://unpkg.com/ag-grid-community@32.1.0/styles/ag-theme-quartz.css">
+
+    <!-- Jquery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <!-- AG Grid JS -->
+    <script src="https://unpkg.com/ag-grid-community@32.1.0/dist/ag-grid-community.min.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'UA-119386393-1');
+    </script>
+
+    <style>
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: nowrap;
+            padding: 10px 20px;
+            width: 100%;
+        }
+
+        .menu-icon {
+            flex-shrink: 0;
+            padding-left: 300px;
+        }
+
+        .search-toggle-icon {
+            flex-shrink: 0;
+            cursor: pointer;
+            padding-top: 5px;
+            padding-left: 20px;
+        }
+
+        .header-search {
+            flex: 1;
+            max-width: 300px;
+            position: relative;
+            
+        }
+
+        .header-search .form-group {
+            margin-bottom: 0;
+            position: relative;
+            padding-top: 25px;
+        }
+
+        .header-search .search-input {
+            height: 38px;
+            padding-right: 80px;
+            
+        }
+
+        .header-search .dropdown {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .header-search .dropdown-toggle {
+            padding: 6px 12px;
+        }
+
+        .month-picker-container {
+            flex: 0 0 auto;
+            max-width: 500px;
+            position: relative;
+            padding-top: 20px;
+            padding-left: 20px;
+            
+            
+        }
+
+
+        .month-picker {
+            height: 38px;
+            padding: 6px 30px 6px 12px;
+            width: 100%;
+            
+        }
+
+        .month-picker-container .clear-icon {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+
+        .export-button {
+            flex: 0 0 auto;
+            padding-left: 100px;
+        }
+
+        .export-button .btn-primary {
+            padding: 8px 16px;
+            border-color: white;
+            height: 38px;
+            display: flex;
+            align-items: center;
+        }
+
+        .user-info-dropdown {
+            flex: 0 0 auto;
+        }
+
+        .user-info-dropdown .dropdown-toggle {
+            display: flex;
+            align-items: center;
+            padding: 0;
+        }
+
+        .user-icon img {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .user-name {
+            margin-left: 8px;
+            font-size: 14px;
+        }
+
+        .circular-button {
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .larger-icon {
+            font-size: 24px;
+        }
+
+        .container-with-scrollbar {
+            max-height: 100px;
+            overflow-y: auto;
+            border: 2px solid rgb(213, 209, 209);
+        }
+
+        .rule-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 50px;
+            background-color: white;
+            font-size: 15px;
+            position: relative;
+            margin-top: 5px;
+            margin-left: 5px;
+            margin-bottom: 5px;
+            border: 2px solid rgb(213, 209, 209);
+        }
+
+        .emp_count {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 50px;
+            background-color: lightgray;
+            font-size: 15px;
+            position: relative;
+            margin-top: 5px;
+            margin-left: 5px;
+            margin-bottom: 5px;
+            border: 2px solid rgb(213, 209, 209);
+        }
+
+        .optional-field {
+            display: inline-block;
+            padding: 5px 10px;
+        }
+
+        .check-box {
+            transform: scale(1.5);
+            margin-right: 5px;
+        }
+
+        /* AG Grid specific styles */
+        .ag-theme-quartz {
+            --ag-header-background-color: #fff;
+            --ag-odd-row-background-color: #eaeef2;
+            --ag-row-background-color: #fff;
+            --ag-border-color: #e0e0e0;
+            height: calc(100vh - 200px);
+            width: 100%;
+        }
+
+        .ag-header {
+            background-color: #3f51b5;
+            color: white;
+            font-weight: 600;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .ag-header-cell {
+            background-color: #3f51b5;
+            color: white;
+            border-right: 1px solid #5c6bc0;
+            padding: 10px 8px;
+        }
+
+        .ag-header-cell:hover {
+            background-color: #ffffff;
+            color: rgb(13, 13, 13);
+            border-right: 1px solid #5c6bc0;
+            padding: 10px 8px;
+        }
+
+        .ag-theme-quartz .ag-cell {
+            border: 1px solid #e0e0e0 !important;
+        }
+
+        .ag-theme-quartz .ag-pinned-left-cols-container .ag-cell:first-child {
+            position: sticky;
+            left: 0;
+            z-index: 2;
+            background: inherit;
+        }
+
+        .ag-theme-quartz .ag-pinned-left-cols-container .ag-header-cell:first-child {
+            position: sticky;
+            left: 0;
+            z-index: 3;
+            background-color: #fff;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .header {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .header-search {
+                flex: 1 1 100%;
+                max-width: none;
+            }
+
+            .month-picker-container {
+                flex: 1 1 100%;
+                max-width: none;
+            }
+
+            .export-button {
+                flex: 0 0 auto;
+            }
+
+            .user-info-dropdown {
+                flex: 0 0 auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <div class="menu-icon dw dw-menu"></div>
+        <div class="search-toggle-icon dw dw-search2" data-toggle="header_search"></div>
+        <div class="header-search">
+            <form action="{% url 'search_runpayroll' %}" method="GET">
+                <div class="form-group">
+                   
+                    <input type="text" data-live-search="true" class="form-control search-input" name="search" {% if query is None %} placeholder="Search" {% else %} value="{{query}}" {% endif %}>
+                    <span onclick="var input = this.previousElementSibling; input.value = ''; input.focus();" class="clear-icon" id="search-cross">
+                        <a href="{% url 'runpayroll' %}" style="color: grey;">x</a>
+                    </span>
+                    <div class="dropdown">
+                        <button class="btn-primary dropdown-toggle no-arrow" role="button">
+                            <i class="fa fa-search" style="color: white;"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="month-picker-container">
+            <form action="{% url 'runpayroll' %}" method="get" id="search-form">
+                <div class="form-group">
+                    <input id="monthPicker" name="monthselect" class="form-control month-picker" type="text" />
+                    <span onclick="var input = this.previousElementSibling; input.value = ''; input.focus();" class="clear-icon" id="month-cross">
+                        <a href="{% url 'runpayroll' %}" style="color: grey;">x</a>
+                    </span>
+                </div>
+            </form>
+        </div>
+        <div class="export-button">
+            <button class="btn btn-primary" data-toggle="modal" href="#export_Modal">Export</button>
+        </div>
+        <div class="user-info-dropdown">
+            <div class="dropdown">
+                <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                    <span class="user-icon">
+                        {% if k.image %}
+                        <img src="{{ k.image.url }}" alt="User Image">
+                        {% else %}
+                        <img src="/static/logo/userlogo.png" id="photo" alt="Default User Image">
+                        {% endif %}
+                    </span>
+                    <span class="user-name">{{request.user.username}}</span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                    <a class="dropdown-item" href="{% url 'createpersonalinfo' %}"><i class="dw dw-user1"></i> Profile</a>
+                    <a class="dropdown-item" href="{% url 'department' %}" data-toggle="right-sidebar"><i class="dw dw-settings2"></i> Settings</a>
+                    <a class="dropdown-item" href="{% url 'help_page' %}"><i class="dw dw-help"></i> Help</a>
+                    <a class="dropdown-item" href="{% url 'logout' %}"><i class="dw dw-logout"></i> Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="left-side-bar">
+        <div class="brand-logo mt-3">
+            <a href="{% url 'dashboard' %}">
+                {% if request.user.company_type %}
+                {% if request.user.company_type.inverse_logo %}
+                <img src="{{ request.user.company_type.inverse_logo.url }}" style="width: 100%; height: 100%;">
+                {% else %}
+                <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+                {% endif %}
+                {% else %}
+                <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+                {% endif %}
+            </a>
+            <div class="close-sidebar" data-toggle="left-sidebar-close">
+                <i class="ion-close-round"></i>
+            </div>
+        </div>
+        <div class="menu-block customscroll">
+            <div class="sidebar-menu">
+                <ul id="accordion-menu">
+                    <br>
+                    <li class="btn-primary active" style="background-color:black">
+                        <a href="{% url 'dashboard' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-house-1"></span><span class="mtext"><b>Dashboard</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'companyprofile' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-building"></span><span class="mtext"><b>Company Profile</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'personalinfonav' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-user1"></span><span class="mtext"><b>My Profile</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'leave' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-calendar-1"></span><span class="mtext"><b>Leave</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'directory' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-list"></span><span class="mtext"><b>Directory</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'dailylog' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon bi bi-check2-square"></span><span class="mtext"><b>Attendance</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'calender' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-calendar"></span><span class="mtext"><b>Holiday Calendar</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'runpayroll_overview' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-money-2"></span><span class="mtext"><b>Payroll</b></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="mobile-menu-overlay"></div>
+
+    <div class="main-container">
+        <div class="card-box">
+            <ul class="nav nav-tabs customtab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'runpayroll_overview' %}">Run Payroll</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'create_salary' %}">Setup Payroll</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'payroll_dec' %}">Declaration</a>
+                </li>
+            </ul>
+            <div class="min-height-100px">
+                <ul class="nav nav-tabs customtab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'runpayroll_overview' %}">Overview</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'runpayroll' %}">Attendance & Leave</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'salary_revision' %}">Salary Revision</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'pay_register' %}">Pay Register</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'payout' %}">Payout</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'adhoc' %}">Variable & Adhoc</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'salary_onhold' %}">Salary on Hold</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="min-height-100px">
+                <ul class="nav nav-tabs customtab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'runpayroll' %}">Attendance</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'payroll_leave' %}">Leave</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="pd-20 card-box">
+                {% csrf_token %}
+                <div class="modal fade bs-example-modal-lg" id="export" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Export</h4>
+                                <button type="button" class="close" data-dismiss="modal">×</button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <span class="emp_count" id="selected-employees-count">0 Employee Selected</span>
+                                            <hr>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label>Selected Fields</label>
+                                        <div class="form-group container-with-scrollbar">
+                                            <ul id="selected-fields-list">
+                                                <li class="rule-badge">Employee ID</li>
+                                                <li class="rule-badge">Employee Name</li>
+                                                <li class="rule-badge">Department</li>
+                                                <li class="rule-badge">Designation</li>
+                                                <li class="rule-badge">Primary Manager</li>
+                                                <li class="rule-badge">Secondary Managers</li>
+                                                <li class="rule-badge">Job Title</li>
+                                                <li class="rule-badge">DOJ</li>
+                                                <li class="rule-badge">Work Location</li>
+                                                <li class="rule-badge">Employee Status</li>
+                                                <li class="rule-badge">Employee Type</li>
+                                                <li class="rule-badge">Probation Period</li>
+                                                <li class="rule-badge">Contact Number</li>
+                                                <li class="rule-badge">Official Email ID</li>
+                                                <li class="rule-badge">Personal Email ID</li>
+                                                <li class="rule-badge">Employee Emergency Contacts</li>
+                                                <li class="rule-badge">CTC</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-9">
+                                        <label>Select Optional Fields</label>
+                                    </div>
+                                    <div class="col-md-3 dtcheckbox">
+                                        <input type="checkbox" style="transform: scale(1.5);" name="selectall" id="selectallcheckbox">
+                                        <span class="dt-checkbox-label"></span>
+                                        <label>Select All</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group container-with-scrollbar">
+                                            <ul id="optional-fields-list">
+                                                <li class="optional-field">
+                                                    <input type="checkbox" class="check-box" name="subdep" id="subdep"><span class="dt-checkbox-label"></span> Sub Department
+                                                </li>
+                                                <li class="optional-field">
+                                                    <input type="checkbox" class="check-box" name="marital-status" id="marital-status"><span class="dt-checkbox-label"></span> Marital Status
+                                                </li>
+                                                <li class="optional-field">
+                                                    <input type="checkbox" class="check-box" name="bloodgp" id="bloodgp"><span class="dt-checkbox-label"></span> Blood Group
+                                                </li>
+                                                <li class="optional-field">
+                                                    <input type="checkbox" class="check-box" name="address1" id="address1"><span class="dt-checkbox-label"></span> Current Address
+                                                </li>
+                                                <li class="optional-field">
+                                                    <input type="checkbox" class="check-box" name="address2" id="address2"><span class="dt-checkbox-label"></span> Permanent Address
+                                                </li>
+                                                <li class="optional-field">
+                                                    <input type="checkbox" class="check-box" name="eduinfo" id="eduinfo"><span class="dt-checkbox-label"></span> Educational Info
+                                                </li>
+                                                <li class="optional-field">
+                                                    <input type="checkbox" class="check-box" name="familymembers" id="familymembers"><span class="dt-checkbox-label"></span> Family Members
+                                                </li>
+                                                <li class="optional-field">
+                                                    <input type="checkbox" class="check-box" name="idproof" id="idproof"><span class="dt-checkbox-label"></span> ID Proof
+                                                </li>
+                                                <li class="optional-field">
+                                                    <input type="checkbox" class="check-box" name="otherdocument" id="otherdocument"><span class="dt-checkbox-label"></span> Other Documents
+                                                </li>
+                                                <li class="optional-field">
+                                                    <input type="checkbox" class="check-box" name="lastworkingday" id="lastworkingday"><span class="dt-checkbox-label"></span> Last Working Day
+                                                </li>
+                                                <li class="optional-field">
+                                                    <input type="checkbox" class="check-box" name="workhistory" id="workhistory"><span class="dt-checkbox-label"></span> Work History
+                                                </li>
+                                                <li class="optional-field">
+                                                    <input type="checkbox" class="check-box" name="leaverules" id="leaverules"><span class="dt-checkbox-label"></span> Leave Rules
+                                                </li>
+                                                <li class="optional-field">
+                                                    <input type="checkbox" class="check-box" name="attendancerules" id="attendancerules"><span class="dt-checkbox-label"></span> Attendance Rules
+                                                </li>
+                                                <li class="optional-field">
+                                                    <input type="checkbox" class="check-box" name="workweekrules" id="workweekrules"><span class="dt-checkbox-label"></span> Workweek Rules
+                                                </li>
+                                                <li class="optional-field">
+                                                    <input type="checkbox" class="check-box" name="gender" id="gender"><span class="dt-checkbox-label"></span> Gender
+                                                </li>
+                                                <li class="optional-field">
+                                                    <input type="checkbox" class="check-box" name="dob" id="dob"><span class="dt-checkbox-label"></span> DOB
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                <input type="submit" class="btn btn-primary" value="Download" id="submit-button" data-toggle="modal" href="#downloadexcel" disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AG Grid Container -->
+                <div id="dataGrid" class="ag-theme-quartz"></div>
+
+                {% if not users %}
+                <br>
+                <p style="text-align: center;">No Records Found</p>
+                {% endif %}
+                <br>
+
+                <div class="modal fade bs-example-modal-md" id="downloadexcel" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-md">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <div>
+                                    <i class="icon-copy fa fa-check-circle" aria-hidden="true" style="color: green; font-size: 90px; margin-left: 45%;"></i>
+                                </div>
+                                <div style="margin-left: 15%;">
+                                    <b>Your request for export have been queued</b>
+                                </div>
+                                <div style="margin-left: 10%; justify-content: center;">
+                                    As soon as the export process is complete, you will receive an email with the download link.
+                                    You may also view the status of your request by clicking File Manager
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                <a href="{% url 'filemanagernav' %}" type="button" class="btn btn-primary btn-sm">File Manager</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% for user in users %}
+    <div class="modal fade bs-example-modal-sm" id="edittime{{ user.id }}">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Edit Details</h4>
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                </div>
+                <div class="modal-body">
+                    <form action="{% url 'runpayroll' %}?monthselect={{ month_str }}+{{ selected_year }}" method="post" enctype="multipart/form-data" class="form-container" role="form" id="editworkweek" onsubmit="return validateForm()">
+                        {% csrf_token %}
+                        <input type="text" hidden name="lopid" id="lopid" value="{{ user.id }}">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <h6 class="shift-timings">{{ user.username }}</h6>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>LOP Days<span style="color:red">*</span></label>
+                                    <input type="text" pattern="\d+(\.\d+)?" value="{% for lopcount in lop_count %}{% if lopcount.user_id.id == user.id %}{{ lopcount.lop_count }}{% endif %}{% endfor %}" id="lopcount" name="lopcount" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>WFO Count<span style="color:red">*</span></label>
+                                    <input type="text" pattern="\d+(\.\d+)?" value="{% for WFOcount in WFO_count %}{% if WFOcount.user_id.id == user.id %}{{ WFOcount.wfocount }}{% endif %}{% endfor %}" id="WFOcount" name="WFOcount" class="form-control" required>
+                                    <input type="hidden" name="wfoid" id="wfoid" value="{% for WFOcount in WFO_count %}{% if WFOcount.user_id.id == user.id %}{{ WFOcount.user_id.id }}{% endif %}{% endfor %}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary" onsubmit="hideadd">Submit</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    <form action="{% url 'export_runpayroll' %}" method="post" onsubmit="return validateForm()">
+        {% csrf_token %}
+        <div class="modal fade bs-example-modal-sm" id="export_Modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Export</h4>
+                        <button type="button" class="close" data-dismiss="modal">×</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label>Select Month and Year</label>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <input class="form-control month-picker" type="text" name="month" id="month" placeholder="Select Month and Year" style="background-color: white;" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" id="exportButton" class="btn btn-primary" data-toggle="modal" href="">Export</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <!-- JS -->
+    <script src="/static/index/vendors/scripts/core.js"></script>
+    <script src="/static/index/vendors/scripts/script.min.js"></script>
+    <script src="/static/index/vendors/scripts/process.js"></script>
+    <script src="/static/index/vendors/scripts/layout-settings.js"></script>
+    <script src="/static/index/src/plugins/apexcharts/apexcharts.min.js"></script>
+    <script src="/static/index/src/plugins/datatables/js/jquery.dataTables.min.js"></script>
+    <script src="/static/index/src/plugins/datatables/js/dataTables.bootstrap4.min.js"></script>
+    <script src="/static/index/src/plugins/datatables/js/dataTables.responsive.min.js"></script>
+    <script src="/static/index/src/plugins/datatables/js/responsive.bootstrap4.min.js"></script>
+    <script src="/static/index/vendors/scripts/dashboard.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
+    <!-- AG Grid Initialization Script -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const gridOptions = {
+                columnDefs: [
+                    {
+                        headerName: "Emp Id",
+                        field: "empid",
+                        pinned: "left",
+                        width: 150,
+                        cellRenderer: params => {
+                            const userId = params.data.id;
+                            const baseUrl = "/view_personalinfo";
+                            const href = `${baseUrl}${userId}`;
+                            return `<a href="${href}" style="color: inherit;">${params.value}</a>`;
+                        }
+                    },
+                    {
+                        headerName: "Name",
+                        field: "username",
+                        pinned: "left",
+                        width: 150,
+                        cellRenderer: params => {
+                            const userId = params.data.id;
+                            const baseUrl = "/view_personalinfo";
+                            const href = `${baseUrl}${userId}`;
+                            return `<a href="${href}" style="color: inherit;">${params.value}</a>`;
+                        }
+                    },
+                    {
+                        headerName: "Absent Dates",
+                        field: "absent_dates",
+                        width: 250,
+                        cellRenderer: params => {
+                            return params.value || "";
+                        }
+                    },
+                    {
+                        headerName: "Absent Days",
+                        field: "absent_count",
+                        width: 120
+                    },
+                    {
+                        headerName: "Outstanding Anomaly Days",
+                        field: "anomaly_count",
+                        width: 180
+                    },
+                    {
+                        headerName: "LOP Days",
+                        field: "lop_count",
+                        width: 100
+                    },
+                    {
+                        headerName: "WFO",
+                        field: "wfo_count",
+                        width: 100
+                    },
+                    {
+                        headerName: "Action",
+                        field: "action",
+                        width: 100,
+                        cellRenderer: params => {
+                            return `<button class="btn btn-link" data-toggle="modal" data-target="#edittime${params.data.id}">
+                                        <i class="fa fa-edit" style="font-size: 24px; color: grey;"></i>
+                                    </button>`;
+                        }
+                    }
+                ],
+                rowData: [
+                    {% for user in users %}
+                    {
+                        id: {{ user.id }},
+                        empid: "{{ user.empid }}",
+                        username: "{{ user.username }}",
+                        absent_dates: `{% for data in formatted_data %}{% if data.empid == user.empid %}{% for date in data.absent_dates %}{% if forloop.first %}{{ date|date:"M j" }}{% else %}{% if date|date:"d" != data.absent_dates|first|date:"d" %}, {{ date|date:"j" }}{% endif %}{% endif %}{% endfor %}{% endif %}{% endfor %}`,
+                        absent_count: `{% for data in formatted_data %}{% if data.empid == user.empid %}{{ data.absent_count }}{% endif %}{% endfor %}`,
+                        anomaly_count: `{% for data in formatted_data %}{% if data.empid == user.empid %}{{ data.anomaly_count }}{% endif %}{% endfor %}`,
+                        lop_count: `{% for lopcount in lop_count %}{% if lopcount.user_id.id == user.id %}{{ lopcount.lop_count }}{% endif %}{% endfor %}`,
+                        wfo_count: `{% for WFOcount in WFO_count %}{% if WFOcount.user_id.id == user.id %}{{ WFOcount.wfocount|linebreaksbr|safe }}{% endif %}{% endfor %}`
+                    }{% if not forloop.last %},{% endif %}
+                    {% endfor %}
+                ],
+                pagination: true,
+                paginationPageSize: 50,
+                domLayout: 'normal',
+                defaultColDef: {
+                    sortable: false,
+                    filter: true,
+                    resizable: true
+                },
+                animateRows: true,
+                suppressRowClickSelection: true,
+                suppressHorizontalScroll: false,
+                suppressVerticalScroll: false
+            };
+
+            const gridDiv = document.querySelector('#dataGrid');
+            new agGrid.Grid(gridDiv, gridOptions);
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            function getUrlParameter(name) {
+                name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+                var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+                var results = regex.exec(location.search);
+                return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+            }
+
+            var urlSelectedDate = getUrlParameter('monthselect');
+            var selectedDate = urlSelectedDate || new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+            var localStorageSelectedDate = localStorage.getItem("monthselect");
+
+            $("#monthPicker").datepicker({
+                dateFormat: 'MM yyyy',
+                defaultDate: urlSelectedDate,
+                onSelect: function (date) {
+                    selectedDate = date;
+                    localStorage.setItem("monthselect", selectedDate);
+                    $("#search-form").submit();
+                }
+            });
+
+            if (localStorageSelectedDate) {
+                $("#monthPicker").val(localStorageSelectedDate);
+                if ($("#monthPicker").val() !== selectedDate) {
+                    $("#search-form").submit();
+                }
+            } else {
+                $("#monthPicker").val(selectedDate);
+            }
+        });
+    </script>
+</body>
+</html>

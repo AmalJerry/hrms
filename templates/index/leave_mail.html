@@ -1,0 +1,16 @@
+
+<h1>Dear {{request.user.username}}, </h1><br>
+{% for i in data %}
+<p><b>Leave type:</b>{{i.leavetyp}}</p>
+<p><b>Leave Dates:</b>{{i.strtDate}},{{i.endDate}}</p>
+<p><b>No of days:</b>{{i.Days}}</p>
+<p><b>Reason for Leave:</b>{{i.Reason}}</p>
+{% endfor %}
+<p>regards</p>
+{% for i in k %}
+<p><b>{{i.registeredcompanyname}}</b></p>
+{% endfor %}
+
+
+
+

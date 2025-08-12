@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Assign Branch to Employees</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+  <style>
+    body {
+      padding: 20px;
+      background-color: #f8f9fa;
+    }
+    h2 {
+      margin-bottom: 20px;
+    }
+    .assign-btn {
+      margin-left: 10px;
+    }
+    .table thead {
+      background-color: #0d6efd;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <a href="{% url 'dashboard' %}" class="btn btn-outline-primary shadow-sm fw-semibold">← Dashboard</a>
+    <h3>Branch Assigned Employees</h3>
+    <a href="{% url 'assign-branch-location' %}" class="btn btn-primary">+ Assign</a>
+  </div>
+
+  <table class="table table-bordered table-striped">
+    <thead class="table-dark">
+      <tr>
+        <th>Emp ID</th>
+        <th>Name</th>
+        <th>Phone</th>
+        <th>Status</th>
+        <th>Branch</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for profile in profiles %}
+        <tr>
+<style>
+  td a {
+    color: black;
+    text-decoration: none;
+  }
+  td a:hover {
+    color: rgb(2, 178, 187);
+  }
+</style>
+            <td>
+            <a href="{% url 'view_personalinfo' profile.user.id %}">{{ profile.user.empid }}</a>
+            </td>
+          <td><a href="{% url 'view_personalinfo' profile.user.id %}">{{ profile.user.get_full_name|default:profile.user.username }}</a></td>
+            <td>
+            {% if profile.user.phone %}
+              <a href="tel:{{ profile.user.phone|default_if_none:'' }}">{{ profile.user.phone }}</a>
+            {% else %}
+              <span class="text-muted">N/A</span>
+            {% endif %}
+            </td>
+          <td>{{ profile.user.status }}</td>
+          <td>
+            {% if profile.branch_location %}
+              {{ profile.branch_location.name }}
+            {% else %}
+              <span class="text-muted">Not Assigned</span>
+            {% endif %}
+          </td>
+          <td>
+            <button class="btn btn-danger btn-sm delete-btn" data-user-id="{{ profile.user.id }}">
+              🗑️ Delete
+            </button>
+          </td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="6" class="text-center text-muted">No profiles found.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<div id="deleteModal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <h3>Confirm Deletion</h3>
+    <p>Are you sure you want to delete this employee's profile?</p>
+    <div style="display: flex; gap: 10px; justify-content: center;">
+      <button id="confirmDelete" class="btn btn-danger">Yes, Delete</button>
+      <button id="cancelDelete" class="btn btn-secondary">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<style>
+.modal {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5); display: flex;
+  justify-content: center; align-items: center; z-index: 1000;
+}
+.modal-content {
+  background: white; padding: 2rem; border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3); width: 300px;
+}
+</style>
+
+<script>
+  let selectedUserId = null;
+
+  document.querySelectorAll('.delete-btn').forEach(btn => {
+    btn.addEventListener('click', function () {
+      selectedUserId = this.dataset.userId;
+      document.getElementById('deleteModal').style.display = 'flex';
+    });
+  });
+
+  document.getElementById('cancelDelete').addEventListener('click', () => {
+    document.getElementById('deleteModal').style.display = 'none';
+  });
+
+  document.getElementById('confirmDelete').addEventListener('click', () => {
+    fetch("{% url 'delete_employee_profile' %}", {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': '{{ csrf_token }}',
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: `user_id=${selectedUserId}`
+    })
+    .then(response => response.json())
+    .then(data => {
+      alert(data.message);
+      if (data.success) location.reload();
+    })
+    .catch(error => {
+      alert("❌ Deletion failed.");
+      console.error(error);
+    })
+    .finally(() => {
+      document.getElementById('deleteModal').style.display = 'none';
+    });
+  });
+</script>
+
+</body>
+</html>

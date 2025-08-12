@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>email</title>
+</head>
+<body>
+    <form action="{% url 'approve_resignation' %}" method="post" >
+        <p style="font-family:Nunito;font-size:25px;color: #c20006">
+          <b>Dear {{ data.user.username }} ,</b>
+        </p>
+        <p style="font-family:Nunito;font-size:20px;">
+            Your resignation has been <b>Approved</b> by Nimisha Mohan.<br><br>
+            <!-- <p><strong><span style='color: black;'>Reason for Rejection:</span></strong> {{ data.rejection_reason }} -->
+            <br>
+            Regards, <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;HRMS
+        </p>
+    </form>
+</body>
+</html>

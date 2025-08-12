@@ -1,0 +1,31 @@
+<!-- for toast -->
+<link
+  rel="stylesheet"
+  href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"
+/>
+<link
+  rel="stylesheet"
+  href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"
+/>
+<script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+<link href="static/login/css/theme.css" rel="stylesheet" media="all" />
+<!-- end toast -->
+
+<!-- Icon Style -->
+<link
+  href="https://fonts.googleapis.com/icon?family=Material+Icons"
+  rel="stylesheet"
+/>
+<!-- End Icon -->
+
+<!-- for toast -->
+<script>
+  {% if messages %}
+  {% for message in messages %}
+  alertify.set('notifier', 'position', 'bottom-right');
+  alertify.set('notifier','delay', 5);
+  alertify.error('{{message}}');
+  {% endfor %}
+  {% endif %}
+</script>
+<!-- end toast -->

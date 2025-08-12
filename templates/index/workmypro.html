@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Basic Page Info -->
+    <meta charset="utf-8">
+    <title>HRMS</title>
+    <link rel="icon" href="/static/logo/apple-touch-icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <!-- Site favicon -->
+    <!-- <link rel="apple-touch-icon" sizes="180x180" href="static/index/vendors/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="static/index/vendors/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="static/index/vendors/images/favicon-16x16.png"> -->
+
+    <!-- Mobile Specific Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/core.css">
+    <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/icon-font.min.css">
+    <link rel="stylesheet" type="text/css" href="static/index/src/plugins/jquery-steps/jquery.steps.css">
+    <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/style.css">
+
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-119386393-1');
+    </script>
+    <script>
+       
+        flatpickr("[data-behavior='flatpickr']", {
+            allowInput: true,
+            dateFormat: "Y-m-d"
+        });
+    </script>
+    
+</head>
+<body>
+
+    <div class="header">
+        <div class="header-left">
+            <div class="menu-icon dw dw-menu"></div>
+            
+        </div>
+        <div class="header-right">
+            <div class="dashboard-setting user-notification">
+                <div class="dropdown">
+                    <a class="dropdown-toggle no-arrow" href="javascript:;" data-toggle="right-sidebar">
+                       
+                    </a>
+                </div>
+            </div>
+            <!-- <div class="user-notification">
+                <div class="dropdown">
+                    <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
+                        <i class="icon-copy dw dw-notification"></i>
+                        <span class="badge notification-active"></span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <div class="notification-list mx-h-350 customscroll">
+                            <ul>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/img.jpg" alt="">
+                                        <h3>John Doe</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/photo1.jpg" alt="">
+                                        <h3>Lea R. Frith</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/photo2.jpg" alt="">
+                                        <h3>Erik L. Richards</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/photo3.jpg" alt="">
+                                        <h3>John Doe</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/photo4.jpg" alt="">
+                                        <h3>Renee I. Hansen</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/img.jpg" alt="">
+                                        <h3>Vicki M. Coleman</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+            <div class="user-info-dropdown">
+                <div class="dropdown">
+                    <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                        <span class="user-icon">
+                             
+                        {% if k.image %}
+                            <img src="{{ k.image.url }}" alt="" style="width: 100%; height:100% ">
+                        {% else %}
+                            <img src="/static/logo/userlogo.png" id="photo" style="width: 100%; height:100% ">
+                        {% endif %}
+                        </span>
+                        <span class="user-name">{{request.user.username}}</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                        <a class="dropdown-item" href="{% url 'createpersonalinfo' %}"><i class="dw dw-user1"></i> Profile</a>
+                        <a class="dropdown-item" href="{% url 'department' %}"  data-toggle="right-sidebar"><i class="dw dw-settings2"></i> Settings</a>
+                        <a class="dropdown-item" href="{% url 'help_page' %}"><i class="dw dw-help"></i> Help</a>
+                        <a class="dropdown-item" href="{% url 'logout' %}"><i class="dw dw-logout"></i> Logout</a>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <div class="right-sidebar">
+        <div class="sidebar-title">
+            <h3 class="weight-600 font-16 text-blue">
+                 Settings
+                <!--<span class="btn-block font-weight-400 font-12">User Interface Settings</span>-->
+            </h3>
+            <div class="close-sidebar" data-toggle="right-sidebar-close">
+                <i class="icon-copy ion-close-round"></i>
+            </div>
+        </div>
+
+        <div class="right-sidebar-body customscroll">
+            <div class="right-sidebar-body-content">
+                				<h4 class="weight-600 font-18 pb-10" ><a href="{% url 'department' %}">Department</a> </h4>
+				<h4 class="weight-600 font-18 pb-10" ><a href="{% url 'subdepartment' %}">Sub Department</a> </h4>
+				<h4 class="weight-600 font-18 pb-10"><a href="{% url 'designation' %}">Designation</a></h4>
+				<h4 class="weight-600 font-18 pb-10"><a href="{% url 'job' %}">Job Title</a></h4>
+				<h4 class="weight-600 font-18 pb-10"><a href="{% url 'wrk' %}">Work location</a></h4>
+            </div>
+        </div>
+    </div>
+    
+    <div class="left-side-bar">
+        <div class="brand-logo mt-3">
+
+        
+
+        <!-- <a href="{% url 'dashboard' %}">
+            {% if c.inverse_logo %}
+            <img src="{{ c.inverse_logo.url }}" style="width: 100% ;height: 100%;">
+
+            {% else %}
+            <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+            {% endif %}
+        </a> -->
+        <a href="{% url 'dashboard' %}">
+            {% if request.user.company_type %}
+            {% if request.user.company_type.inverse_logo %}
+            <img src="{{ request.user.company_type.inverse_logo.url }}" style="width: 100%; height: 100%;">
+            {% else %}
+            <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+            {% endif %}
+            {% else %}
+            <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+            {% endif %}
+        </a>
+        <div class="close-sidebar" data-toggle="left-sidebar-close">
+           <i class="ion-close-round"></i>
+        </div>
+     </div>
+      
+       <div class="menu-block customscroll">
+            <div class="sidebar-menu">
+                <ul id="accordion-menu">
+					
+					<br>
+					<li class="btn-primary active" style="background-color:black">
+						<a href="{% url 'dashboard' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-house-1"></span><span class="mtext"><b>Dashboard</b></span>
+						</a>
+					</li>
+					
+					<li>
+						<a href="{% url 'companyprofile' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-building"></span><span class="mtext"><b>Company Profile</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'personalinfonav' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-user1"></span><span class="mtext"><b>My Profile</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'leave' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-calendar-1"></span><span class="mtext"><b>Leave</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'directory' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-list"></span><span class="mtext"><b>Directory</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'dailylog' %}" class="dropdown-toggle no-arrow">
+							<span class="micon bi bi-check2-square"></span><span class="mtext"><b>Attendance</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'calender' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-calendar"></span><span class="mtext"><b>Holiday Calendar</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'runpayroll_overview' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-money-2"></span><span class="mtext"><b>Payroll</b></span>
+						</a>
+					</li>
+
+
+				</ul>
+            </div>
+        </div>
+    </div>
+   
+    </div>
+    <div class="main-container">
+    <!-- <div class=""> -->
+        <div class="card-box height-100-px overflow-hidden">
+            <!-- <div class="profile-tab ">
+                <div class="tab height"> -->
+                           <!-- <br><h4 class="text-blue h4" style="padding-left:30px">COMPANY PROFILE</h4> -->
+                           <ul class="nav nav-tabs customtab" role="tablist" >
+                               <li class="nav-item" >
+                                   <a class="nav-link " href="{% url 'personalinfonav' %}">Personal</a>
+                               </li>
+                               <li class="nav-item">
+                                   <a class="nav-link active" href="{% url 'worknav' %}">Work</a>
+                               </li>
+                               <li class="nav-item">
+                                   <a class="nav-link " href="{% url 'view_team' request.user.id %}">Team</a>
+                               </li>
+                               <li class="nav-item">
+                                   <a class="nav-link" href="{% url 'educationnav' %}">Education</a>
+                               </li>
+                               <li class="nav-item">
+                                   <a class="nav-link " href="{% url 'familynav' %}">Family</a>
+                               </li>
+                               <li class="nav-item">
+                                   <a class="nav-link" href="{% url 'documentsnav' %}">Document</a>
+                               </li>
+                               <li class="nav-item">
+                                   <a class="nav-link " href="{% url 'workweeknav' %}">Work Week</a>
+                               </li>
+                               <li class="nav-item">
+                                   <a class="nav-link" href="{% url 'pay_slip' %}">Payroll</a>
+                               </li>
+                               <li class="nav-item">
+                                <a class="nav-link" href="{% url 'e_exit' %}">E-Exit</a>
+                                </li>
+                               <li class="nav-item">
+                                   <a class="nav-link " href="{% url 'filemanagernav' %}">Filemanager</a>
+                               </li>
+                               <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'list_generated_certificates' %}">Experience Certificates</a>
+                                </li>
+                            <!-- </div> -->
+                           </ul>
+        
+                           <!-- <div class="main-container" style="padding-top: 0px; " >    -->
+                            
+                    <div class="min-height-200px">
+                        <!-- <div class="pd-20 card-box mb-30"> -->
+                            <!-- <div class="clearfix" style="padding-left: 20px;">
+                                <h4 class="text-blue h4">MY PROFILE</h4>
+                            </div>                               -->
+                            <!-- <h5 style="padding-left: 20px;">Work</h5> -->
+                            <!-- <section> -->
+                                <form id="Work" action="{% url 'creatework' userid=user.id %} " method="post" enctype="multipart/form-data" class="form-container" role="form"  >
+                                    {% csrf_token %}
+                                        <!-- <br>
+                                        <br> -->
+                                        <div class="pd-20 card-box mb-30" id="basicinfo" style="margin-bottom: 0;">
+                                            <h6>BASIC INFO</h6><hr>
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label >Employee ID <span style="color:red">&#42</span></label>
+                                                        <!-- value="{% if k.empid %}{{k.empid}}{% endif %}" -->
+                                                        <input readonly type="text" pattern="[0-9]" class="form-control" name="Empid" id="Empid" value="{{request.user.empid}}">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <style>
+                                                            .inputWithIcon input[type="text"] {  
+                                                            padding-left: 30px;  
+                                                            }  
+                                                            
+                                                            .inputWithIcon {  
+                                                            position: relative;  
+                                                            }  
+                                                            
+                                                            .inputWithIcon i {  
+                                                            position: absolute;  
+                                                            left: 10;  
+                                                            top: 6px;  
+                                                            padding: 9px 8px;  
+                                                            color: rgb(148, 145, 145);  
+                                                            transition: 0.3s;  
+                                                            
+                                                            }  
+                                                        </style>
+                                                        <label >Date of Joining <span style="color:red">&#42</span></label>
+                                                        <div class="inputWithIcon">
+                                                            <i class="icon-copy fa fa-calendar" aria-hidden="true"></i>
+                                                            
+                                                            <input class="form-control date-picker" readonly placeholder="Select Date" type="text" name="Joindate" id="Joindate" value="{% if request.user.datejoin %}{{request.user.datejoin}}{% endif %}" required>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label >Probation Period</span></label>
+                                                    
+                                                        <input type="text"class="form-control" name="Probationperiod" id="Probationperiod" value="{% if request.user.probperiod %}{{request.user.probperiod}}{% endif %}">
+                                                    
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label>Employee Type <span style="color:red">&#42 </label>
+                                                            <select class="custom-select form-control" name="Emptype" required>
+                                                                <option value="" disabled>Select Employee Type</option>
+                                                                <option value="Full Time" {% if user.emptype == 'Full Time' %}selected{% endif %}>Full Time</option>
+                                                                <option value="Part Time" {% if user.emptype == 'Part Time' %}selected{% endif %}>Part Time</option>
+                                                                <option value="Intern" {% if user.emptype == 'Intern' %}selected{% endif %}>Intern</option>
+                                                                <option value="Contract" {% if user.emptype == 'Contract' %}selected{% endif %}>Contract</option>
+                                                            </select>
+                                                        <!-- <label>Employee Type </label>
+                                                        <select class="custom-select form-control" name="Emptype" id="Emptype" >
+                                                            <option value="select employee type">{% if request.user.emptype %}{{request.user.emptype}}{% else %}Select Employee type{% endif %}</option>
+                                                            <option value="type1">type1</option>
+                                                            <option value="type2">type2</option>
+                                                            
+                                                        </select> -->
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label>Work Location <span style="color:red">&#42</span></label>
+            
+                                                        <select class="custom-select form-control" id="wrklcn" name="wrklcn" required>
+                                                            <option value="" disabled>Select Work Location</option>
+                                                                {% for j in wr %}
+                                                                    <option value="{{j.id}}" {% if j.id == user.wrklcn.id %} selected {% endif %}>{{j.location}}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                            
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label>Employee Status <span style="color:red">&#42</span></label>
+                                                        <select class="custom-select form-control" name="Empstatus" required>
+                                                            <option value="" disabled="true" >Select Status</option>
+                                                            <option value="Onboarding" {% if user.status == 'Onboarding' %}selected{% endif %}>Onboarding</option>
+                                                            <option value="Active" {% if user.status == 'Active' %}selected{% endif %}>Active</option>
+                                                            <option value="Inactive" {% if user.status == 'Inactive' %}selected{% endif %}>Inactive</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
+                                        <!-- </div> -->
+                                        <!-- <div class="pd-20 card-box mb-30"> -->
+                                            <h6>WORK INFO</h6><hr>
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label>Designation <span style="color:red">&#42</span></label>
+                                                        <select class="custom-select form-control" name="designation" id="designation" required>
+                                                            <!-- <option value="" disabled >Select designation</option> -->
+                                                            <option value="" disabled>Select Designation</option>   
+                                                            {% for j in dsn %}
+                                                                <option value="{{j.id}}" {% if j.id == user.designation.id  %} selected {% endif %}>{{j.name}}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label >Job Title <span style="color:red">&#42</span></label>
+                                                        <select class="custom-select form-control" name="jobtitle" id="jobtitle" required >
+                                                            <option value="" disabled>Select Job title</option>
+
+                                                            {% for j in jttl %}
+                                                            <option value="{{j.id}}" {% if j.id == user.jobtitle.id %} selected {% endif %} >{{j.name}}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label >Department <span style="color:red">&#42</span></label>
+                                                        <select class="custom-select form-control" name="department" id="department" required >
+                                                            <option value="" disabled>Select Department</option>
+                                                                {% for department in dpt %}
+                                                                <option value="{{ department.id }}" {% if department.id == user.department.id %}selected{% endif %}>{{ department.name }}</option>
+                                                                <!-- <option value="">{% if request.user.department %}{{request.user.department.name}}{% else %}Select department{% endif %}</option> -->
+                                                                <!-- <option value="{{i.id}}"{% if i.id == department %} selected {% endif %}> {{ i.name }}</option> -->
+                                                            {% endfor %}
+                                                        </select>
+             
+             
+                                                  </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label >Sub Department <span style="color:red">&#42</span></label>
+                                                        <select class="custom-select form-control" name="subdepartment" id="subdepartment" required >
+                                                        
+                                                            <option value="" disabled>Select Sub Department</option> 
+                            
+                                                            <!-- <option value="">{% if request.user.subdepartment %}{{request.user.subdepartment}}{% else %}Select subdepartment{% endif %}</option> -->
+                                                            {% for i in sd %}
+                                                            <option value="{{i.id}}" {% if i.id == user.subdepartment.id %} selected {% endif %} >{{ i.subname }}</option>
+                                                            
+                                                            {% endfor %}
+                                                            
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label>Work Experience <span style="color:red"></span></label>
+                                                        
+                                                        <input type="text" class="form-control" name="Workexp" id="Workexp" value="{% if request.user.wrkexp %}{{request.user.wrkexp}}{% endif %}">
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <!-- </div> -->
+                                            
+                                        <div class="row">
+                                            
+                                            <div class="col-md-12 float-right">
+                                                <!-- <a href="{% url 'personalinfonav' %}"><button type="button"  id="nxt1" class="btn btn-secondary  ">Previous</button></a> -->
+                                                <button type="submit" class="btn btn-primary float-right"  >Save</button>
+                                            <!-- <a href="{% url 'teamnav' %}"><button type="button" id="nxt2"   class="btn btn-secondary ">Next</button></a> -->
+                                            </div>
+                                        </div>
+                                        </div>
+                                </form>
+                                
+                                
+                                <!-- <br><br><br> -->
+                                    <!-- <div class="pd-20 card-box mb-30" > -->
+                                        <!-- <div class="row"> -->
+                                            <!-- <h6 style="padding-left: 15px;">WORK HISTORY</h6> -->
+                                            <!-- <i class="fa fa-plus-circle" data-toggle="modal" data-target="#Workhistory" style="font-size: 24px;color:grey;float: right;margin-top: -20px;cursor: pointer;"></i>
+                                            <div class="modal" id="Workhistory" >
+                                                <div class style="width:60%;margin-left:300px;margin-right:950px;margin-top:150px;">
+                                                    <div class="modal-content">
+                                                        <body>
+                                                            <table-align="right"></table-align>
+                                                        </body>
+
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title" >Work History</h4>
+                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                    
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form id="WorkHistory" action="" method="post" enctype="multipart/form-data" class="form-container" role="form">
+                                                                {% csrf_token %}
+                                                            
+                                                            
+                                                                <br>
+                                                                <div class="row"> 
+                                                                    <div class="card-box" style="margin-left:20px;margin-right: 20px;padding-left: 20px;padding-right: 20px;">
+                                                                        <div class="row">
+                                                                            
+                                                                            <div class="col-md-6">
+                                                                                <div class="form-group">
+                                                                                    <label>Department</label>
+                                                                                    <input class="form-control" type="text" name="Department1" id="Department1">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-6">
+                                                                                <div class="form-group">
+                                                                                    <label>Designation</label>
+                                                                                    <input class="form-control" type="text" name="Designation1" id="Designation1">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-6">
+                                                                                <div class="form-group">
+                                                                                    <label>From</label>
+                                                                                    <div class="inputWithIcon">
+                                                                                        <i class="icon-copy fa fa-calendar" aria-hidden="true"></i>
+                                                                                        <input class="form-control date-picker" placeholder="Select Date" type="text" name="From" id="From">
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-6">
+                                                                                <div class="form-group">
+                                                                                    <label>To</label>
+                                                                                    <div class="inputWithIcon">
+                                                                                        <i class="icon-copy fa fa-calendar" aria-hidden="true"></i>
+                                                                                        <input class="form-control date-picker" placeholder="Select Date" type="text" name="To" id="To">
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <input type="hidden" name="whId" id="whId">
+                                                                        </div>
+                                                                    </div>       
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="submit" class="btn btn-info" style="background-color: blue;" >Submit</button>
+                                                                    <button type="button" class="btn btn-danger" data-dismiss="modal" style="border-color: blue; background-color: white;color: blue;">Cancel</button>
+                                                                            
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                    
+                                            </div>
+                                        
+                                        
+                                            <hr><br>
+                                            <table class="table table-hover">
+                                                
+                                                    <thead>
+                                                        <tr style="background-color:rgb(233, 227, 227)">
+                                                            
+                                                            <th scope="col">Department</th>
+                                                            <th scope="col">Designation</th>
+                                                            <th scope="col">From</th>
+                                                            <th scope="col">To</th>
+                                                        </tr>
+                                                    </thead>
+                                                    {% for i in x %}
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>{% if i.dep1 %} {{i.dep1}} {% endif %}</td>
+                                                            <td>{% if i.design1 %} {{i.design1}} {% endif %}</td>
+                                                            <td>{% if i.from_date %} {{i.from_date}} {% endif %}</td>
+                                                            <td>{% if i.to_date %} {{i.to_date}} {% endif %}</td>
+                                                        </tr>
+                                                        
+                                                    </tbody>
+                                                    {% endfor %}
+                                                
+                                            </table>
+                                            <hr>
+                                        
+                                    </div> -->
+                                    
+                                <!-- </form> -->
+                                <!-- <div class="text float-right"> -->
+
+                                    <!-- <a href="{% url 'personalinfonav' %}"><button type="button"  id="nxt1" class="btn btn-outline-primary ">Previous</button></a>
+                                    <a href="{% url 'teamnav' %}"><button type="button" id="nxt2"   class="btn btn-primary ">Next</button></a> -->
+                                    
+                                <!-- </div> -->
+                                <!-- <script>
+                                    function enblnxt1() {
+                                        document.getElementById("nxt1").disabled=false;
+                                        document.getElementById("nxt2").disabled=false;
+
+                                        
+
+                                    }
+                                </script>    -->
+                                    </div>
+                                
+
+                                
+                            <!-- </section> -->
+            <!-- </div> -->
+                    </div>
+                <!-- </div> -->
+            
+            </div>
+        <!-- </div>
+    </div> -->
+    
+
+
+
+
+ <!-- js -->
+ <script src="static/index/vendors/scripts/core.js"></script>
+ <script src="static/index/vendors/scripts/script.min.js"></script>
+ <script src="static/index/vendors/scripts/process.js"></script>
+ <script src="static/index/vendors/scripts/layout-settings.js"></script>
+ <script src="static/index/src/plugins/jquery-steps/jquery.steps.js"></script>
+ <script src="static/index/vendors/scripts/steps-setting.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="static/utility.js"> </script>
+ <script>
+    // JavaScript to update subdepartment options based on the selected department
+    const departmentSelect = document.getElementById("department");
+    const subdepartmentSelect = document.getElementById("subdepartment");
+    
+    departmentSelect.addEventListener("change", function () {
+        const selectedDepartmentId = departmentSelect.value;
+        
+        // Clear the subdepartment dropdown
+        subdepartmentSelect.innerHTML = '<option value="" disabled>Select Subdepartment</option>';
+        
+        // Populate the subdepartment dropdown with corresponding subdepartments
+        {% for subdepartment in sd %}
+            if ("{{ subdepartment.depname.id }}" === selectedDepartmentId) {
+                const option = document.createElement("option");
+                option.value = "{{ subdepartment.id }}";
+                option.text = "{{ subdepartment.subname }}";
+                subdepartmentSelect.appendChild(option);
+            }
+        {% endfor %}
+    });
+</script>
+
+<script>
+    setTimeout(function(){
+      if ($('#msg1').length > 0) {
+        $('#msg1').remove();
+      }
+    }, 7000),
+    setTimeout(function(){
+      if ($('#msg2').length > 0) {
+        $('#msg2').remove();
+      }
+    }, 7000),
+    setTimeout(function(){
+      if ($('#msg3').length > 0) {
+        $('#msg3').remove();
+      }
+    }, 7000)
+
+</script>
+</body>
+</html>

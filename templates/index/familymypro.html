@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Basic Page Info -->
+    <meta charset="utf-8">
+    <title>HRMS</title>
+    <link rel="icon" href="/static/logo/apple-touch-icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <!-- Mobile Specific Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/core.css">
+    <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/icon-font.min.css">
+    <link rel="stylesheet" type="text/css" href="static/index/src/plugins/jquery-steps/jquery.steps.css">
+    <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/style.css">
+    <!-- AG Grid CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ag-grid-community@32.2.0/styles/ag-grid.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ag-grid-community@32.2.0/styles/ag-theme-alpine.css">
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-119386393-1');
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <!-- AG Grid JS -->
+    <script src="https://cdn.jsdelivr.net/npm/ag-grid-community@32.2.0/dist/ag-grid-community.min.js"></script>
+    <script>
+        flatpickr("[data-behavior='flatpickr']", {
+            allowInput: true,
+            dateFormat: "Y-m-d"
+        });
+    </script>
+    <style>
+        /* Ensure AG Grid fits within the container */
+        .ag-theme-alpine {
+            height: 300px;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        /* Style for the dependent checkbox */
+        .ag-dependent-checkbox {
+            transform: scale(1.5);
+        }
+        /* Icon styles for actions */
+        .ag-action-icon {
+            cursor: pointer;
+            font-size: 24px;
+            margin-right: 10px;
+        }
+        .ag-header {
+            background-color: #3f51b5;
+            /* Change to match your theme */
+            color: white;
+            font-weight: 600;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .ag-header-cell {
+            background-color: #3f51b5;
+            color: white;
+            border-right: 1px solid #5c6bc0;
+            padding: 10px 8px;
+        }
+
+        .ag-header-cell:hover {
+            background-color: #ffffff;
+            color: rgb(13, 13, 13);
+            border-right: 1px solid #5c6bc0;
+            padding: 10px 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-left">
+            <div class="menu-icon dw dw-menu"></div>
+            {% if is_view_family %}
+                <h6 class="text-primary" style="padding-left: 20px;">Impersonate Employee: {{data.username}}</h6>
+            {% endif %}
+        </div>
+        <div class="header-right">
+            <div class="dashboard-setting user-notification">
+                <div class="dropdown">
+                    <a class="dropdown-toggle no-arrow" href="javascript:;" data-toggle="right-sidebar"></a>
+                </div>
+            </div>
+            <div class="user-info-dropdown">
+                <div class="dropdown">
+                    <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                        <span class="user-icon">
+                            {% if k.image %}
+                                <img src="{{ k.image.url }}" alt="" style="width: 100%; height:100% ">
+                            {% else %}
+                                <img src="/static/logo/userlogo.png" id="photo" style="width: 100%; height:100% ">
+                            {% endif %}
+                        </span>
+                        <span class="user-name">{{request.user.username}}</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                        <a class="dropdown-item" href="{% url 'createpersonalinfo' %}"><i class="dw dw-user1"></i> Profile</a>
+                        <a class="dropdown-item" href="{% url 'department' %}" data-toggle="right-sidebar"><i class="dw dw-settings2"></i> Settings</a>
+                        <a class="dropdown-item" href="{% url 'help_page' %}"><i class="dw dw-help"></i> Help</a>
+                        <a class="dropdown-item" href="{% url 'logout' %}"><i class="dw dw-logout"></i> Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="left-side-bar">
+        <div class="brand-logo mt-3">
+            <a href="{% url 'dashboard' %}">
+                {% if request.user.company_type %}
+                    {% if request.user.company_type.inverse_logo %}
+                        <img src="{{ request.user.company_type.inverse_logo.url }}" style="width: 100%; height: 100%;">
+                    {% else %}
+                        <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+                    {% endif %}
+                {% else %}
+                    <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+                {% endif %}
+            </a>
+            <div class="close-sidebar" data-toggle="left-sidebar-close">
+                <i class="ion-close-round"></i>
+            </div>
+        </div>
+        <div class="menu-block customscroll">
+            <div class="sidebar-menu">
+                <ul id="accordion-menu">
+                    <br>
+                    <li class="btn-primary active" style="background-color:black">
+                        <a href="{% url 'dashboard' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-house-1"></span><span class="mtext"><b>Dashboard</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'companyprofile' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-building"></span><span class="mtext"><b>Company Profile</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'personalinfonav' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-user1"></span><span class="mtext"><b>My Profile</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'leave' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-calendar-1"></span><span class="mtext"><b>Leave</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'directory' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-list"></span><span class="mtext"><b>Directory</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'dailylog' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon bi bi-check2-square"></span><span class="mtext"><b>Attendance</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'calender' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-calendar"></span><span class="mtext"><b>Holiday Calendar</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'runpayroll_overview' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-money-2"></span><span class="mtext"><b>Payroll</b></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="main-container">
+        <div class="card-box height-100-p overflow-hidden">
+            <ul class="nav nav-tabs customtab" role="tablist">
+                {% if is_view_family %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'view_personalinfo' id=data.id %}">Personal</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'view_work' id=data.id %}">Work</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'view_team' id=data.id %}">Team</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'view_education' id=data.id %}">Education</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'view_family' id=data.id %}">Family</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'view_document' id=data.id %}">Document</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'view_workweek' id=data.id %}">Work Week</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'view_daily_log' id=data.id %}">Attendance</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'view_payroll' id=data.id %}">Payroll</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'list_generated_certificates' %}">Experience Certificates</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'personalinfonav' %}">Personal</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'worknav' %}">Work</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'view_team' request.user.id %}">Team</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'educationnav' %}">Education</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'familynav' %}">Family</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'documentsnav' %}">Document</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'workweeknav' %}">Work Week</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'pay_slip' %}">Payroll</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'e_exit' %}">E-Exit</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'filemanagernav' %}">Filemanager</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'list_generated_certificates' %}">Experience Certificates</a>
+                    </li>
+                {% endif %}
+            </ul>
+            <div class="min-height-200px">
+                <div class="pd-20 card-box mb-30" style="margin-bottom: 0;">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <h6 class="float-left">Family Members</h6>
+                        </div>
+                        <div class="col-md-2">
+                            <i class="fa fa-plus-circle float-right" data-toggle="modal" data-target="#familyMembers" style="font-size: 24px;color:grey;cursor: pointer;"></i>
+                        </div>
+                    </div>
+                    <div class="modal fade bs-example-modal-md" id="familyMembers">
+                        <div class="modal-dialog modal-md modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Family Members</h4>
+                                    <button type="button" class="close" data-dismiss="modal">×</button>
+                                </div>
+                                <div class="modal-body">
+                                    {% if is_view_family %}
+                                        <form action="{% url 'admin_add_empfamily' uid_5=data.id %}" method="post" enctype="multipart/form-data" class="form-container" role="form" id="workhistory" onsubmit="return validateForm()">
+                                    {% else %}
+                                        <form action="{% url 'tablefammembers' uid_5=request.user.id %}" method="post" enctype="multipart/form-data" class="form-container" role="form" id="workhistory" onsubmit="return validateForm()">
+                                    {% endif %}
+                                        {% csrf_token %}
+                                        <div class="col-md">
+                                            <div class="form-group">
+                                                <label>Name <span style="color:red">*</span></label>
+                                                <input class="form-control" type="text" id="nameid" name="Name3" required pattern="[a-zA-Z\s]+">
+                                                <span id="nameError" style="color: red;font-size: small;"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md">
+                                            <div class="form-group">
+                                                <label>Relationship <span style="color:red">*</span></label>
+                                                <select class="select form-control" name="Relationship" required>
+                                                    <option value="" disabled selected>Select Relationship</option>
+                                                    <option>Father</option>
+                                                    <option>Mother</option>
+                                                    <option>Husband</option>
+                                                    <option>Wife</option>
+                                                    <option>Son</option>
+                                                    <option>Daughter</option>
+                                                    <option>Brother</option>
+                                                    <option>Sister</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md">
+                                            <div class="form-group">
+                                                <style>
+                                                    .inputWithIcon input[type="text"] {
+                                                        padding-left: 30px;
+                                                    }
+                                                    .inputWithIcon {
+                                                        position: relative;
+                                                    }
+                                                    .inputWithIcon i {
+                                                        position: absolute;
+                                                        left: 10px;
+                                                        top: 6px;
+                                                        padding: 9px 8px;
+                                                        color: rgb(148, 145, 145);
+                                                        transition: 0.3s;
+                                                    }
+                                                </style>
+                                                <label>Date of Birth <span style="color:red">*</span></label>
+                                                <div class="inputWithIcon">
+                                                    <i class="icon-copy fa fa-calendar" aria-hidden="true"></i>
+                                                    <input class="form-control date-picker" readonly placeholder="Select Date" type="text" id="dobid" name="DOB1" required>
+                                                    <span id="dobError" style="color: red;font-size: small;"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md">
+                                            <div class="form-group">
+                                                <input type="checkbox" style="transform: scale(1.5);margin-right: 11px;" id="gid" name="Dependant">
+                                                <label>Dependant</label>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div id="familyGrid" class="ag-theme-alpine"></div>
+                    {% if not l %}
+                        <p style="text-align: center;">No Data Found</p>
+                    {% endif %}
+                    <hr>
+                    <div class="modal bs-example-modal-md" id="form1">
+                        <div class="modal-dialog modal-md modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Family Members</h4>
+                                    <button type="button" class="close" onclick="closeform()" data-dismiss="modal">×</button>
+                                </div>
+                                <div class="modal-body">
+                                    {% if is_view_family %}
+                                        <form action="{% url 'admin_edit_empfamily' id=data.id %}" method="post" enctype="multipart/form-data" class="form-container" role="form" id="workhistory" onsubmit="return validateForm2()">
+                                    {% else %}
+                                        <form action="{% url 'updatefammembers' %}" method="post" enctype="multipart/form-data" class="form-container" role="form" id="workhistory" onsubmit="return validateForm2()">
+                                    {% endif %}
+                                        {% csrf_token %}
+                                        <div class="col-md">
+                                            <div class="form-group">
+                                                <label>Name <span style="color:red">*</span></label>
+                                                <input class="form-control" type="text" id="fname3" pattern="[a-zA-Z\s]+" name="Name6" required>
+                                                <span id="name_Error2" style="color: red;font-size: small;"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md">
+                                            <div class="form-group">
+                                                <label>Relationship <span style="color:red">*</span></label>
+                                                <select class="select form-control" id="relation" name="Relationship1" required>
+                                                    <option>{% if l.relation %}{{l.relation}}{% else %}Select Relationship{% endif %}</option>
+                                                    <option>Father</option>
+                                                    <option>Mother</option>
+                                                    <option>Husband</option>
+                                                    <option>Wife</option>
+                                                    <option>Son</option>
+                                                    <option>Daughter</option>
+                                                    <option>Brother</option>
+                                                    <option>Sister</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md">
+                                            <div class="form-group">
+                                                <style>
+                                                    .inputWithIcon input[type="text"] {
+                                                        padding-left: 30px;
+                                                    }
+                                                    .inputWithIcon {
+                                                        position: relative;
+                                                    }
+                                                    .inputWithIcon i {
+                                                        position: absolute;
+                                                        left: 10px;
+                                                        top: 6px;
+                                                        padding: 9px 8px;
+                                                        color: rgb(148, 145, 145);
+                                                        transition: 0.3s;
+                                                    }
+                                                </style>
+                                                <label>Date of Birth <span style="color:red">*</span></label>
+                                                <div class="inputWithIcon">
+                                                    <i class="icon-copy fa fa-calendar" aria-hidden="true"></i>
+                                                    <input class="form-control date-picker" id="dob1" readonly placeholder="Select Date" type="text" name="DOB2">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md">
+                                            <div class="form-group">
+                                                <input type="checkbox" style="transform: scale(1.5);margin-right: 11px;" id="dependant" name="Dependant1">
+                                                <label>Dependant</label>
+                                            </div>
+                                        </div>
+                                        <input hidden id="famid" name="fam_memberid">
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                            <button type="button" class="btn btn-secondary" onclick="closeform()" data-dismiss="modal">Cancel</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-10">
+                            <h6 class="float-left">Emergency Contact</h6>
+                        </div>
+                        <div class="col-md-2">
+                            <i class="fa fa-plus-circle float-right" data-toggle="modal" data-target="#emergencyContact" style="font-size: 24px;color:grey; cursor: pointer;"></i>
+                        </div>
+                    </div>
+                    <div class="modal fade bs-example-modal-md" id="emergencyContact">
+                        <div class="modal-dialog modal-md modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Emergency Contact</h4>
+                                    <button type="button" class="close" data-dismiss="modal">×</button>
+                                </div>
+                                <div class="modal-body">
+                                    {% if is_view_family %}
+                                        <form action="{% url 'admin_add_emergencycontact' uid_6=data.id %}" method="post" enctype="multipart/form-data" class="form-container" role="form" id="workhistory" onsubmit="return validateForm3()">
+                                    {% else %}
+                                        <form action="{% url 'tableemergencycontact' uid_6=request.user.id %}" method="post" enctype="multipart/form-data" class="form-container" role="form" id="workhistory" onsubmit="return validateForm3()">
+                                    {% endif %}
+                                        {% csrf_token %}
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Name <span style="color:red">*</span></label>
+                                                <input class="form-control" required pattern="[a-zA-Z\s]+" id="name_id" type="text" name="Name4">
+                                                <span id="name_Error" style="color: red;font-size: small;"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Relationship <span style="color:red">*</span></label>
+                                                <select class="select form-control" id="relation" name="Relationship1" required>
+                                                    <option value="" disabled selected>Select Relationship</option>
+                                                    <option>Father</option>
+                                                    <option>Mother</option>
+                                                    <option>Husband</option>
+                                                    <option>Wife</option>
+                                                    <option>Son</option>
+                                                    <option>Daughter</option>
+                                                    <option>Brother</option>
+                                                    <option>Sister</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Phone Number <span style="color:red">*</span></label>
+                                                <input class="form-control" type="text" name="Phone1" required pattern="[0-9]{10}">
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer" style="margin-right: 7px;">
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div id="emergencyGrid" class="ag-theme-alpine"></div>
+                    {% if not x %}
+                        <p style="text-align: center;">No Data Found</p>
+                    {% endif %}
+                    <hr>
+                    <div class="modal bs-example-modal-md" id="form2">
+                        <div class="modal-dialog modal-md modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Emergency Contact</h4>
+                                    <button type="button" class="close" onclick="closeform1()" data-dismiss="modal">×</button>
+                                </div>
+                                <div class="modal-body">
+                                    {% if is_view_family %}
+                                        <form action="{% url 'admin_edit_emergencycontact' id=data.id %}" method="post" enctype="multipart/form-data" class="form-container" role="form" id="workhistory" onsubmit="return validateForm4()">
+                                    {% else %}
+                                        <form action="{% url 'updateemergencycontact' %}" method="post" enctype="multipart/form-data" class="form-container" role="form" id="workhistory" onsubmit="return validateForm4()">
+                                    {% endif %}
+                                        {% csrf_token %}
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Name <span style="color:red">*</span></label>
+                                                <input class="form-control" type="text" id="ename4" name="Name5" required pattern="[a-zA-Z\s]+">
+                                                <span id="name_Error4" style="color: red;font-size: small;"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Relationship <span style="color:red">*</span></label>
+                                                <select class="select form-control" id="relation1" name="Relationship2" required>
+                                                    <option>{% if x.relation1 %}{{x.relation1}}{% else %}Select Relationship{% endif %}</option>
+                                                    <option>Father</option>
+                                                    <option>Mother</option>
+                                                    <option>Husband</option>
+                                                    <option>Wife</option>
+                                                    <option>Son</option>
+                                                    <option>Daughter</option>
+                                                    <option>Brother</option>
+                                                    <option>Sister</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Phone Number <span style="color:red">*</span></label>
+                                                <input class="form-control" type="number" id="phone1" name="Phone2" required pattern="[0-9]{10}">
+                                            </div>
+                                        </div>
+                                        <input hidden id="emerid" name="emergencyid">
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                            <button type="button" class="btn btn-secondary" onclick="closeform1()" data-dismiss="modal">Cancel</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- js -->
+    <script src="static/index/vendors/scripts/core.js"></script>
+    <script src="static/index/vendors/scripts/script.min.js"></script>
+    <script src="static/index/vendors/scripts/process.js"></script>
+    <script src="static/index/vendors/scripts/layout-settings.js"></script>
+    <script src="static/index/src/plugins/jquery-steps/jquery.steps.js"></script>
+    <script src="static/index/vendors/scripts/steps-setting.js"></script>
+    <script>
+        // Family Members Grid
+        const familyColumnDefs = [
+            { headerName: "Name", field: "name3", sortable: true, filter: true },
+            { headerName: "Relationship", field: "relation", sortable: true, filter: true },
+            { headerName: "Date of Birth", field: "dob1", sortable: true, filter: true },
+            {
+                headerName: "Dependant",
+                field: "dependant",
+                sortable: true,
+                cellRenderer: params => {
+                    return params.value === 'on' ? '<span style="color: blue;font-size: 25px;">✓</span>' : '';
+                }
+            },
+            {
+                headerName: "Action",
+                field: "id",
+                cellRenderer: params => {
+                    if (params.data && params.data.id && !isNaN(params.data.id) && params.data.id !== '') {
+                        const deleteUrl = "{% if is_view_family %}{% url 'admin_delete_empfamily' id=0 %}{% else %}{% url 'deletefammembers' myuser_5__id=0 %}{% endif %}".replace('0', params.data.id);
+                        return `
+                            <i class="fa fa-edit ag-action-icon" onclick="openform(
+                                name3='${params.data.name3 || ''}',
+                                relation='${params.data.relation || ''}',
+                                dob1='${params.data.dob1 || ''}',
+                                dependant='${params.data.dependant || ''}',
+                                fam_memberid='${params.data.id}'
+                            );"></i>
+                            <a href="${deleteUrl}">
+                                <i class="fa fa-trash ag-action-icon"></i>
+                            </a>`;
+                    } else {
+                        return '<span style="color: red;">Invalid ID</span>';
+                    }
+                }
+            }
+        ];
+
+        const familyRowData = [
+            {% for i in l %}
+                {
+                    id: '{{ i.id|default:"" }}',
+                    name3: '{{ i.name3|default:"" }}',
+                    relation: '{{ i.relation|default:"" }}',
+                    dob1: '{{ i.dob1|default:"" }}',
+                    dependant: '{{ i.dependant|default:"" }}'
+                }{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ];
+
+        const familyGridOptions = {
+            columnDefs: familyColumnDefs,
+            rowData: familyRowData,
+            defaultColDef: {
+                flex: 1,
+                minWidth: 100,
+                resizable: true
+            },
+            pagination: true,
+            paginationPageSize: 10
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const gridDiv = document.querySelector('#familyGrid');
+            new agGrid.Grid(gridDiv, familyGridOptions);
+            // Hide grid if no data
+            if (familyRowData.length === 0) {
+                gridDiv.style.display = 'none';
+            }
+            // Debug: Log familyRowData to inspect id values
+            console.log('Family Row Data:', familyRowData);
+        });
+
+        // Emergency Contact Grid
+        const emergencyColumnDefs = [
+            { headerName: "Name", field: "name4", sortable: true, filter: true },
+            { headerName: "Relationship", field: "relation1", sortable: true, filter: true },
+            { headerName: "Phone Number", field: "phone1", sortable: true, filter: true },
+            {
+                headerName: "Action",
+                field: "id",
+                cellRenderer: params => {
+                    if (params.data && params.data.id && !isNaN(params.data.id) && params.data.id !== '') {
+                        const deleteUrl = "{% if is_view_family %}{% url 'admin_delete_emergencycontact' id=0 %}{% else %}{% url 'deleteemergencycontact' myuser_6__id=0 %}{% endif %}".replace('0', params.data.id);
+                        return `
+                            <i class="fa fa-edit ag-action-icon" onclick="openform1(
+                                name4='${params.data.name4 || ''}',
+                                relation1='${params.data.relation1 || ''}',
+                                phone1='${params.data.phone1 || ''}',
+                                emergency_id='${params.data.id}'
+                            );"></i>
+                            <a href="${deleteUrl}">
+                                <i class="fa fa-trash ag-action-icon"></i>
+                            </a>`;
+                    } else {
+                        return '<span style="color: red;">Invalid ID</span>';
+                    }
+                }
+            }
+        ];
+
+        const emergencyRowData = [
+            {% for i in x %}
+                {
+                    id: '{{ i.id|default:"" }}',
+                    name4: '{{ i.name4|default:"" }}',
+                    relation1: '{{ i.relation1|default:"" }}',
+                    phone1: '{{ i.phone1|default:"" }}'
+                }{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ];
+
+        const emergencyGridOptions = {
+            columnDefs: emergencyColumnDefs,
+            rowData: emergencyRowData,
+            defaultColDef: {
+                flex: 1,
+                minWidth: 100,
+                resizable: true
+            },
+            pagination: true,
+            paginationPageSize: 10
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const gridDiv = document.querySelector('#emergencyGrid');
+            new agGrid.Grid(gridDiv, emergencyGridOptions);
+            // Hide grid if no data
+            if (emergencyRowData.length === 0) {
+                gridDiv.style.display = 'none';
+            }
+            // Debug: Log emergencyRowData to inspect id values
+            console.log('Emergency Row Data:', emergencyRowData);
+        });
+
+        function openform(name3, relation, dob1, dependant, fam_memberid) {
+            document.getElementById('form1').style.display = 'block';
+            document.getElementById('fname3').value = name3;
+            document.getElementById('relation').value = relation;
+            document.getElementById('dob1').value = dob1;
+            var editCheckbox = document.getElementById("dependant");
+            editCheckbox.checked = (dependant === 'on');
+            document.getElementById('famid').value = fam_memberid;
+        }
+
+        function closeform() {
+            document.getElementById('form1').style.display = 'none';
+        }
+
+        function openform1(name4, relation1, phone1, emergency_id) {
+            document.getElementById('form2').style.display = 'block';
+            document.getElementById('ename4').value = name4;
+            document.getElementById('relation1').value = relation1;
+            document.getElementById('phone1').value = phone1;
+            document.getElementById('emerid').value = emergency_id;
+        }
+
+        function closeform1() {
+            document.getElementById('form2').style.display = 'none';
+        }
+
+        function validateForm() {
+            var nameInput = document.getElementById("nameid");
+            var trimmednameInput = nameInput.value.trim();
+            var nameError = document.getElementById("nameError");
+            var dobInput = document.getElementById("dobid");
+            var trimmeddobInput = dobInput.value.trim();
+            var dobError = document.getElementById("dobError");
+
+            if (trimmednameInput === "") {
+                nameError.textContent = "Name required";
+                return false;
+            }
+
+            if (trimmeddobInput === "") {
+                dobError.textContent = "DOB required";
+                dobInput.focus();
+                return false;
+            }
+
+            nameError.textContent = "";
+            dobError.textContent = "";
+            return true;
+        }
+
+        function validateForm2() {
+            var nameInput = document.getElementById("fname3");
+            var trimmednameInput = nameInput.value.trim();
+            var name_Error2 = document.getElementById("name_Error2");
+
+            if (trimmednameInput === "") {
+                name_Error2.textContent = "Name required";
+                nameInput.focus();
+                return false;
+            }
+
+            name_Error2.textContent = "";
+            return true;
+        }
+
+        function validateForm3() {
+            var nameInput = document.getElementById("name_id");
+            var trimmednameInput = nameInput.value.trim();
+            var name_Error = document.getElementById("name_Error");
+
+            if (trimmednameInput === "") {
+                name_Error.textContent = "Name required";
+                nameInput.focus();
+                return false;
+            }
+
+            name_Error.textContent = "";
+            return true;
+        }
+
+        function validateForm4() {
+            var nameInput = document.getElementById("ename4");
+            var trimmednameInput = nameInput.value.trim();
+            var name_Error4 = document.getElementById("name_Error4");
+
+            if (trimmednameInput === "") {
+                name_Error4.textContent = "Name required";
+                nameInput.focus();
+                return false;
+            }
+
+            name_Error4.textContent = "";
+            return true;
+        }
+    </script>
+</body>
+</html>

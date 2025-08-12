@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Basic Page Info -->
+    <meta charset="utf-8">
+    <title>HRMS</title>
+    <link rel="icon" href="/static/logo/apple-touch-icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Site favicon -->
+    <!-- <link rel="apple-touch-icon" sizes="180x180" href="static/index/vendors/images/apple-touch-icon.png">
+         <link rel="icon" type="image/png" sizes="32x32" href="static/index/vendors/images/favicon-32x32.png">
+         <link rel="icon" type="image/png" sizes="16x16" href="static/index/vendors/images/favicon-16x16.png"> -->
+    <!-- Mobile Specific Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/core.css">
+    <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/icon-font.min.css">
+    <link rel="stylesheet" type="text/css" href="static/index/src/plugins/jquery-steps/jquery.steps.css">
+    <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/style.css">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>
+
+    <style>
+        .form-popup {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            z-index: 1;
+            margin-left: -400px;
+        }
+
+        .form-popup1 {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            z-index: 1;
+            margin-left: -400px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <div class="header-left">
+            <div class="menu-icon dw dw-menu"></div>
+        </div>
+        <div class="header-right">
+            <!-- For Toast Message-->
+            {% include 'messages.html' %}
+
+            <div class="dashboard-setting user-notification">
+                <div class="dropdown">
+                    <a class="dropdown-toggle no-arrow" href="javascript:;" data-toggle="right-sidebar">
+                    </a>
+                </div>
+            </div>
+            <!-- <div class="user-notification">
+                <div class="dropdown">
+                    <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
+                        <i class="icon-copy dw dw-notification"></i>
+                        <span class="badge notification-active"></span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <div class="notification-list mx-h-350 customscroll">
+                            <ul>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/img.jpg" alt="">
+                                        <h3>John Doe</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/photo1.jpg" alt="">
+                                        <h3>Lea R. Frith</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/photo2.jpg" alt="">
+                                        <h3>Erik L. Richards</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/photo3.jpg" alt="">
+                                        <h3>John Doe</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/photo4.jpg" alt="">
+                                        <h3>Renee I. Hansen</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/img.jpg" alt="">
+                                        <h3>Vicki M. Coleman</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+            <div class="user-info-dropdown">
+                <div class="dropdown">
+                    <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                        <span class="user-icon">
+
+                            {% if k.image %}
+                            <img src="{{ k.image.url }}" alt="" style="width: 100%; height:100% ">
+                            {% else %}
+                            <img src="/static/logo/userlogo.png" id="photo" style="width: 100%; height:100% ">
+                            {% endif %}
+                        </span>
+                        <span class="user-name">{{request.user.username}}</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                        <a class="dropdown-item" href="{% url 'createpersonalinfo' %}"><i class="dw dw-user1"></i>
+                            Profile</a>
+                        <a class="dropdown-item" href="{% url 'department' %}" data-toggle="right-sidebar"><i
+                                class="dw dw-settings2"></i> Settings</a>
+                        <a class="dropdown-item" href="{% url 'help_page' %}"><i class="dw dw-help"></i> Help</a>
+                        <a class="dropdown-item" href="{% url 'logout' %}"><i class="dw dw-logout"></i> Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="left-side-bar">
+        <div class="brand-logo mt-3">
+            <a href="{% url 'dashboard' %}">
+                {% if request.user.company_type %}
+                {% if request.user.company_type.inverse_logo %}
+                <img src="{{ request.user.company_type.inverse_logo.url }}" style="width: 100%; height: 100%;">
+                {% else %}
+                <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+                {% endif %}
+                {% else %}
+                <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+                {% endif %}
+            </a>
+            <div class="close-sidebar" data-toggle="left-sidebar-close">
+                <i class="ion-close-round"></i>
+            </div>
+        </div>
+
+        <div class="menu-block customscroll">
+            <div class="sidebar-menu">
+               <ul id="accordion-menu">
+					
+					<br>
+					<li class="btn-primary active" style="background-color:black">
+						<a href="{% url 'dashboard' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-house-1"></span><span class="mtext"><b>Dashboard</b></span>
+						</a>
+					</li>
+					
+					<li>
+						<a href="{% url 'companyprofile' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-building"></span><span class="mtext"><b>Company Profile</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'personalinfonav' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-user1"></span><span class="mtext"><b>My Profile</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'leave' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-calendar-1"></span><span class="mtext"><b>Leave</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'directory' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-list"></span><span class="mtext"><b>Directory</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'dailylog' %}" class="dropdown-toggle no-arrow">
+							<span class="micon bi bi-check2-square"></span><span class="mtext"><b>Attendance</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'calender' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-calendar"></span><span class="mtext"><b>Holiday Calendar</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'runpayroll_overview' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-money-2"></span><span class="mtext"><b>Payroll</b></span>
+						</a>
+					</li>
+
+
+				</ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="card-box height-100-px overflow-hidden">
+            <ul class="nav nav-tabs customtab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link " href="{% url 'personalinfonav' %}">Personal</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'worknav' %}">Work</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'teamnav' %}">Team</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'educationnav' %}">Education</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link " href="{% url 'familynav' %}">Family</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'documentsnav' %}">Document</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link " href="{% url 'workweeknav' %}">Work Week</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'pay_slip' %}">Payroll</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'e_exit' %}">E-Exit</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link " href="{% url 'filemanagernav' %}">Filemanager</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'list_generated_certificates' %}">Experience Certificates</a>
+                </li>
+            </ul>
+
+
+            <div class="pd-20 card-box">
+                <div class="row">
+                    <div class="col-md-10">
+                        <h6 class="float-left">Reporting Manager</h6>
+                    </div>
+                    <div class=" col-md-2">
+                        <i class="fa fa-plus-circle float-right" data-toggle="modal" data-target="#reportingManager"
+                            style="font-size: 24px;color:grey;cursor: pointer;"></i>
+                    </div>
+                </div>
+
+                <div class="modal fade bs-example-modal-md" id="reportingManager">
+                    <div class="modal-dialog modal-md modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Reporting Manager</h4>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                            </div>
+                            <div class="modal-body">
+                                <form action="{% url 'tablereportingmanager' %} " method="post"
+                                    enctype="multipart/form-data" class="form-container" role="form">
+                                    {% csrf_token %}
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Name <span style="color:red">&#42</span></label>
+                                                <select class="custom-select form-control" name="Name1" required
+                                                    id="nameDropdown">
+                                                    <option value="" disabled selected>Select User</option>
+                                                    {% for user in users %}
+                                                        <option value="{{ user.id }}">{{ user.username }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Type <span style="color:red">&#42</span></label>
+                                                <select class="custom-select form-control" name="Type" id="Type"
+                                                    required>
+                                                    <option value="Primary">Primary</option>
+                                                    <option value="Secondary">Secondary</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <input id="kid" name="kid" type="hidden">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                        <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Cancel</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <table class="table table-hover">
+                    <tr style="background-color:rgb(233, 227, 227)">
+                        <th scope="col">Name</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">Department</th>
+                        <th scope="col">Designation</th>
+                        <th scope="col">Action</th>
+                        <th scope="col"></th>
+                    </tr>
+                    {% for report in l %}
+                    <tbody>
+                        {% for user in report.myuser_2.all %}
+                        <tr onclick="redirectToPersonalInfo({{user.id}})" style="cursor: pointer;">
+                            <td>{{ user.username }}</td>
+                            <td>{{ report.type }}</td>
+                            <td>{% if user.department %} {{ user.department }} {% endif %}</td>
+                            <td>{% if user.designation %} {{ user.designation }} {% endif %}</td>
+                            <td><a class="dropdown-item" onclick="return confirm('Are you sure to delete?')"
+                                    href="{% url 'deletereportingmanager' r_id=report.id %}"><i class="fa fa-trash"
+                                        style="font-size:24px; color:rgb(61, 61, 61) ;" title="Delete"></i></a></td>
+
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    {% endfor %}
+                    <!-- </form> -->
+                </table>
+                <script>
+                    function redirectToPersonalInfo(userId) {
+                        if (userId) {
+                            window.location.href = `/view_personalinfo/${userId}`;
+                        }
+                    }
+                </script>
+                {% if not l %}
+
+                <p style="text-align: center;">No Data Found</p>
+
+                {% endif %}
+                <hr>
+
+                <div class="modal bs-example-modal-md" id="form2">
+                    <div class="modal-dialog modal-md modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Edit Reporting Manager</h4>
+                                <button type="button" class="close" onclick="closeform1()"
+                                    data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{% url 'updatereportingmanager' %} " method="post"
+                                    enctype="multipart/form-data" class="form-container" role="form">
+                                    {% csrf_token %}
+                                    <!-- <input  id="reportingmanager_id" name="reportingmanager_id"> -->
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Name <span style="color:red">&#42</span></label>
+
+                                                <select name="myuser_2" id="myuser_2" class="custom-select form-control"
+                                                    required>
+                                                    <option value="" disabled>Select Name</option>
+                                                    {% for user in users %}
+                                                    <option value="{{ user.id }}">{{ user.username }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Type <span style="color:red">&#42</span></label>
+                                                <select class="custom-select form-control" name="typ" id="typ" required>
+                                                    <option value="" disabled>Select Employee Type</option>
+                                                    <option value="Primary" {% if l.type == "Primary" %}selected{% endif %}>Primary</option>
+                                                    <option value="Secondary" {% if l.type == "Secondary" %}selected{% endif %}>Secondary</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                                            onclick="closeform1()">Cancel</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-10">
+                        <h6 class="float-left">Direct Report</h6>
+                    </div>
+                    <div class=" col-md-2">
+                        <i class="fa fa-plus-circle float-right" data-toggle="modal" data-target="#directreport"
+                            style="font-size: 24px;color:grey;cursor: pointer;"></i>
+                    </div>
+                </div>
+
+                <div class="modal fade bs-example-modal-md" id="directreport">
+                    <div class="modal-dialog modal-md modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Direct Report</h4>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                            </div>
+                            <div class="modal-body">
+                                <form action="{% url 'tabledirectreports' %}" method="post"
+                                    enctype="multipart/form-data" class="form-container" role="form">
+                                    {% csrf_token %}
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Name <span style="color:red">&#42</span></label>
+                                                <select class="form-control" name="Name" required id="name">
+                                                    <option value="" disabled selected>Select User</option>
+                                                    {% for user in users %}
+                                                    <option value="{{ user.id }}">{{ user.username }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <input id="directreport" name="directreport" type="hidden">
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                        <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Cancel</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <table class="table table-hover">
+                    <tr style="background-color:rgb(233, 227, 227)">
+                        <th scope="col">Name</th>
+                        <th scope="col">Department</th>
+                        <th scope="col">Designation</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                    {% for report in directreport_users %}
+                    <tbody>
+                        <tr style="cursor: pointer;">
+                            <td><a href="{% url 'view_personalinfo' id=report.id %}">{{ report.username }} </td></a>
+                            <td>{% if report.department %} {{ report.department }} {% endif %}</td>
+                            <td>{% if report.designation %} {{ report.designation }} {% endif %}</td>
+                            <td><a class="dropdown-item" onclick="return confirm('Are you sure to delete?')" href="{% url 'deletedirectreport' report.id %}">
+                                <i class="fa fa-trash" style="font-size:24px; color:rgb(61, 61, 61);" title="Delete"></i></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                    {% endfor %}
+                </table>
+
+
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openform(username, department, designation, directreportid) {
+            document.getElementById('form1').style.display = 'block';
+            document.getElementById('username').value = username;
+            document.getElementById('department').value = department;
+            document.getElementById('designation').value = designation;
+            document.getElementById('directreportid').value = directreportid;
+        }
+
+        function closeform() {
+            document.getElementById('form1').style.display = 'none';
+        }
+    </script>
+    <script>
+        function editform(myuser_2, typ, department, designation, reportingmanager_id) {
+
+            document.getElementById('form2').style.display = 'block';
+            // document.getElementById('name').value = myuser_2;
+
+            var nameSelect = document.getElementById("myuser_2");
+
+            for (var i = 0; i < nameSelect.options.length; i++) {
+                if (nameSelect.options[i].value === myuser_2) {
+                    nameSelect.selectedIndex = i;
+                    break;
+                }
+            }
+
+            document.getElementById('typ').value = typ;
+            document.getElementById('reportingmanager_id').value = reportingmanager_id;
+            // console.log(document.getElementById('reportingmanager_id').value);
+        }
+
+        function closeform1() {
+            document.getElementById('form2').style.display = 'none';
+
+
+
+        }
+    </script>
+    <!-- js -->
+    <script src="static/index/vendors/scripts/core.js"></script>
+    <script src="static/index/vendors/scripts/script.min.js"></script>
+    <script src="static/index/vendors/scripts/process.js"></script>
+    <script src="static/index/vendors/scripts/layout-settings.js"></script>
+    <script src="static/index/src/plugins/jquery-steps/jquery.steps.js"></script>
+    <script src="static/index/vendors/scripts/steps-setting.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+</body>
+
+</html>

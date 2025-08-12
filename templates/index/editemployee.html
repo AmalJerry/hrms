@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Basic Page Info -->
+    <meta charset="utf-8">
+   
+    <title>{{ c.brandname }}</title>
+    <link rel="icon" href="{{ c.logo.url }}" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Site favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="static/index/vendors/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="static/index/vendors/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="static/index/vendors/images/favicon-16x16.png">
+
+    <!-- Mobile Specific Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!--  datepicker jquery bootstrap css -->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/core.css">
+    <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/icon-font.min.css">
+    <link rel="stylesheet" type="text/css" href="static/index/src/plugins/jquery-steps/jquery.steps.css">
+    <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/style.css">
+    <link rel="stylesheet" type="text/css" href="/static/vendors/styles/style1.css">
+
+    
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-119386393-1');
+    </script>
+    <script>
+        var loadFile = function(event) {
+            var image = document.getElementById('output');
+            image.src = URL.createObjectURL(event.target.files[0]);
+        };
+    </script>
+    <style>
+        i{
+            cursor: pointer;
+        }
+        .alert{
+            background-color: white;
+            border: none;
+        }
+    </style>
+ 
+ 
+<!-- bootstrap datepicker scripts -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+  <script>
+  $( function() {
+    $( "#datepicker" ).datepicker({
+        language:'en',
+        changeMonth:true,
+        changeYear: true
+    });
+  } );
+  </script>
+</head>
+<body>
+   
+    <div class="header">
+        <div class="header-left">
+            <div class="menu-icon dw dw-menu"></div>
+            <div class="search-toggle-icon dw dw-search2" data-toggle="header_search"></div>
+            
+        </div>
+        <div class="header-right">
+            <div class="dashboard-setting user-notification">
+                <div class="dropdown">
+                    <a class="dropdown-toggle no-arrow" href="javascript:;" data-toggle="right-sidebar">
+                       
+                    </a>
+                </div>
+            </div>
+            <!-- <div class="user-notification">
+                <div class="dropdown">
+                    <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
+                        <i class="icon-copy dw dw-notification"></i>
+                        <span class="badge notification-active"></span>
+                    </a>
+                   
+                </div>
+            </div> -->
+            <div class="user-info-dropdown">
+                <div class="dropdown">
+                    <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                        <span class="user-icon">
+                            {% if m.image %}
+                            <img src="{{ m.image.url }}" alt="" style="width: 100%; height:100% ">
+                            {% else %}
+                            <img src="/static/logo/userlogo.png" id="photo" style="width: 100%; height:100% ">
+                            {% endif %}                         </span>
+                        <span class="user-name">{{request.user.username}}</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                        <a class="dropdown-item" href="{% url 'createpersonalinfo' %}"><i class="dw dw-user1"></i> Profile</a>
+                        <a class="dropdown-item" href="{% url 'department' %}"  data-toggle="right-sidebar"><i class="dw dw-settings2"></i> Settings</a>
+                        <a class="dropdown-item" href="{% url 'help_page' %}"><i class="dw dw-help"></i> Help</a>
+                        <a class="dropdown-item" href="{% url 'logout' %}"><i class="dw dw-logout"></i> Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="left-side-bar">
+        <div class="brand-logo mt-3">
+        <a href="{% url 'dashboard' %}">
+            {% if request.user.company_type %}
+            {% if request.user.company_type.inverse_logo %}
+            <img src="{{ request.user.company_type.inverse_logo.url }}" style="width: 100%; height: 100%;">
+            {% else %}
+            <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+            {% endif %}
+            {% else %}
+            <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+            {% endif %}
+        </a>
+        <div class="close-sidebar" data-toggle="left-sidebar-close">
+           <i class="ion-close-round"></i>
+        </div>
+     </div>
+      
+       <div class="menu-block customscroll">
+            <div class="sidebar-menu">
+                <ul id="accordion-menu">
+					
+					<br>
+					<li class="btn-primary active" style="background-color:black">
+						<a href="{% url 'dashboard' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-house-1"></span><span class="mtext"><b>Dashboard</b></span>
+						</a>
+					</li>
+					
+					<li>
+						<a href="{% url 'companyprofile' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-building"></span><span class="mtext"><b>Company Profile</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'personalinfonav' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-user1"></span><span class="mtext"><b>My Profile</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'leave' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-calendar-1"></span><span class="mtext"><b>Leave</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'directory' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-list"></span><span class="mtext"><b>Directory</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'dailylog' %}" class="dropdown-toggle no-arrow">
+							<span class="micon bi bi-check2-square"></span><span class="mtext"><b>Attendance</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'calender' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-calendar"></span><span class="mtext"><b>Holiday Calendar</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'runpayroll_overview' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-money-2"></span><span class="mtext"><b>Payroll</b></span>
+						</a>
+					</li>
+
+
+				</ul>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="mobile-menu-overlay"></div>
+
+       
+ <div class="main-container" id ="editemployee" >    
+    <form  method="post" enctype="multipart/form-data" onsubmit="openModal()" >
+    
+    {% csrf_token %}
+  
+        <div class="pd-ltr-20 card-box height-100-px overflow-hidden">
+            <div class=" row profile-setting">   
+                <h5 >UPDATE EMPLOYEE</h5>
+            </div>            
+    
+                    <!-- <div class="pd-20 card-box mb-30"> -->
+                        <br>
+                        <p class="text-center" id="msg3" style="color: green;">{{msg3}}</p>
+                        <h4 class="mb-20 h5 text-blue">Personal Information <hr></h4><br>
+                        <div class="row profile-setting">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label >Name <span style="color:red">&#42</span></label>
+                                    <input type="text" pattern="[a-zA-Z\s]+"  class="form-control" name='username' value="{{ employee.username }}" required>
+                                </div>
+                            </div>
+                            <input class="form-control" id="exampleFormControlInput1" value="{{employee.id}}" type="hidden" name='n'>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Email Address <span style="color:red">&#42</span></label>
+                                    <input type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}" class="form-control" name="email"  id="Email" value="{{ employee.email }}" required>
+                                    <p style="color: red;" id="msg1">{{msg1}}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Phone Number <span style="color:red">&#42</span></label>
+                                    <input type="text" pattern="[0-9]{10}"  class="form-control" name="phone" id="Phn" value="{{ employee.phone }}" required>
+                                    <p style="color: red;" id="msg2">{{msg2}}</p>
+                                    
+                                
+                                </div>
+                            </div>
+                       
+                        <!-- <h4 class="mb-20 h5 text-blue">Personal Information<hr></h4><br> -->
+                        
+                            
+                        <!-- <div class="row"> -->
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <!-- <label> Date of Birth <span style="color:red">&#42</span></label>
+                                           
+                                        <div class="input-group date">
+                                            <input class="form-control date-picker" placeholder="Select Date" type="text" id="datepicker" name="dob" value="{{request.user.dob}}" required>
+
+                                        </div>    -->
+                                        <label>Date of Birth<span style="color:red">&#42</span></label>
+                                                                                <div class="inputWithIcon">
+                                                                                    <!-- <i class="icon-copy fa fa-calendar" aria-hidden="true"></i> -->
+                                                                                    <input  class="form-control date-picker"  type="text" name="dob" id="DOB" value="{{employee.dob}}"  required>
+                                                                                </div>
+
+
+
+
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Select Gender </label>
+                                    <div class="d-flex">
+                                        <div class="custom-radio ">
+                                            <label >Male</label>
+                                            <input type="radio" name="gender" id="customRadio4" value="Male"  >
+                                            <label>Female</label>
+                                            <input type="radio" name="gender"  id="customRadio5" value="Female">
+                                            <label>Transgender</label>
+                                            <input type="radio" name="gender"  id="customRadio6" value="Transgender">
+                                        </div>
+                                        <input type="hidden" name="gid" id="gid" value="{{employee.gender}}" >
+
+                                        <script>
+       
+        
+                                            if (document.getElementById('gid').value =='Male') {
+                                                document.getElementById("customRadio4").checked = true;
+                                            } else if (document.getElementById('gid').value =='Female') {
+                                                document.getElementById("customRadio5").checked = true;
+                                            }
+                                             else  {
+                                                document.getElementById("customRadio6").checked = true;
+                                            }
+                                    
+                                        
+                                    </script>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <h4 class="mb-20 h5 text-blue">Work Details<hr></h4><br>
+                            <div class="row">
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <style>
+                                            .inputWithIcon input[type="text"] {  
+                                            padding-left: 30px;  
+                                            }  
+                                            
+                                            .inputWithIcon {  
+                                            position: relative;  
+                                            }  
+                                            
+                                            .inputWithIcon i {  
+                                            position: absolute;  
+                                            left: 10;  
+                                            top: 6px;  
+                                            padding: 9px 8px;  
+                                            color: rgb(148, 145, 145);  
+                                            transition: 0.3s;  
+                                            
+                                            }  
+                                        </style>
+                                        <label >Date of Joining</label>
+                                        <div class="inputWithIcon">
+                                            <i class="icon-copy fa fa-calendar" aria-hidden="true"></i>
+                                            
+                                            <input class="form-control date-picker" readonly placeholder="Select Date" type="text" name="Joindate" id="Joindate" value="{% if employee.datejoin %}{{employee.datejoin}}{% endif %}">
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                            <label>Status </label>
+                                            <select class="form-select" name="status" required>
+                                                <option value="" disabled="true" >Select Status</option>
+                                                <!-- {% for choice in status %}
+                                                    <option value="{{ choice.0 }}" {% if choice.0 == i.status  %} selected {% endif %}>{{ choice.1 }}</option>
+                                                {% endfor %} -->
+
+                                                <option value="Onboarding" {% if employee.status == 'Onboarding' %}selected{% endif %}>Onboarding</option>
+                                                <option value="Active" {% if employee.status == 'Active' %}selected{% endif %}>Active</option>
+                                                <option value="Inactive" {% if employee.status == 'Inactive' %}selected{% endif %}>Inactive</option>
+                                            </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="department">Department <span style="color:red">&#42</label>
+                                        <select class="form-select" name="department" id="department" required>
+                                            <option value="" selected>Select Department</option>
+                                            {% for department in dp %}
+                                                <option value="{{ department.id }}" {% if employee.department_id == department.id %}selected{% endif %}>
+                                                    {{ department.name }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>   
+                                
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="subdepartment">Sub Department</label>
+                                        <select class="form-select" name="subdepartment" id="subdepartment">
+                                            <option value="" selected>Select Sub Department</option>
+                                            {% for subdepartment in sd %}
+                                                {% if employee.department_id == subdepartment.depname_id %}
+                                                    <option value="{{ subdepartment.id }}" {% if employee.subdepartment_id == subdepartment.id %}selected{% endif %}>
+                                                        {{ subdepartment.subname }}
+                                                    </option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Designation <span style="color:red">&#42</label>
+                                            <select class="form-select" name="designation" required>
+                                             <option  value="" selected>Select Designation</option>   
+                                             {% for designation in dn %}
+                                             <option value="{{ designation.id }}" {% if designation.id == employee.designation.id %}selected{% endif %}>{{ designation.name }}</option>
+                                            {% endfor %}
+                                            </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Job Title <span style="color:red">&#42</label>
+                                            <select class="form-select" name="jobtitle" required>
+                                            <option value="" selected>Select Job title</option>
+
+                                            {% for jobtitle in jb %}
+                                            <option value="{{ jobtitle.id }}" {% if jobtitle.id == employee.jobtitle.id %}selected{% endif %}>{{ jobtitle.name }}</option>
+                                          {% endfor %}
+                                            </select>
+                                    </div>
+                                </div>
+                                <!-- <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Reporting Manager</label>
+                                        <select class="form-select" name="reptmgr">
+                                            <option value="" selected>Select Reporting Manager</option>
+                                            {% for user in rp %}
+                                                <option value="{{ user.id }}" {% if current_reptmgr and user.id == current_reptmgr.id %}selected{% endif %}>
+                                                    {{ user.username }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div> -->
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Reporting Manager</label>
+                                        <select class="form-select" name="reptmgr">
+                                            <option value="" {% if not current_reptmgr %}selected{% endif %}>Select Reporting Manager</option>
+                                            {% for user in rp %}
+                                                <option value="{{ user.id }}" {% if current_reptmgr and user.id == current_reptmgr.myuser_2.first.id %}selected{% endif %}>{{ user.username }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                
+                                
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Work Location <span style="color:red">&#42</label>
+                                       <select class="form-select" name="wrklcn" required>
+                                        <option value="" selected>Select Work Location</option>
+                                        {% for worklocation in wr %}
+                                        <option value="{{ worklocation.id }}" {% if worklocation.id == employee.wrklcn.id %}selected{% endif %}>{{ worklocation.location }}</option>
+                                      {% endfor %}
+                                        </select>
+                                        <!-- <input type="text" class="form-control" name="Workloc" id="Workloc" value="{% if request.user.wrklcn.location %}{{request.user.wrklcn.location}}{% endif%}"> -->
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Employee Type <span style="color:red">&#42 </label>
+                                        <select class="form-select" name="emptype" required>
+                                           <option value="" selected>Select Employee Type</option>
+                                           <!-- {% for choice in types %}
+                                                <option value="{{ choice.0 }}" {% if choice.0 == i.emptype  %} selected {% endif %}>{{ choice.1 }}</option>
+                                            {% endfor %} -->
+                                        
+                                            <option value="Full Time" {% if employee.emptype == 'Full Time' %}selected{% endif %}>Full Time</option>
+                                            <option value="Part Time" {% if employee.emptype == 'Part Time' %}selected{% endif %}>Part Time</option>
+                                            <option value="Intern" {% if employee.emptype == 'Intern' %}selected{% endif %}>Intern</option>
+                                            <option value="Contract" {% if employee.emptype == 'Contract' %}selected{% endif %}>Contract</option>
+                                    </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="company_type">Company Type <span style="color:red">&#42</span></label>
+                                        <select class="form-select" id="company_type" name="company_type" required>
+                                            <option value="" {% if not employee.company_type %}selected{% endif %}>Select Company Type</option>
+                                            {% for company in company_profiles %}
+                                                <option value="{{ company.id }}" {% if employee.company_type.id == company.id %}selected{% endif %}>
+                                                    {{ company.type_of_company }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Probation Period</label>
+                                        <input type="number" class="form-control" name="probperiod" value="{{ employee.probperiod }}" >
+                                        <!-- <input type="text" class="form-control" name="Probationperiod" id="Probationperiod" value="{% if request.user.probperiod %}{{request.user.probperiod}}{% endif %}"> -->
+                                    </div>
+                                </div>
+                                
+                                <div class=" col-md-12 ">
+                                    <div class=" form-group text float-right"  data-toggle="modal" data-target="#success-modal" >
+                                    <button type="submit" class="btn btn-primary" role="menuitem" >Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>  
+                    </div>
+                    
+            </div>
+        </div>
+    </div>
+</form>
+</div>  
+   <!-- js -->
+    <script src="static/index/vendors/scripts/core.js"></script>
+    <script src="static/index/vendors/scripts/script.min.js"></script>
+    <script src="static/index/vendors/scripts/process.js"></script>
+    <script src="static/index/vendors/scripts/layout-settings.js"></script>
+    <script src="static/index/src/plugins/jquery-steps/jquery.steps.js"></script>
+    <script src="static/index/vendors/scripts/steps-setting.js"></script>
+
+
+    <script>
+        // JavaScript to update subdepartment options based on the selected department
+        const departmentSelect = document.getElementById("department");
+        const subdepartmentSelect = document.getElementById("subdepartment");
+        
+        departmentSelect.addEventListener("change", function () {
+            const selectedDepartmentId = departmentSelect.value;
+            
+            // Clear the subdepartment dropdown
+            subdepartmentSelect.innerHTML = '<option value="" disabled>Select Subdepartment</option>';
+            
+            // Populate the subdepartment dropdown with corresponding subdepartments
+            {% for subdepartment in sd %}
+                if ("{{ subdepartment.depname_id }}" === selectedDepartmentId) {
+                    const option = document.createElement("option");
+                    option.value = "{{ subdepartment.id }}";
+                    option.text = "{{ subdepartment.subname }}";
+                    subdepartmentSelect.appendChild(option);
+                }
+            {% endfor %}
+        });
+    </script>
+
+<script>
+        setTimeout(function(){
+          if ($('#msg1').length > 0) {
+            $('#msg1').remove();
+          }
+        }, 7000),
+        setTimeout(function(){
+          if ($('#msg2').length > 0) {
+            $('#msg2').remove();
+          }
+        }, 7000),
+        setTimeout(function(){
+          if ($('#msg3').length > 0) {
+            $('#msg3').remove();
+          }
+        }, 7000)
+
+</script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        p{
+            font-family: Nunito;
+            font-size: 18px;
+            max-width: 85%;
+        }
+    </style>
+
+</head>
+<body>
+
+<h2>Dear {{admin.username}},</h2>
+
+<p>
+ I hope this message finds you well.I wanted to bring to your attention a significant milestone within our team. {{employee.username}} is about to celebrate their work anniversary with {{companydetail.registeredcompanyname}}.
+</p>
+
+ <p>
+ {{employee.username}} has been an integral part of our team for {{years_of_service}} years, contributing {% if employee.gender =='Male' %}his{else}her{% endif %} skills, dedication, and hard work to the success of our projects and the overall growth of the company.
+ </p>
+
+ <p>
+ To commemorate this special occasion, we are planning to celebrate {{employee.username}}'s work anniversary on {{employee.datejoin}}. We believe that recognizing and appreciating the dedication and commitment of our team members is crucial to fostering a positive work environment.
+ </p>
+
+ <!-- <p>
+ If you have any suggestions or would like to be involved in the celebration planning, please feel free to share your thoughts. We want to ensure that {{employee.username}} feels valued and appreciated for their contributions over the past {{employee.username}} years.
+ </p> -->
+
+ <p>
+ Thank you for your attention to this matter, and we look forward to celebrating this milestone with the entire team.
+</p>
+
+ <p>
+ Best regards,<br>
+ Cydez Technologies<br>
+ cydezt@gmail.com <br>
+ HRMS Support Team <br>
+</p>
+</body>
+</html>

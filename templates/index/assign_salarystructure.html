@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Basic Page Info -->
+    <meta charset="utf-8">
+    <title>HRMS</title>
+    <link rel="icon" href="/static/logo/apple-touch-icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <!-- Site favicon -->
+    <!-- <link rel="apple-touch-icon" sizes="180x180" href="static/index/vendors/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="static/index/vendors/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="static/index/vendors/images/favicon-16x16.png"> -->
+
+    <!-- Mobile Specific Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="/static/index/vendors/styles/core.css">
+    <link rel="stylesheet" type="text/css" href="/static/index/vendors/styles/icon-font.min.css">
+    <link rel="stylesheet" type="text/css"
+        href="/static/index/src/plugins/datatables/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" type="text/css"
+        href="/static/index/src/plugins/datatables/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/index/vendors/styles/style.css">
+
+    <!-- Jquery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <!-- Data table css -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.dataTables.css" />
+    <script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
+
+
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-119386393-1');
+    </script>
+
+    <style>
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 90px;
+            height: 32px;
+        }
+
+        .switch input {
+            display: none;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #848080;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        input:checked+.slider {
+            background-color: #2196F3;
+        }
+
+        input:focus+.slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked+.slider:before {
+            -webkit-transform: translateX(55px);
+            -ms-transform: translateX(55px);
+            transform: translateX(55px);
+        }
+
+        /*------ ADDED CSS ---------*/
+        .on {
+            display: none;
+        }
+
+        .on {
+            color: white;
+            position: absolute;
+            transform: translate(-50%, -50%);
+            top: 50%;
+            left: 35%;
+            font-size: 15px;
+            /* font-family: Verdana, sans-serif; */
+        }
+
+        .off {
+            color: white;
+            position: absolute;
+            transform: translate(-50%, -50%);
+            top: 50%;
+            left: 66%;
+            font-size: 14px;
+            font-family: Verdana, sans-serif;
+        }
+
+        input:checked+.slider .on {
+            display: block;
+        }
+
+        input:checked+.slider .off {
+            display: none;
+        }
+
+        /*--------- END --------*/
+
+        /* Rounded sliders */
+        .slider.round {
+            border-radius: 34px;
+        }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+
+        .rejection-modal {
+            justify-content: center;
+            align-items: center;
+            display: none;
+            position: absolute;
+            z-index: 99999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+
+        }
+
+        /* .modal-content {
+                background-color: #fefefe;
+                padding: 20px;
+                border: 1px solid #888;
+                width: 50%;
+                max-width: 500px;
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+              }
+               */
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        span.close {
+            padding-left: 428px;
+            position: absolute;
+            top: 10px;
+            right: 50%;
+            transform: translateX(50%);
+        }
+
+        .rule-badge {
+            display: inline-block;
+            /* padding: 5px 10px; */
+            padding-top: 5px;
+            padding-right: 10px;
+            padding-bottom: 5px;
+            margin-right: 5px;
+            border-radius: 50px;
+            background-color: lightgray;
+            font-size: 12px;
+            position: static;
+        }
+
+        .closeicon {
+            /* position: absolute; */
+            /* margin-top: -11%; */
+            margin-left: 6%;
+            /* display: none; */
+            color: #888;
+            cursor: pointer;
+            font-size: larger;
+        }
+
+        /* .rule-badge:hover .close-icon {
+            display: block;
+        } */
+
+        .badge-circle {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: gray;
+            color: white;
+            text-align: center;
+            line-height: 20px;
+        }
+
+
+        th {
+            top: -2px;
+            background-color: #fff;
+            white-space: nowrap;
+            text-align: left !important;
+            z-index: 10;
+        }
+
+        td {
+            border: 1px solid #e0e0e0;
+            background-color: #fff;
+        }
+
+        th:nth-child(1),
+        td:nth-child(1) {
+            position: sticky;
+            left: -1px;
+            width: 0;
+            background-color: #fff;
+            z-index: 30;
+        }
+
+        th:nth-child(2),
+        td:nth-child(2) {
+            position: sticky;
+            /* left: 67.5px; */
+            /* width: 5%; */
+            background-color: #fff;
+            z-index: 25;
+
+        }
+
+        tr:nth-child(even) td {
+            background: #fff;
+        }
+
+        tr:nth-child(odd) td {
+            background: #eaeef2;
+        }
+
+        tbody td:nth-child(n+2):nth-child(-n+14):hover {
+            cursor: pointer;
+        }
+
+        div.dt-container {
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        #dt-length-0 {
+            margin-right: 0.5rem !important;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="header">
+        <!-- <div class="count" style="margin-left: 5%; margin-top: 1.5%;background-color: #e4e4e4;width: 4%;height: 35px;">
+            <div style="margin-top: 13%;text-align: center;">
+            <span id="selected-employees-count">0</span>
+            </div>
+        </div> -->
+
+        <div class="header-left">
+            <div class="menu-icon dw dw-menu"></div>
+
+            <div class="search-toggle-icon dw dw-search2" data-toggle="header_search"></div>
+            <div class="header-search">
+                <form action="{% url 'view_assign_salarystructure' %}" method="GET">
+                    {% csrf_token %}
+                    <div class="form-group mb-0">
+                        <i class="dw dw-search2 search-icon"></i>
+                        <input type="text" name="search" class="form-control search-input" {% if query is None %}
+                            placeholder="Search " {% else %} value="{{query}}" {% endif %}>
+                        <span onclick="var input = this.previousElementSibling;input.value = ''; input.focus();"
+                            style="position: absolute;;margin-left:70%;margin-top:-35px;cursor:pointer" id="cross">
+                            <a href="{% url 'view_assign_salarystructure' %}" style="color: gray;">x</a>
+                        </span>
+                        <div class="dropdown">
+                            <button class=" btn-primary dropdown-toggle no-arrow search-bt" role="button"
+                                value="Search">
+                                <i class="fa fa-search" style="color:White"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- <div> -->
+
+            <!-- </div> -->
+        </div>
+
+        <div class="user-info-dropdown assgrule" style="margin-top: .95%;">
+            <div class="dropdown">
+                <button data-toggle="modal" href="#rules_Modal" class="btn btn-primary"
+                    style="border-color: white;">Assign Rule</button>
+            </div>
+        </div>
+        <!-- <div style="margin-left: 53%;margin-top: -40px;">
+        <button data-toggle="modal" href="#rules_Modal" style="border-color: white;width: 120%;height: 40px;font-weight: bold;">Assign Rules</button>
+       </div> -->
+
+
+        <div class="user-info-dropdown">
+            <div class="dropdown">
+                <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                    <span class="user-icon">
+                        {% if k.image %}
+                        <img src="{{ k.image.url }}" alt="" style="width: 100%; height:100% ">
+                        {% else %}
+                        <img src="/static/logo/userlogo.png" id="photo" style="width: 100%; height:100% ">
+                        {% endif %}
+                    </span>
+                    <span class="user-name">{{request.user.username}}</span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                    <a class="dropdown-item" href="{% url 'createpersonalinfo' %}"><i class="dw dw-user1"></i>
+                        Profile</a>
+                    <a class="dropdown-item" href="{% url 'department' %}" data-toggle="right-sidebar"><i
+                            class="dw dw-settings2"></i> Settings</a>
+                    <a class="dropdown-item" href="{% url 'help_page' %}"><i class="dw dw-help"></i> Help</a>
+                    <a class="dropdown-item" href="{% url 'logout' %}"><i class="dw dw-logout"></i> Logout</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="left-side-bar">
+        <div class="brand-logo mt-3">
+            <a href="{% url 'dashboard' %}">
+                {% if request.user.company_type %}
+                {% if request.user.company_type.inverse_logo %}
+                <img src="{{ request.user.company_type.inverse_logo.url }}" style="width: 100%; height: 100%;">
+                {% else %}
+                <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+                {% endif %}
+                {% else %}
+                <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+                {% endif %}
+            </a>
+            <div class="close-sidebar" data-toggle="left-sidebar-close">
+                <i class="ion-close-round"></i>
+            </div>
+        </div>
+
+        <div class="menu-block customscroll">
+            <div class="sidebar-menu">
+                <ul id="accordion-menu">
+					
+					<br>
+					<li class="btn-primary active" style="background-color:black">
+						<a href="{% url 'dashboard' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-house-1"></span><span class="mtext"><b>Dashboard</b></span>
+						</a>
+					</li>
+					
+					<li>
+						<a href="{% url 'companyprofile' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-building"></span><span class="mtext"><b>Company Profile</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'personalinfonav' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-user1"></span><span class="mtext"><b>My Profile</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'leave' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-calendar-1"></span><span class="mtext"><b>Leave</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'directory' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-list"></span><span class="mtext"><b>Directory</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'dailylog' %}" class="dropdown-toggle no-arrow">
+							<span class="micon bi bi-check2-square"></span><span class="mtext"><b>Attendance</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'calender' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-calendar"></span><span class="mtext"><b>Holiday Calendar</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'runpayroll_overview' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-money-2"></span><span class="mtext"><b>Payroll</b></span>
+						</a>
+					</li>
+
+
+				</ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="card-box">
+            <ul class="nav nav-tabs customtab" role="tablist">
+
+                <li class="nav-item">
+                    <a class="nav-link " href="{% url 'runpayroll_overview' %}">Run Payroll</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'create_salary' %}">Setup Payroll</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'payroll_dec' %}">Declaration</a>
+                </li>
+                <!-- <li class="nav-item">
+                                                        <a class="nav-link" href="" >Advanced Settings</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="" >Audit History</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="" >Statutory</a>
+                                                    </li> -->
+            </ul>
+
+            <ul class="nav nav-tabs customtab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'create_salary' %}">Create Salary Structure</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'view_assign_salarystructure' %}">Assign Salary
+                        Structure</a>
+                </li>
+            </ul>
+
+
+            <form id="form_id" method="post">
+                {% csrf_token %}
+                <div class="pd-20 card-box">
+
+                    <div class="float-left">
+                        <ul class="nav">
+                            <li class="nav-item" id="selected-employees-count">
+                                <span><b>Selected Employee 0</b></span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="float-right assgrule" style="margin-right: 20%;">
+                        <ul class="nav assgrule" style="margin-top: -1.5%;">
+                            <!-- <li class="nav-item">
+                                                <label class="switch">
+                                                    <input type="checkbox" id="enable_toggle" name="enable_toggle">
+                                                    <div class="slider round">
+                                                        <span class="on">Annual</span>
+                                                        <span class="off">Monthly</span>
+                                                    </div>
+                                                </label>
+                                            </li> -->
+
+                            <li class="nav-item" style="margin-left: 15px;">
+                                <button type="button" class="btn btn-info btn-sm" onclick="exportSelected()"
+                                    id="export-button" disabled>Export</button>
+                            </li>
+                        </ul>
+                    </div>
+                    <br>
+
+                    <hr>
+                    <!-- <div style="width: 96%;margin-left: 2%;margin-top: -3%;"> -->
+
+                    <!-- <div class="table-bordered" style="height: 350px; overflow-x: auto; overflow-y: auto;"> -->
+
+                    <table id="data_Table" class=" table table-striped" style="width:100%">
+                        <thead>
+                            <tr style="background: #fff;">
+                                <th style="background: #fff;">
+                                    <div class="dtcheckbox">
+                                        <input type="checkbox" style="transform: scale(1.5);" name="select_all"
+                                            id="select-all-checkbox">
+                                        <span class="dt-checkbox-label"></span>
+                                    </div>
+                                </th>
+                                <th style="background: #fff;">Emp ID</th>
+                                <th style="background: #fff;">Name</th>
+                                <th style="background: #fff;">Department</th>
+                                <th style="background: #fff;">Effective Date</th>
+                                <th style="background: #fff;">Rules Applied</th>
+                                <!-- <th style="background: #fff;">CTC / Wage</th> -->
+                                {% for i in component %}
+                                <th style="background: #fff;">{{ i.componentname }}</th>
+                                {% endfor %}
+                                <!-- <th></th> -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for i in datas %}
+                            <tr>
+                                <td>
+                                    <div class="dtcheckbox">
+                                        <input type="checkbox" style="transform: scale(1.5);" class="employee-checkbox"
+                                            name="selected_employees" value="{{ i.id }}">
+                                        <span class="dt-checkbox-label"></span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <a href="{% url 'view_personalinfo' i.id %}" style="color: inherit;">
+                                        {{ i.empid}}
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="{% url 'view_personalinfo' i.id %}" style="color: inherit;">{{ i.username }}
+
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="{% url 'view_personalinfo' i.id %}" style="color: inherit;">{{ i.department.name }}
+                                        
+                                    </a>
+                                </td>
+                                <td style="text-wrap: nowrap;">
+                                    {% for assign_rule in assg_rule %}
+                                    {% if assign_rule.user_id_id == i.id %}
+                                    {{ assign_rule.effective_date|date:"F Y" }}
+                                    {% endif %}
+                                    {% endfor %}
+                                </td>
+                                <td style="white-space: normal; text-wrap: nowrap;">
+                                    {% for assign_rule in assg_rule %}
+                                    {% if assign_rule.user_id_id == i.id %}
+                                    <span class="rule-badge" id="assign-rule-{{ assign_rule.id }}">
+                                        <span class="badge-circle">
+                                            {{ assign_rule.assign_salary.rule_name|slice:":1"}}</span>
+                                        {{ assign_rule.assign_salary.rule_name }}
+                                        <span class="closeicon"
+                                            onclick="deleteAssignRule('{{assign_rule.id}}')">X</span>
+                                    </span>
+                                    {% endif %}
+                                    {% endfor %}
+                                </td>
+
+                                <!-- <td id="ctcColumn_{{ i.id }}" style="text-align: right;">{{ i.ctc_amount }}</td> -->
+
+                                <!-- <td id="annualCtcColumn_{{ i.id }}" style="display: none; text-align: right;">
+                                                    {{i.annualctc_amount }}
+                                                </td> -->
+                                {% for comp in component %}
+                                <td>
+                                    {% for assign_rule in assg_rule %}
+                                    {% if assign_rule.user_id_id == i.id %}
+                                    {% for salary_structure_name in assign_rule.assignsalarystructurename_set.all %}
+                                    {% if comp in salary_structure_name.salarycomponent.all %}
+                                    {% for amount in salary_structure_name.assignsalarystructureamount_set.all %}
+                                    <span id="CmptColumn_{{ i.id }}_{{ comp.id }}" style="float: right;"
+                                        data-i-id="{{ i.id }}" data-comp-id="{{ comp.id }}">
+                                        {{ amount.amount }}
+                                    </span>
+                                    <span id="AnnulaCmptColumn_{{ i.id }}_{{ comp.id }}"
+                                        style="display: none; float: right;" data-i-id="{{ i.id }}"
+                                        data-comp-id="{{ comp.id }}"></span>
+                                    {% endfor %}
+                                    {% endif %}
+                                    {% endfor %}
+                                    {% endif %}
+                                    {% endfor %}
+                                </td>
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                </div>
+        </div>
+    </div>
+
+    </div>
+
+
+    <div class="modal fade bs-example-modal-sm" id="rules_Modal" tabindex="-1" role="dialog"
+        aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Assign Rule</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                </div>
+                <div class="modal-body">
+                    <div class="col-md">
+
+                        <label>Select Rule<span style="color:red">&#42</span></label>
+                        <div class="form-group" style="overflow-y: auto;">
+
+                            {% for i in com_rule %}
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="rule" value="{{i.id}}" required>
+                                <label class="form-check-label">{{i.rule_name}}</label>
+                            </div>
+                            {% endfor %}
+                            {% if not com_rule %}
+                            <a href="{% url 'create_salary' %}" type="button" class="btn btn-primary btn-sm ">Add Salary
+                                Structure</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label>Effective Date<span style="color:red">&#42</span></label>
+                            <input class="form-control month-picker" type="text" name="effdate" id="effdate"
+                                placeholder="Select Month and Year" style="background-color: white;" required>
+                            <!-- <input class="form-control date-picker"  type="text" name="effdate" id="effdate" placeholder="dd-mm-yyy" style="background-color: white;" required> -->
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <input type="submit" class="btn btn-primary" value="Submit" id="submit-button"
+                        onclick="assignSelected()" disabled> </input>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    </form>
+
+    <!-- js -->
+    <script src="/static/index/vendors/scripts/core.js"></script>
+    <script src="/static/index/vendors/scripts/script.min.js"></script>
+    <script src="/static/index/vendors/scripts/process.js"></script>
+    <script src="/static/index/vendors/scripts/layout-settings.js"></script>
+    <script src="/static/index/src/plugins/apexcharts/apexcharts.min.js"></script>
+    <script src="/static/index/src/plugins/datatables/js/jquery.dataTables.min.js"></script>
+    <script src="/static/index/src/plugins/datatables/js/dataTables.bootstrap4.min.js"></script>
+    <script src="/static/index/src/plugins/datatables/js/dataTables.responsive.min.js"></script>
+    <script src="/static/index/src/plugins/datatables/js/responsive.bootstrap4.min.js"></script>
+    <script src="/static/index/vendors/scripts/dashboard.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <!-- <script>
+        console.log('Yes!');
+        new DataTable("#data_Table", {
+            paging: true,
+            scrollX: false,
+            scrollY: 350,
+            ordering: false,
+            searching: true,
+        })
+    </script> -->
+
+    <script>
+        new DataTable("#data_Table", {
+            paging: true,
+            scrollX: false,
+            scrollY: 350,
+            ordering: false,
+            searching: true,
+            pagingType: "full_numbers",
+            pageLength: 50
+
+        })
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const spans = document.querySelectorAll('span[id^="CmptColumn_"], span[id^="AnnulaCmptColumn_"]');
+
+            spans.forEach(span => {
+
+                const iId = span.getAttribute('data-i-id');
+                const compId = span.getAttribute('data-comp-id');
+                AnnualAmount(iId, compId);
+            });
+        });
+
+        function AnnualAmount(iId, compId) {
+
+            var amountElement = document.getElementById("CmptColumn_{{ i.id }}_{{ comp.id }}");
+            var annualAmountElement = document.getElementById("AnnulaCmptColumn_{{ i.id }}_{{ comp.id }}");
+
+            if (amountElement) {
+                var originalAmount = parseFloat(amountElement.innerText);
+                var multipliedAmount = Math.floor(originalAmount * 12);
+                annualAmountElement.innerText = multipliedAmount;
+            }
+        }
+
+    </script>
+    <script>
+        function exportSelected() {
+            document.getElementById("form_id").action = "{% url 'export_salarystructure' %}";
+            document.getElementById("form_id").submit();
+        }
+
+        function assignSelected() {
+            var dateInput = document.getElementById("effdate").value;
+            var radioButton = document.querySelector('input[name="rule"]:checked');
+
+            if (dateInput && radioButton) {
+                document.getElementById("submit-button").disabled = false;
+                document.getElementById("form_id").action = "{% url 'assign_salarystructure' %}";
+                document.getElementById("form_id").submit();
+            }
+        }
+
+
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $(document).on('click', '#select-all-checkbox', function () {
+                $('.employee-checkbox').prop('checked', this.checked);
+                updateSubmitButton();
+            });
+
+            $(document).on('click', '.employee-checkbox', function () {
+                updateSelectAllCheckbox();
+                updateSubmitButton();
+            });
+
+            function updateSelectAllCheckbox() {
+                var allCheckboxes = $('.employee-checkbox');
+                var allChecked = allCheckboxes.length === allCheckboxes.filter(':checked').length;
+                $('#select-all-checkbox').prop('checked', allChecked);
+            }
+
+            function updateSubmitButton() {
+                var checkboxes = $('.employee-checkbox:checked');
+                const submitButton = $('#submit-button');
+                const exportButton = $('#export-button');
+
+                submitButton.prop('disabled', (checkboxes.length === 0));
+
+                exportButton.prop('disabled', checkboxes.length === 0);
+
+                updateCountColor();
+            }
+
+            function updateCountColor() {
+                var checkboxes = $('.employee-checkbox:checked');
+                const countElement = $('#selected-employees-count');
+                const count = checkboxes.length;
+
+                if (count > 0) {
+                    countElement.html(`<span style="color: blue;"><b>Selected Employee ${count}</b></span>`);
+                } else {
+                    countElement.html(`<span style="color: black;"><b>Selected Employee ${count}</b></span>`);
+                }
+            }
+        });
+    </script>
+
+
+
+    <script>
+        function deleteAssignRule(assignRuleId) {
+            fetch('/delete_assign_salarystructure/' + assignRuleId + '/', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                },
+            })
+                .then(response => {
+                    if (response.ok) {
+                        const ruleElement = document.getElementById('assign-rule-' + assignRuleId);
+                        ruleElement.remove();
+
+                        setTimeout(() => {
+                            location.reload();
+                        }, 100);
+                    } else {
+                        console.error('Error deleting the assign rule:', response.status);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error deleting the assign rule:', error);
+                });
+        }
+    </script>
+
+
+    <!-- <script>
+    $(document).ready(function() {
+        $('#select-all-checkbox').on('click', function() {
+            $('.employee-checkbox').prop('checked', this.checked);
+            countSelectedEmployees();
+            updateCountColor();
+        });
+
+        $('.employee-checkbox').on('click', function() {
+            if ($('.employee-checkbox:checked').length === $('.employee-checkbox').length) {
+                $('#select-all-checkbox').prop('checked', true);
+            } else {
+                $('#select-all-checkbox').prop('checked', false);
+            }
+            countSelectedEmployees();
+            updateCountColor();
+        });
+
+        function countSelectedEmployees() {
+            var count = $('.employee-checkbox:checked').length;
+            $('#selected-employees-count').text(count);
+        }
+
+        function updateCountColor() {
+            var count = $('.employee-checkbox:checked').length;
+            const submitButton = document.querySelector('input[type="submit"]');
+            var countElement = $('.count');
+            if (count > 0) {
+                countElement.css('background-color', 'blue');
+                countElement.css('color', 'white');
+                submitButton.disabled = false; 
+            } else {
+                countElement.css('background-color', '#e4e4e4'); 
+                countElement.css('color', 'black');
+            }
+        }
+    });
+</script> -->
+
+
+    <!-- <script>
+    $(document).ready(function(){
+        var multipleCancelButton = new Choices('#rules',{
+        removeItemButton: true,
+        }); 
+    });
+    var limit = 1;
+    $('input.form-check-label').on('change', function(evt) {
+        if($(this).siblings(':checked').length >= limit) {
+            this.checked = false;
+        }
+    }); 
+
+</script> -->
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var rejectLinks = document.getElementsByClassName('reject-link');
+            var modal = document.getElementById('rejection-modal');
+            var leaveIdField = document.getElementById('leave-id');
+            var closeButton = document.getElementsByClassName('close')[0];
+
+            for (var i = 0; i < rejectLinks.length; i++) {
+                rejectLinks[i].addEventListener('click', function (event) {
+                    event.preventDefault();
+                    var leaveId = this.getAttribute('data-leave-id');
+                    leaveIdField.value = leaveId;
+                    modal.style.display = 'block';
+                });
+            }
+
+            closeButton.addEventListener('click', function () {
+                modal.style.display = 'none';
+            });
+
+            // Add an event listener to the rejection form submit button
+            var rejectionForm = document.getElementById('rejection-form');
+            var rejectionSubmitButton = rejectionForm.querySelector('button[type="submit"]');
+            rejectionSubmitButton.addEventListener('click', function () {
+                modal.style.display = 'none';
+            });
+        });
+
+    </script>
+
+    <script>
+        function toggleDisplay() {
+            var toggleButton = document.getElementById("enable_toggle");
+            console.log("DDDDDDDDDDDDDDDDD ", toggleButton)
+
+            {% for i in datas %}
+            var ctcColumn_{{ i.id }
+        } = document.getElementById("ctcColumn_{{ i.id }}");
+        var annualCtcColumn_{{ i.id }} = document.getElementById("annualCtcColumn_{{ i.id }}");
+        {% for comp in component %}
+        var CmptColumn_{{ i.id }}_{ { comp.id } } = document.getElementById("CmptColumn_{{i.id}}_{{comp.id}}");
+        var AnnulaCmptColumn_{{ i.id }}_{ { comp.id } } = document.getElementById("AnnulaCmptColumn_{{i.id}}_{{comp.id}}");
+        {% endfor %}
+
+        if (ctcColumn_{ { i.id } } && annualCtcColumn_{ { i.id } }) {
+            if (toggleButton.checked) {
+                ctcColumn_{ { i.id } }.style.display = "none";
+                annualCtcColumn_{ { i.id } }.style.display = "table-cell"; // Change to "table-cell" for table cells
+                {% for comp in component %}
+                if (CmptColumn_{ { i.id } }_{ { comp.id } } && AnnulaCmptColumn_{ { i.id } }_{ { comp.id } }) {
+                        CmptColumn_{ { i.id } }_{ { comp.id } }.style.display = "none";
+                        AnnulaCmptColumn_{ { i.id } }_{ { comp.id } }.style.display = "table-cell";
+                }
+                {% endfor %}
+            } else {
+                ctcColumn_{ { i.id } }.style.display = "table-cell";
+                annualCtcColumn_{ { i.id } }.style.display = "none";
+                {% for comp in component %}
+                if (CmptColumn_{ { i.id } }_{ { comp.id } } && AnnulaCmptColumn_{ { i.id } }_{ { comp.id } }) {
+                        CmptColumn_{ { i.id } }_{ { comp.id } }.style.display = "table-cell";
+                        AnnulaCmptColumn_{ { i.id } }_{ { comp.id } }.style.display = "none";
+                }
+                {% endfor %}
+            }
+        }
+        {% endfor %}
+}
+
+        document.getElementById("enable_toggle").addEventListener("change", toggleDisplay);
+
+        toggleDisplay();
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html>
+{% load static %}
+<head>
+    <!-- Basic Page Info -->
+    <meta charset="utf-8">
+    <title>HRMS</title>
+    <link rel="icon" href="/static/logo/apple-touch-icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"> 
+
+    <!-- Mobile Specific Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="/static/index/vendors/styles/core.css">
+    <link rel="stylesheet" type="text/css" href="/static/index/vendors/styles/icon-font.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/index/vendors/styles/style.css">
+
+    <!-- AG Grid CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/ag-grid-community@31.0.0/dist/styles/ag-grid.css">
+    <link rel="stylesheet" href="https://unpkg.com/ag-grid-community@31.0.0/dist/styles/ag-theme-alpine.css">
+
+    <!-- Jquery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <!-- AG Grid JavaScript -->
+    <script src="https://unpkg.com/ag-grid-community@31.0.0/dist/ag-grid-community.min.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-119386393-1');
+    </script>
+
+    <script>
+        flatpickr("[data-behavior='flatpickr']", {
+            allowInput: true,
+            dateFormat: "Y-m-d"
+        });
+    </script>
+
+    <style>
+        i {
+            cursor: pointer;
+        }
+
+        .alert {
+            background-color: white;
+            border: none;
+        }
+
+        .btn-link {
+            color: #007BFF;
+            cursor: pointer;
+        }
+
+        .btn-delete {
+            background-color: transparent;
+            border: none;
+            padding: 0;
+        }
+
+        .ag-header {
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            background-color:  #3f51b5;
+        }
+        
+       
+
+        .ag-header-cell:hover {
+            background-color: #ffffff;
+            color: rgb(13, 13, 13);
+            border-right: 1px solid #5c6bc0;
+            padding: 10px 8px;
+        }
+
+        
+
+        .ag-cell {
+            border: 1px solid #e0e0e0 !important;
+            padding: 5px !important; /* Adjust padding for better spacing */
+        }
+
+        .ag-cell:nth-child(1) {
+            position: sticky;
+            left: 0;
+            width: 150px;
+            min-width: 150px;
+            background-color: inherit !important; /* Ensure background matches row */
+            z-index: 1;
+        }
+
+        .ag-row-even .ag-cell:nth-child(1) {
+            background: #fff;
+        }
+
+        .ag-row-odd .ag-cell:nth-child(1) {
+            background: #eaeef2;
+        }
+
+        .ag-row-odd {
+            background: #eaeef2;
+        }
+
+        .ag-theme-alpine {
+            --ag-grid-size: 4px;
+            --ag-header-height: 40px;
+            --ag-row-height: 40px;
+        }
+
+        /* Ensure grid container handles overflow */
+        #agGridTable {
+            overflow-x: auto;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-left">
+            <div class="menu-icon dw dw-menu"></div>
+        </div>
+        <div class="header-right">
+            <div class="dashboard-setting user-notification">
+                <div class="dropdown">
+                    <a class="dropdown-toggle no-arrow" href="javascript:;" data-toggle="right-sidebar"></a>
+                </div>
+            </div>
+
+            <form action="{% url 'salary_revision' %}" method="get" id="search-form">
+                <div class="user-info-dropdown" id="search">
+                    <div class="dropdown">
+                        <div class="input-group">
+                            <div class="form-group">
+                                <input id="monthPicker" name="monthselect" class="form-control month-picker" type="text" style="margin-top: 4%; margin-left: -10%;" />
+                            </div>
+                            <span onclick="var input = this.previousElementSibling; input.value = ''; input.focus();"
+                                  style="position: absolute; margin-left: 80%; margin-top: 9%; cursor: pointer" id="cross">
+                                <a href="{% url 'salary_revision' %}" style="color: grey;">x</a>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <div class="user-info-dropdown">
+                <div class="dropdown">
+                    <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                        <span class="user-icon">
+                            {% if k.image %}
+                            <img src="{{ k.image.url }}" alt="" style="width: 100%; height:100%">
+                            {% else %}
+                            <img src="/static/logo/userlogo.png" id="photo" style="width: 100%; height:110%">
+                            {% endif %} 
+                        </span>
+                        <span class="user-name">{{request.user.username}}</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                        <a class="dropdown-item" href="{% url 'createpersonalinfo' %}"><i class="dw dw-user1"></i> Profile</a>
+                        <a class="dropdown-item" href="{% url 'department' %}" data-toggle="right-sidebar"><i class="dw dw-settings2"></i> Settings</a>
+                        <a class="dropdown-item" href="{% url 'help_page' %}"><i class="dw dw-help"></i> Help</a>
+                        <a class="dropdown-item" href="{% url 'logout' %}"><i class="dw dw-logout"></i> Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="left-side-bar">
+        <div class="brand-logo mt-3">
+            <a href="{% url 'dashboard' %}">
+                {% if request.user.company_type %}
+                    {% if request.user.company_type.inverse_logo %}
+                    <img src="{{ request.user.company_type.inverse_logo.url }}" style="width: 100%; height: 100%;">
+                    {% else %}
+                    <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+                    {% endif %}
+                {% else %}
+                    <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+                {% endif %}
+            </a>
+            <div class="close-sidebar" data-toggle="left-sidebar-close">
+                <i class="ion-close-round"></i>
+            </div>
+        </div>
+      
+        <div class="menu-block customscroll">
+            <div class="sidebar-menu">
+                <ul id="accordion-menu">
+                    <br>
+                    <li class="btn-primary active" style="background-color:black">
+                        <a href="{% url 'dashboard' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-house-1"></span><span class="mtext"><b>Dashboard</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'companyprofile' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-building"></span><span class="mtext"><b>Company Profile</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'personalinfonav' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-user1"></span><span class="mtext"><b>My Profile</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'leave' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-calendar-1"></span><span class="mtext"><b>Leave</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'directory' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-list"></span><span class="mtext"><b>Directory</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'dailylog' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon bi bi-check2-square"></span><span class="mtext"><b>Attendance</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'calender' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-calendar"></span><span class="mtext"><b>Holiday Calendar</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'runpayroll_overview' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-money-2"></span><span class="mtext"><b>Payroll</b></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+  
+    <div class="main-container">
+        <div class="card-box">
+            <ul class="nav nav-tabs customtab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'runpayroll_overview' %}">Run Payroll</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'create_salary' %}">Setup Payroll</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'payroll_dec' %}">Declaration</a>
+                </li>
+            </ul>
+            <div class="min-height-100px">
+                <ul class="nav nav-tabs customtab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'runpayroll_overview' %}">Overview</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'runpayroll' %}">Attendance & Leave</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'salary_revision' %}">Salary Revision</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'pay_register' %}">Pay Register</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'payout' %}">Payout</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'adhoc' %}">Variable & Adhoc</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'salary_onhold' %}">Salary on Hold</a>
+                    </li>
+                </ul>
+            </div>
+          
+            <div class="pd-20 card-box">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h6 class="float-left">Salary Revision</h6> 
+                    </div>
+                </div>
+                <hr>  
+                <div id="agGridTable" class="ag-theme-alpine" style="height: 400px; width: 100%;"></div>
+            </div>
+        </div>
+    </div>
+
+    {% for i in user_data %}
+        {% for assgin_rule in assgin_rules %}
+            {% if assgin_rule.user_id_id == i.id %}
+            <div class="modal fade bs-example-modal-md" id="editsalary_{{ assgin_rule.id }}">
+                <div class="modal-dialog modal-md modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Edit Salary</h4>
+                            <button type="button" class="close" data-dismiss="modal">×</button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="{% url 'edit_assignsalary' %}" method="post" enctype="multipart/form-data" class="form-container" role="form" id="editworkweek" onsubmit="return validateForm()">
+                                {% csrf_token %}
+                                <input hidden type="text" name="salaryid" id="salaryid" value="{{ assgin_rule.id }}">
+                                {% for salary_structure_name in assgin_rule.assignsalarystructurename_set.all %}
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            {% for salary_component in salary_structure_name.salarycomponent.all %}
+                                            <label>{{ salary_component.componentname }} <span style="color:red">*</span></label>
+                                            {% for amount in salary_structure_name.assignsalarystructureamount_set.all %}
+                                            <input type="text" class="form-control" name="amount" value="{{ amount.amount }}">
+                                            {% endfor %}
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Effective Date <span style="color:red">*</span></label>
+                                            <input class="form-control month-picker" type="text" name="effdate" id="month"
+                                                   placeholder="Select Month and Year" style="background-color: white;"
+                                                   value="{{ assgin_rule.effective_date|date:'F Y' }}" required>
+                                        </div>
+                                    </div>
+                                </div>                                                
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+
+    <!-- js -->
+    <script src="/static/index/vendors/scripts/core.js"></script>
+    <script src="/static/index/vendors/scripts/script.min.js"></script>
+    <script src="/static/index/vendors/scripts/process.js"></script>
+    <script src="/static/index/vendors/scripts/layout-settings.js"></script>
+    <script src="/static/index/src/plugins/apexcharts/apexcharts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <script>
+        // AG Grid configuration
+        const componentNames = [
+            {% for i in component %}
+            "{{ i.componentname }}",
+            {% endfor %}
+        ];
+
+        const columnDefs = [
+            { 
+                headerName: "Emp Id", 
+                field: "empid", 
+                width: 150, 
+                pinned: 'left', 
+                cellRenderer: params => {
+                    return `<a href="/view_personalinfo${params.data.id}">${params.value}</a>`;
+                },            },
+            { 
+                headerName: "Name", 
+                field: "username", 
+                width: 150, 
+                cellRenderer: params => {
+                    return `<a href="/view_personalinfo${params.data.id}">${params.value}</a>`;
+                },            },
+            ...componentNames.map(name => ({
+                headerName: name,
+                field: name.toLowerCase().replace(/\s+/g, '_'),
+                width: 150,
+                cellStyle: { 'text-align': 'right' }
+            })),
+            { 
+                headerName: "Action", 
+                field: "action", 
+                width: 100, 
+                pinned: 'right', // Pin the action column to the right
+                cellRenderer: params => {
+                    return params.data && params.data.assign_rule_id 
+                        ? `<button class="btn btn-link" data-toggle="modal" data-target="#editsalary_${params.data.assign_rule_id}">
+                               <i class="fa fa-edit" style="font-size: 24px; color: grey;"></i>
+                           </button>`
+                        : '';
+                }
+            }
+        ];
+
+        const rowData = [
+            {% for i in user_data %}
+            {
+                id: "{{ i.id }}",
+                empid: "{{ i.empid }}",
+                username: "{{ i.username }}",
+                assign_rule_id: "{% for assgin_rule in assgin_rules %}{% if assgin_rule.user_id_id == i.id %}{{ assgin_rule.id }}{% endif %}{% endfor %}",
+                {% for comp in component %}
+                "{{ comp.componentname|lower }}": "{% for assgin_rule in assgin_rules %}{% if assgin_rule.user_id_id == i.id %}{% for salary_structure_name in assgin_rule.assignsalarystructurename_set.all %}{% if comp in salary_structure_name.salarycomponent.all %}{% for amount in salary_structure_name.assignsalarystructureamount_set.all %}{{ amount.amount }}{% endfor %}{% endif %}{% endfor %}{% endif %}{% endfor %}" || "",
+                {% endfor %}
+            },
+            {% endfor %}
+        ].map(row => {
+            const transformedRow = {
+                id: row.id,
+                empid: row.empid,
+                username: row.username,
+                assign_rule_id: row.assign_rule_id
+            };
+            componentNames.forEach(name => {
+                const fieldName = name.toLowerCase().replace(/\s+/g, '_');
+                const lowerCaseName = name.toLowerCase();
+                transformedRow[fieldName] = row[lowerCaseName] || '';
+            });
+            transformedRow.action = ''; // Placeholder for the action column
+            return transformedRow;
+        });
+
+        const gridOptions = {
+            columnDefs: columnDefs,
+            rowData: rowData,
+            domLayout: 'autoHeight', // Adjusts height dynamically
+            enableCellTextSelection: true,
+            defaultColDef: {
+                sortable: false,
+                resizable: true
+            },
+            suppressHorizontalScroll: false, // Allow horizontal scrolling if needed
+            pagination: true,
+            paginationPageSize: 50,
+            rowHeight: 40,
+            headerHeight: 40
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const gridDiv = document.querySelector('#agGridTable');
+            new agGrid.Grid(gridDiv, gridOptions);
+        });
+    </script>
+    <script>
+        // Retrieve stored month from local storage
+        var selectedMonth = localStorage.getItem('selectedMonth');
+        if (selectedMonth) {
+            document.getElementById('selectedMonth').value = selectedMonth;
+        }
+    </script>
+    <script>
+        $(document).ready(function () {
+            function getUrlParameter(name) {
+                name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+                var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+                var results = regex.exec(location.search);
+                return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+            }
+
+            var urlSelectedDate = getUrlParameter('monthselect');
+            var selectedDate = urlSelectedDate || new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+            var localStorageSelectedDate = localStorage.getItem("monthselect");
+
+            $("#monthPicker").datepicker({
+                dateFormat: 'MM yyyy',
+                defaultDate: urlSelectedDate,
+                onSelect: function (date) {
+                    selectedDate = date;
+                    localStorage.setItem("monthselect", selectedDate);
+                    $("#search-form").submit();
+                }
+            });
+
+            if (localStorageSelectedDate) {
+                $("#monthPicker").val(localStorageSelectedDate);
+                if ($("#monthPicker").val() !== selectedDate) {
+                    $("#search-form").submit();
+                }
+            } else {
+                $("#monthPicker").val(selectedDate);
+            }
+        });
+    </script>
+</body>
+</html>

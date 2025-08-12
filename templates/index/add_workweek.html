@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Basic Page Info -->
+    <meta charset="utf-8">
+    <title>HRMS</title>
+    <link rel="icon" href="/static/logo/apple-touch-icon.png" type="image/x-icon">
+
+
+    <!-- Site favicon -->
+    <!-- <link rel="apple-touch-icon" sizes="180x180" href="static/index/vendors/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="static/index/vendors/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="static/index/vendors/images/favicon-16x16.png"> -->
+
+    <!-- Mobile Specific Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="/static/index/vendors/styles/core.css">
+    <link rel="stylesheet" type="text/css" href="/static/index/vendors/styles/icon-font.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/index/src/plugins/datatables/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/index/src/plugins/datatables/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/index/vendors/styles/style.css">
+
+    <!-- Jquery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+    <!-- Data table css -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.dataTables.css" />
+    <script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-119386393-1');
+    </script>
+    <script>
+       
+        flatpickr("[data-behavior='flatpickr']", {
+            allowInput: true,
+            dateFormat: "Y-m-d"
+        });
+    </script>
+
+
+    <style>
+        .inpbtn {
+            border: 2px solid #28a745;
+            border-radius: 4px;
+            background-color: #28a745;
+            width: 32%;
+    
+        }
+    
+        .inpbtn2 {
+            border: 2px solid;
+            border-radius: 4px;
+            width: 32%;
+    
+        }
+    
+        th {
+            top: -2px;
+            background-color: #fff;
+            white-space: nowrap;
+            text-align: left !important;
+            z-index: 10;
+        }
+    
+        td {
+            border: 1px solid #e0e0e0;
+            background-color: #fff;
+        }
+    
+        th:nth-child(1),
+        td:nth-child(1) {
+            position: sticky;
+            left: -1px;
+            width: 0;
+            background-color: #fff;
+            z-index: 30;
+        }
+    
+        th:nth-child(2),
+        td:nth-child(2) {
+            position: sticky;
+            left: 67.5px;
+            width: 5%;
+            background-color: #fff;
+            z-index: 25;
+    
+        }
+    
+        tr:nth-child(even) td {
+            background: #fff;
+        }
+    
+        tr:nth-child(odd) td {
+            background: #eaeef2;
+        }
+    
+        tbody td:nth-child(n+2):nth-child(-n+14):hover {
+            cursor: pointer;
+        }
+    
+        div.dt-container {
+            width: 100%;
+            margin: 0 auto;
+        }
+    
+        #dt-length-0 {
+            margin-right: 0.5rem !important;
+        }
+    </style>
+
+</head>
+<body>
+
+    <div class="header">
+        <div class="header-left">
+            <div class="menu-icon dw dw-menu"></div>
+            
+        </div>
+        <div class="header-right">
+            <div class="dashboard-setting user-notification">
+                <div class="dropdown">
+                    <a class="dropdown-toggle no-arrow" href="javascript:;" data-toggle="right-sidebar">
+                      
+                    </a>
+                </div>
+            </div>
+            <!-- <div class="user-notification">
+                <div class="dropdown">
+                    <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
+                        <i class="icon-copy dw dw-notification"></i>
+                        <span class="badge notification-active"></span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <div class="notification-list mx-h-350 customscroll">
+                            <ul>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/img.jpg" alt="">
+                                        <h3>John Doe</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/photo1.jpg" alt="">
+                                        <h3>Lea R. Frith</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/photo2.jpg" alt="">
+                                        <h3>Erik L. Richards</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/photo3.jpg" alt="">
+                                        <h3>John Doe</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/photo4.jpg" alt="">
+                                        <h3>Renee I. Hansen</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/img.jpg" alt="">
+                                        <h3>Vicki M. Coleman</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+            <div class="user-info-dropdown">
+                <div class="dropdown">
+                    <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                        <span class="user-icon">
+                             
+                        {% if k.image %}
+                                    <img src="{{ k.image.url }}" alt="" style="width: 100%; height:100% ">
+                        {% else %}
+                        <img src="/static/logo/userlogo.png" id="photo" style="width: 100%; height:100% ">
+                        {% endif %}  
+                        </span>
+                        <span class="user-name">{{request.user.username}}</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                        <a class="dropdown-item" href="{% url 'createpersonalinfo' %}"><i class="dw dw-user1"></i> Profile</a>
+                        <a class="dropdown-item" href="{% url 'department' %}" data-toggle="right-sidebar"><i class="dw dw-settings2"></i> Settings</a>
+                        <a class="dropdown-item" href="{% url 'help_page' %}"><i class="dw dw-help"></i> Help</a>
+                        <a class="dropdown-item" href="{% url 'logout' %}"><i class="dw dw-logout"></i>Logout</a>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+<!-- 
+    <div class="right-sidebar">
+        <div class="sidebar-title">
+            <h3 class="weight-600 font-16 text-blue">
+                 Settings -->
+                <!--<span class="btn-block font-weight-400 font-12">User Interface Settings</span>-->
+            <!-- </h3>
+            <div class="close-sidebar" data-toggle="right-sidebar-close">
+                <i class="icon-copy ion-close-round"></i>
+            </div>
+        </div>
+
+        <div class="right-sidebar-body customscroll">
+            <div class="right-sidebar-body-content">
+                				<h4 class="weight-600 font-18 pb-10" ><a href="{% url 'department' %}">Department</a> </h4>
+				<h4 class="weight-600 font-18 pb-10" ><a href="{% url 'subdepartment' %}">Sub Department</a> </h4>
+				<h4 class="weight-600 font-18 pb-10"><a href="{% url 'designation' %}">Designation</a></h4>
+				<h4 class="weight-600 font-18 pb-10"><a href="{% url 'job' %}">Job Title</a></h4>
+				<h4 class="weight-600 font-18 pb-10"><a href="{% url 'wrk' %}">Work location</a></h4>
+            </div>
+        </div>
+    </div> -->
+
+    <div class="left-side-bar">
+        <div class="brand-logo mt-3">
+        <a href="{% url 'dashboard' %}">
+            {% if request.user.company_type %}
+				{% if request.user.company_type.inverse_logo %}
+				<img src="{{ request.user.company_type.inverse_logo.url }}" style="width: 100%; height: 100%;">
+				{% else %}
+				<img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+				{% endif %}
+				{% else %}
+				<img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+				{% endif %}
+        </a>
+        <div class="close-sidebar" data-toggle="left-sidebar-close">
+           <i class="ion-close-round"></i>
+        </div>
+     </div>
+      
+       <div class="menu-block customscroll">
+            <div class="sidebar-menu">
+                <ul id="accordion-menu">
+					
+					<br>
+					<li class="btn-primary active" style="background-color:black">
+						<a href="{% url 'dashboard' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-house-1"></span><span class="mtext"><b>Dashboard</b></span>
+						</a>
+					</li>
+					
+					<li>
+						<a href="{% url 'companyprofile' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-building"></span><span class="mtext"><b>Company Profile</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'personalinfonav' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-user1"></span><span class="mtext"><b>My Profile</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'leave' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-calendar-1"></span><span class="mtext"><b>Leave</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'directory' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-list"></span><span class="mtext"><b>Directory</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'dailylog' %}" class="dropdown-toggle no-arrow">
+							<span class="micon bi bi-check2-square"></span><span class="mtext"><b>Attendance</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'calender' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-calendar"></span><span class="mtext"><b>Holiday Calendar</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'runpayroll_overview' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-money-2"></span><span class="mtext"><b>Payroll</b></span>
+						</a>
+					</li>
+
+
+				</ul>
+            </div>
+        </div>
+    </div>
+
+          
+    <div class="main-container">
+               <div class="card-box height-100-p overflow-hidden">
+                           <!-- <br><h4 class="text-blue h4" style="padding-left:30px">COMPANY PROFILE</h4> -->
+                           <ul class="nav nav-tabs customtab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'dailylog' %}">Logs</a>
+                              </li>
+                              <li class="nav-item">
+                                <a class="nav-link" href="{% url 'attendance_logs' %}">Attendance Logs</a>
+                            </li>
+                            <li class="nav-item"></li>
+                                <a class="nav-link" href="{% url 'search_punch_logs' %}">Attendance Month Logs</a>
+                            </li>
+                              <li class="nav-item">
+                                <a class="nav-link" href="{% url 'automationlog' %}"
+                                  >Automation Logs</a
+                                >
+                              </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'list-request-approvals' %}">Approvals</a>
+                            </li>
+                              <li class="nav-item">
+                                <a class="nav-link" href="{% url 'attendanceRule' %}">Rules</a>
+                             </li>
+                             <li class="nav-item">
+                                <a class="nav-link " href="{% url 'view_assignattendancerule' %}">Assign Rule</a>
+                             </li>
+                              <li class="nav-item">
+                                <a class="nav-link active" href="{% url 'attendance_workweek' %}">Work Week</a>
+                            </li>
+                            <li class="nav-item">
+                             <a class="nav-link" href="{% url 'view_assignworkweek' %}">Assign Work Week</a>
+                         </li>
+                           </ul>
+
+                           
+        
+                                    <!-- <div class="min-height-200px"> -->
+                                        <div class="pd-20 card-box">
+                                            <div  class="row">
+                                                <div class="col-md-10">
+                                                    <h6 class="float-left">
+                                                        Work Week</h6> 
+                                                </div>
+                                                <div class=" col-md-2">
+                                                    <i class="fa fa-plus-circle" id="add" data-toggle="modal" data-target="#work_week" style="font-size:24px; color:grey;float: right;cursor: pointer; margin-left: 10px;"></i>
+                                                </div>
+                                            </div> <hr>  
+                                            
+                                            <div class="modal fade bs-example-modal-lg" id="work_week" >
+                                                <div class="modal-dialog modal-lg modal-dialog-centered" >
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title" >Work Week</h4>
+                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                        </div>
+                                                        
+                                                            <div class="modal-body">
+                                                                <form action="{% url 'add_workweek' %} " method="post" enctype="multipart/form-data" class="form-container" role="form" id="workweek" onsubmit="return validateForm2()">
+                                                                    {% csrf_token %}
+                                                                            <div class="row">
+                                                                                <div class="col-md-6" >
+                                                                                    <div class="form-group">
+                                                                                        <label>Off Day <span style="color:red">&#42</span></label>
+                                                                                        <input pattern="[a-zA-Z\s]+" type="text" class="form-control" id="off_day" name="off_day" required >  
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="col-md-6">
+                                                                                    <div class="form-group">
+                                                                                        <label>Description <span style="color:red">&#42</span></label>
+                                                                                        <input type="text" class="form-control" id="desc" name="description"  required >
+                                                                                        <span id="instituteError" style="color: red;font-size: small;"></span> 
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="col-md-6">
+                                                                                    <div class="form-group">
+                                                                                        <label>Rule Name <span style="color:red">&#42</span></label>
+                                                                                        <input type="text" class="form-control" id="rule_name" name="rule_name"> 
+                                                                                    </div>
+                                                                                </div>
+                                                                                
+                                                                                <div class="col-md-6">
+                                                                                    <div class="form-group">
+                                                                                        <br><br>
+                                                                                        <input type="checkbox" id="half_day" name="half_day" style="width: 20px; height: 20px; cursor: pointer;">&nbsp;
+                                                                                        <label for="half_day">Half Day</label>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="col-md-12">
+                                                                                    <div class="form-group">
+                                                                                        <table class="table table-hover">
+                                                                                            <tr style="background-color:rgb(233, 227, 227)">
+                                                                                                <th scope="col">Week</th>
+                                                                                                <th scope="col">Mon</th>
+                                                                                                <th scope="col">Tue</th>
+                                                                                                <th scope="col">Wed</th>
+                                                                                                <th scope="col">Thu</th>
+                                                                                                <th scope="col">Fri</th>
+                                                                                                <th scope="col">Sat</th>
+                                                                                                <th scope="col">Sun</th>
+                                                                                            </tr>
+                                                                                            <tbody>
+                                                                                                <tr>
+                                                                                                    <td class="td">1</td>
+
+                                                                                                    <td class="td">
+                                                                                                        <input type="button" id="day_1" class="inpbtn" onclick="toggleColor('day_1')">
+                                                                                                        <input type="hidden" id="day_1_color" name="day_1_color" value="#28a745">
+                                                                                                    </td>
+                                                                                                
+                                                                                                    <td class="td">
+                                                                                                        <input type="button" id="day_2" name="day_2" class="inpbtn" onclick="toggleColor('day_2')">
+                                                                                                        <input type="hidden" id="day_2_color" name="day_2_color" value="#28a745">
+                                                                                                    </td>
+
+                                                                                                    <td class="td">
+                                                                                                        <input type="button" id="day_3" name="day_3" class="inpbtn" onclick="toggleColor('day_3')">
+                                                                                                        <input type="hidden" id="day_3_color" name="day_3_color" value="#28a745">                                                                   
+                                                                                                    <td class="td">
+                                                                                                        <input type="button" id="day_4" name="day_4" class="inpbtn" onclick="toggleColor('day_4')">
+                                                                                                        <input type="hidden" id="day_4_color" name="day_4_color" value="#28a745"> 
+                                                                                                    </td>
+                                                                                                    <td class="td">
+                                                                                                        <input type="button" id="day_5" name="day_5" class="inpbtn" onclick="toggleColor('day_5')">
+                                                                                                        <input type="hidden" id="day_5_color" name="day_5_color" value="#28a745">
+                                                                                                    </td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_6" name="day_6" class="inpbtn" onclick="toggleColor('day_6')">
+                                                                                                            <input type="hidden" id="day_6_color" name="day_6_color" value="#28a745">
+                                                                                                        </td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_7" name="day_7" class="inpbtn" onclick="toggleColor('day_7')">
+                                                                                                            <input type="hidden" id="day_7_color" name="day_7_color" value="#28a745">                         
+                                                                                                        </td>
+                                                                                                </tr>
+                                                                                                
+                                                                                                <tr>
+                                                                                                    <td class="td">2</td>
+                                                                                                    <td>
+                                                                                                            <input type="button" id="day_8" name="day_8" class="inpbtn" onclick="toggleColor('day_8')" >
+                                                                                                            <input type="hidden" id="day_8_color" name="day_8_color" value="#28a745">   
+                                                                                                        </td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_9" name="day_9" class="inpbtn" onclick="toggleColor('day_9')" >
+                                                                                                            <input type="hidden" id="day_9_color" name="day_9_color" value="#28a745">                 
+                                                                                                        </td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_10" name="day_10" class="inpbtn" onclick="toggleColor('day_10')">
+                                                                                                            <input type="hidden" id="day_10_color" name="day_10_color" value="#28a745">                                                                        
+                                                                                                        </td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_11" name="day_11" class="inpbtn" onclick="toggleColor('day_11')">
+                                                                                                            <input type="hidden" id="day_11_color" name="day_11_color" value="#28a745">                                                 
+                                                                                                        </td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_12" name="day_12" class="inpbtn" onclick="toggleColor('day_12')">
+                                                                                                            <input type="hidden" id="day_12_color" name="day_12_color" value="#28a745">                                                    
+                                                                                                        </td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_13" name="day_13" class="inpbtn" onclick="toggleColor('day_13')">
+                                                                                                            <input type="hidden" id="day_13_color" name="day_13_color" value="#28a745">                                                                 
+                                                                                                        </td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_14" name="day_14" class="inpbtn" onclick="toggleColor('day_14')">
+                                                                                                            <input type="hidden" id="day_14_color" name="day_14_color" value="#28a745">                                                                                        
+                                                                                                        </td>
+                                                                                                </tr>
+                                                                                                <tr>
+                                                                                                    <td class="td">3</td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_15" name="day_15" class="inpbtn" onclick="toggleColor('day_15')">
+                                                                                                            <input type="hidden" id="day_15_color" name="day_15_color" value="#28a745">                                                                                
+                                                                                                        </td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_16" name="day_16" class="inpbtn" onclick="toggleColor('day_16')">
+                                                                                                            <input type="hidden" id="day_16_color" name="day_16_color" value="#28a745">                
+                                                                                                        </td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_17" name="day_17" class="inpbtn" onclick="toggleColor('day_17')">
+                                                                                                            <input type="hidden" id="day_17_color" name="day_17_color" value="#28a745">                                                                    
+                                                                                                        </td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_18" name="day_18" class="inpbtn" onclick="toggleColor('day_18')">
+                                                                                                            <input type="hidden" id="day_18_color" name="day_18_color" value="#28a745">                                                                       
+                                                                                                        </td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_19" name="day_19" class="inpbtn" onclick="toggleColor('day_19')">
+                                                                                                            <input type="hidden" id="day_19_color" name="day_19_color" value="#28a745">                                                                                                    
+                                                                                                        </td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_20" name="day_20" class="inpbtn" onclick="toggleColor('day_20')">
+                                                                                                            <input type="hidden" id="day_20_color" name="day_20_color" value="#28a745">                                                                                                    
+                                                                                                        </td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_21" name="day_21" class="inpbtn" onclick="toggleColor('day_21')">
+                                                                                                            <input type="hidden" id="day_21_color" name="day_21_color" value="#28a745">                                                                                                 
+                                                                                                        </td>
+                                                                                                </tr>
+                                                                                                <tr>
+                                                                                                    <td class="td">4</td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_22" name="day_22" class="inpbtn" onclick="toggleColor('day_22')">
+                                                                                                            <input type="hidden" id="day_22_color" name="day_22_color" value="#28a745">                                                                                                
+                                                                                                        </td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_23" name="day_23" class="inpbtn" onclick="toggleColor('day_23')">
+                                                                                                            <input type="hidden" id="day_23_color" name="day_23_color" value="#28a745">                                                                                    
+                                                                                                        </td>
+                                                                                                    <td class="td">
+                                                                                                        <input type="button" id="day_24" name="day_24" class="inpbtn" onclick="toggleColor('day_24')">
+                                                                                                        <input type="hidden" id="day_24_color" name="day_24_color" value="#28a745">                                                                                     
+                                                                                                    </td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_25" name="day_25" class="inpbtn" onclick="toggleColor('day_25')">
+                                                                                                            <input type="hidden" id="day_25_color" name="day_25_color" value="#28a745">                                                                                                    
+                                                                                                    </td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_26" name="day_26" class="inpbtn" onclick="toggleColor('day_26')">
+                                                                                                            <input type="hidden" id="day_26_color" name="day_26_color" value="#28a745">                                                                                                    
+
+                                                                                                    </td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_27" name="day_27" class="inpbtn" onclick="toggleColor('day_27')">
+                                                                                                            <input type="hidden" id="day_27_color" name="day_27_color" value="#28a745">                                                                                                    
+                                                                                                    </td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_28" name="day_28" class="inpbtn" onclick="toggleColor('day_28')">
+                                                                                                            <input type="hidden" id="day_28_color" name="day_28_color" value="#28a745">                                                                                                   
+                                                                                                    </td>
+                                                                                                </tr>
+                                                                                                <tr>
+                                                                                                    <td class="td">5</td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_29" name="day_29" class="inpbtn" onclick="toggleColor('day_29')">
+                                                                                                            <input type="hidden" id="day_29_color" name="day_29_color" value="#28a745">                                                                                                   
+                                                                                                    </td>
+                                                                                                    <td class="td">
+                                                                                                        <input type="button" id="day_30" name="day_30" class="inpbtn" onclick="toggleColor('day_30')">
+                                                                                                            <input type="hidden" id="day_30_color" name="day_30_color" value="#28a745">                                                                                                    
+                                                                                                    </td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_31" name="day_31" class="inpbtn" onclick="toggleColor('day_31')">
+                                                                                                            <input type="hidden" id="day_31_color" name="day_31_color" value="#28a745">                                                                                                 
+
+                                                                                                    </td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_32" name="day_32" class="inpbtn" onclick="toggleColor('day_32')">
+                                                                                                            <input type="hidden" id="day_32_color" name="day_32_color" value="#28a745">                                                                                                 
+
+                                                                                                    </td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_33" name="day_33" class="inpbtn" onclick="toggleColor('day_33')">
+                                                                                                            <input type="hidden" id="day_33_color" name="day_33_color" value="#28a745">                                                                                                    
+
+                                                                                                    </td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_34" name="day_34" class="inpbtn" onclick="toggleColor('day_34')">
+                                                                                                            <input type="hidden" id="day_34_color" name="day_34_color" value="#28a745">                                                                                                    
+
+                                                                                                    </td>
+                                                                                                    <td class="td">
+                                                                                                        <input type="button" id="day_35" name="day_35" class="inpbtn" onclick="toggleColor('day_35')">
+                                                                                                        <input type="hidden" id="day_35_color" name="day_35_color" value="#28a745">                                                                                                    
+                                                                                                    </td>
+                                                                                                </tr>
+                                                                                            </tbody>
+                                                                                    </table>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                
+                                                                                <div class="modal-footer">
+                                                                                    <button type="submit" class="btn btn-primary" onsubmit="hideadd">Submit</button>
+                                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>        
+                                                                                </div>
+                                                            
+                                                            
+                                                                </form>
+                                                            </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="pd-20 card-box">
+                                                <table id="data_Table" class=" table table-striped" style="width:100%">
+                                                    <thead>
+                                                        <tr style="background-color:rgb(233, 227, 227)">
+                                                            <th>Off Day</th>
+                                                            <th>Description</th>
+                                                            <th>Rule Name</th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% for i in work_week %}
+                                            
+                                                        <tr>
+                                                            <td >{{i.off_day}}</td>
+                                                            <td>{{i.description}}</td>
+                                                            <td>{{i.rule_name}}</td>
+                                                            <td>
+                                                                <button class="btn btn-link" data-toggle="modal" data-target="#editworkweek{{ i.id }}"
+                                                                    data-workweek-id="{{ i.id }}">
+                                                                    <i class="fa fa-edit" style="font-size: 24px; color: grey;"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                            
+                                                        {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                        </div>
+                                        
+                     {% for i in work_week %}                   
+                <div class="modal fade bs-example-modal-lg" id="editworkweek{{ i.id }}" >
+                                                <div class="modal-dialog modal-lg modal-dialog-centered" >
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title" >Work Week</h4>
+                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                        </div>
+                                                        
+                                                            <div class="modal-body">
+                                                                <form action="{% url 'edit_workweek' %} " method="post" enctype="multipart/form-data" class="form-container" role="form" id="editworkweek" onsubmit="return validateForm()">
+                                                                    {% csrf_token %}
+
+                                                                    <input hidden type="text" name="workweekid" id="workweekid" value="{{i.id}}">
+                                                                            <div class="row">
+                                                                                <div class="col-md-6" >
+                                                                                    <div class="form-group">
+                                                                                        <label>Off Day <span style="color:red">&#42</span></label>
+                                                                                        <input pattern="[a-zA-Z\s]+" type="text" class="form-control" id="off_day" name="off_day" value="{{i.off_day}}" required >  
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="col-md-6">
+                                                                                    <div class="form-group">
+                                                                                        <label>Description <span style="color:red">&#42</span></label>
+                                                                                        <input type="text" class="form-control" id="desc" name="description" value="{{i.description}}"  required >
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="col-md-6">
+                                                                                    <div class="form-group">
+                                                                                        <label>Rule Name <span style="color:red">&#42</span></label>
+                                                                                        <input type="text" class="form-control" id="rule_name" name="rule_name" value="{{i.rule_name}}" required> 
+                                                                                    </div>
+                                                                                </div>
+                                                                                
+                                                                                <div class="col-md-6">
+                                                                                    <div class="form-group">
+                                                                                        <br><br>
+                                                                                        <input type="checkbox" id="half_day_{{ i.id }}" name="half_day" {% if i.half_day %} checked {% endif %} style="width: 20px; height: 20px; cursor: pointer;">
+                                                                                        <label for="half_day_{{ i.id }}">Half Day</label>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="col-md-12">
+                                                                                    <div class="form-group">
+                                                                                        <table class="table table-hover">
+                                                                                            <tr style="background-color:rgb(233, 227, 227)">
+                                                                                                <th scope="col">Week</th>
+                                                                                                <th scope="col">Mon</th>
+                                                                                                <th scope="col">Tue</th>
+                                                                                                <th scope="col">Wed</th>
+                                                                                                <th scope="col">Thu</th>
+                                                                                                <th scope="col">Fri</th>
+                                                                                                <th scope="col">Sat</th>
+                                                                                                <th scope="col">Sun</th>
+                                                                                            </tr>
+                                                                                            <tbody>
+                                                                                                <tr>
+                                                                                                    <td class="td">1</td>
+
+                                                                                                    <td class="td">
+                                                                                                        <input type="button" id="day_1_{{ i.id }}" name="day_1" class="inpbtn2" style="border-color: {{ i.day_1 }}; background-color: {{ i.day_1 }};" onclick="togglebtn('day_1_{{ i.id }}')">
+                                                                                                        <input type="hidden" id="day_1_color_{{ i.id }}" name="day_1_color" value="{{ i.day_1 }}">
+                                                                                                    </td>
+                                                                                                    
+                                                                                                    <td class="td">
+                                                                                                        <input type="button" id="day_2_{{ i.id }}" name="day_2" class="inpbtn2" style="border-color: {{ i.day_2 }}; background-color: {{ i.day_2  }};" onclick="togglebtn('day_2_{{ i.id }}')">
+                                                                                                        <input type="hidden" id="day_2_color_{{ i.id }}" name="day_2_color" value="{{ i.day_2 }}">
+                                                                                                    </td>
+
+                                                                                                    <td class="td">
+                                                                                                        <input type="button" id="day_3_{{ i.id }}" name="day_3" class="inpbtn2" style="border-color: {{ i.day_3 }}; background-color: {{ i.day_3 }};" onclick="togglebtn('day_3_{{ i.id }}')">
+                                                                                                        <input type="hidden" id="day_3_color_{{ i.id }}" name="day_3_color" value="{{ i.day_3 }}">  
+                                                                                                    </td>                                                                 
+                                                                                                    <td class="td">
+                                                                                                        <input type="button" id="day_4_{{ i.id }}" name="day_4" class="inpbtn" style="border-color: {{ i.day_4 }}; background-color: {{ i.day_4 }};" onclick="togglebtn('day_4_{{ i.id }}')">
+                                                                                                        <input type="hidden" id="day_4_color_{{ i.id }}" name="day_4_color" value="{{ i.day_4 }}"> 
+                                                                                                    </td>
+                                                                                                    <td class="td">
+                                                                                                        <input type="button" id="day_5_{{ i.id }}" name="day_5" class="inpbtn2" style="border-color: {{ i.day_5 }}; background-color: {{ i.day_5 }};" onclick="togglebtn('day_5_{{ i.id }}')">
+                                                                                                        <input type="hidden" id="day_5_color_{{ i.id }}" name="day_5_color" value="{{ i.day_5 }}">
+                                                                                                    </td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_6_{{ i.id }}" name="day_6" class="inpbtn2" style="border-color: {{ i.day_6 }}; background-color: {{ i.day_6 }};" onclick="togglebtn('day_6_{{ i.id }}')">
+                                                                                                            <input type="hidden" id="day_6_color_{{ i.id }}" name="day_6_color" value="{{ i.day_6 }}">
+                                                                                                        </td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_7_{{ i.id }}" name="day_7" class="inpbtn2" style="border-color: {{ i.day_7 }}; background-color: {{ i.day_7 }};" onclick="togglebtn('day_7_{{ i.id }}')">
+                                                                                                            <input type="hidden" id="day_7_color_{{ i.id }}" name="day_7_color" value="{{ i.day_7 }}">                         
+                                                                                                        </td>
+                                                                                                </tr>
+                                                                                                
+                                                                                                <tr>
+                                                                                                    <td class="td">2</td>
+                                                                                                    <td>
+                                                                                                            <input type="button" id="day_8_{{ i.id }}" name="day_8" class="inpbtn2" style="border-color: {{ i.day_8 }}; background-color: {{ i.day_8 }};" onclick="togglebtn('day_8_{{ i.id }}')" >
+                                                                                                            <input type="hidden" id="day_8_color_{{ i.id }}" name="day_8_color" value="{{ i.day_8 }}">   
+                                                                                                        </td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_9_{{ i.id }}" name="day_9" class="inpbtn2" style="border-color: {{ i.day_9 }}; background-color: {{ i.day_9 }};" onclick="togglebtn('day_9_{{ i.id }}')" >
+                                                                                                            <input type="hidden" id="day_9_color_{{ i.id }}" name="day_9_color" value="{{ i.day_9 }}">                 
+                                                                                                        </td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_10_{{ i.id }}" name="day_10" class="inpbtn2" style="border-color: {{ i.day_10 }}; background-color: {{ i.day_10 }};" onclick="togglebtn('day_10_{{ i.id }}')">
+                                                                                                            <input type="hidden" id="day_10_color_{{ i.id }}" name="day_10_color" value="{{ i.day_10 }}">                                                                        
+                                                                                                        </td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_11_{{ i.id }}" name="day_11" class="inpbtn2" style="border-color: {{ i.day_11 }}; background-color: {{ i.day_11 }};" onclick="togglebtn('day_11_{{ i.id }}')">
+                                                                                                            <input type="hidden" id="day_11_color_{{ i.id }}" name="day_11_color" value="{{ i.day_11 }}">                                                 
+                                                                                                        </td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_12_{{ i.id }}" name="day_12" class="inpbtn2" style="border-color: {{ i.day_12 }}; background-color: {{ i.day_12 }};" onclick="togglebtn('day_12_{{ i.id }}')">
+                                                                                                            <input type="hidden" id="day_12_color_{{ i.id }}" name="day_12_color" value="{{ i.day_12 }}">                                                    
+                                                                                                        </td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_13_{{ i.id }}" name="day_13" class="inpbtn2" style="border-color: {{ i.day_13 }}; background-color: {{ i.day_13 }};" onclick="togglebtn('day_13_{{ i.id }}')">
+                                                                                                            <input type="hidden" id="day_13_color_{{ i.id }}" name="day_13_color" value="{{ i.day_13 }}">                                                                 
+                                                                                                        </td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_14_{{ i.id }}" name="day_14" class="inpbtn2" style="border-color: {{ i.day_14 }}; background-color: {{ i.day_14 }};" onclick="togglebtn('day_14_{{ i.id }}')">
+                                                                                                            <input type="hidden" id="day_14_color_{{ i.id }}" name="day_14_color" value="{{ i.day_14 }}">                                                                                        
+                                                                                                        </td>
+                                                                                                </tr>
+                                                                                                <tr>
+                                                                                                    <td class="td">3</td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_15_{{ i.id }}" name="day_15" class="inpbtn2" style="border-color: {{ i.day_15 }}; background-color: {{ i.day_15 }};" onclick="togglebtn('day_15_{{ i.id }}')">
+                                                                                                            <input type="hidden" id="day_15_color_{{ i.id }}" name="day_15_color" value="{{ i.day_15 }}">                                                                                
+                                                                                                        </td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_16_{{ i.id }}" name="day_16" class="inpbtn2" style="border-color: {{ i.day_16 }}; background-color: {{ i.day_16 }};" onclick="togglebtn('day_16_{{ i.id }}')">
+                                                                                                            <input type="hidden" id="day_16_color_{{ i.id }}" name="day_16_color" value="{{ i.day_16 }}">                
+                                                                                                        </td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_17_{{ i.id }}" name="day_17" class="inpbtn2" style="border-color: {{ i.day_17 }}; background-color: {{ i.day_17 }};" onclick="togglebtn('day_17_{{ i.id }}')">
+                                                                                                            <input type="hidden" id="day_17_color_{{ i.id }}" name="day_17_color" value="{{ i.day_17 }}">                                                                    
+                                                                                                        </td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_18_{{ i.id }}" name="day_18" class="inpbtn2" style="border-color: {{ i.day_18 }}; background-color: {{ i.day_18 }};" onclick="togglebtn('day_18_{{ i.id }}')">
+                                                                                                            <input type="hidden" id="day_18_color_{{ i.id }}" name="day_18_color" value="{{ i.day_18 }}">                                                                       
+                                                                                                        </td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_19_{{ i.id }}" name="day_19" class="inpbtn2" style="border-color: {{ i.day_19 }}; background-color: {{ i.day_19 }};" onclick="togglebtn('day_19_{{ i.id }}')">
+                                                                                                            <input type="hidden" id="day_19_color_{{ i.id }}" name="day_19_color" value="{{ i.day_19 }}">                                                                                                    
+                                                                                                        </td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_20_{{ i.id }}" name="day_20" class="inpbtn2" style="border-color: {{ i.day_20 }}; background-color: {{ i.day_20 }};" onclick="togglebtn('day_20_{{ i.id }}')">
+                                                                                                            <input type="hidden" id="day_20_color_{{ i.id }}" name="day_20_color" value="{{ i.day_20 }}">                                                                                                    
+                                                                                                        </td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_21_{{ i.id }}" name="day_21" class="inpbtn2" style="border-color: {{ i.day_21 }}; background-color: {{ i.day_21 }};" onclick="togglebtn('day_21_{{ i.id }}')">
+                                                                                                            <input type="hidden" id="day_21_color_{{ i.id }}" name="day_21_color" value="{{ i.day_21 }}">                                                                                                 
+                                                                                                        </td>
+                                                                                                </tr>
+                                                                                                <tr>
+                                                                                                    <td class="td">4</td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_22_{{ i.id }}" name="day_22" class="inpbtn2" style="border-color: {{ i.day_22 }}; background-color: {{ i.day_22 }};" onclick="togglebtn('day_22_{{ i.id }}')">
+                                                                                                            <input type="hidden" id="day_22_color_{{ i.id }}" name="day_22_color" value="{{ i.day_22 }}">                                                                                                
+                                                                                                        </td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_23_{{ i.id }}" name="day_23" class="inpbtn2" style="border-color: {{ i.day_23 }}; background-color: {{ i.day_23 }};" onclick="togglebtn('day_23_{{ i.id }}')">
+                                                                                                            <input type="hidden" id="day_23_color_{{ i.id }}" name="day_23_color" value="{{ i.day_23 }}">                                                                                    
+                                                                                                        </td>
+                                                                                                    <td class="td">
+                                                                                                        <input type="button" id="day_24_{{ i.id }}" name="day_24" class="inpbtn2" style="border-color: {{ i.day_24 }}; background-color: {{ i.day_24 }};" onclick="togglebtn('day_24_{{ i.id }}')">
+                                                                                                        <input type="hidden" id="day_24_color_{{ i.id }}" name="day_24_color" value="{{ i.day_24 }}">                                                                                     
+                                                                                                    </td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_25_{{ i.id }}" name="day_25" class="inpbtn2" style="border-color: {{ i.day_25 }}; background-color: {{ i.day_25 }};" onclick="togglebtn('day_25_{{ i.id }}')">
+                                                                                                            <input type="hidden" id="day_25_color_{{ i.id }}" name="day_25_color" value="{{ i.day_25 }}">                                                                                                    
+                                                                                                    </td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_26_{{ i.id }}" name="day_26" class="inpbtn2" style="border-color: {{ i.day_26 }}; background-color: {{ i.day_26 }};" onclick="togglebtn('day_26_{{ i.id }}')">
+                                                                                                            <input type="hidden" id="day_26_color_{{ i.id }}" name="day_26_color" value="{{ i.day_26 }}">                                                                                                    
+
+                                                                                                    </td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_27_{{ i.id }}" name="day_27" class="inpbtn2" style="border-color: {{ i.day_27 }}; background-color: {{ i.day_27 }};" onclick="togglebtn('day_27_{{ i.id }}')">
+                                                                                                            <input type="hidden" id="day_27_color_{{ i.id }}" name="day_27_color" value="{{ i.day_27 }}">                                                                                                    
+                                                                                                    </td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_28_{{ i.id }}" name="day_28" class="inpbtn2" style="border-color: {{ i.day_28 }}; background-color: {{ i.day_28 }};" onclick="togglebtn('day_28_{{ i.id }}')">
+                                                                                                            <input type="hidden" id="day_28_color_{{ i.id }}" name="day_28_color" value="{{ i.day_28 }}">                                                                                                   
+                                                                                                    </td>
+                                                                                                </tr>
+                                                                                                <tr>
+                                                                                                    <td class="td">5</td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_29_{{ i.id }}" name="day_29" class="inpbtn2" style="border-color: {{ i.day_29 }}; background-color: {{ i.day_29 }};" onclick="togglebtn('day_29_{{ i.id }}')">
+                                                                                                            <input type="hidden" id="day_29_color_{{ i.id }}" name="day_29_color" value="{{ i.day_29 }}">                                                                                                   
+                                                                                                    </td>
+                                                                                                    <td class="td">
+                                                                                                        <input type="button" id="day_30_{{ i.id }}" name="day_30" class="inpbtn2" style="border-color: {{ i.day_30 }}; background-color: {{ i.day_30 }};" onclick="togglebtn('day_30_{{ i.id }}')">
+                                                                                                            <input type="hidden" id="day_30_color_{{ i.id }}" name="day_30_color" value="{{ i.day_30 }}">                                                                                                    
+                                                                                                    </td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_31_{{ i.id }}" name="day_31" class="inpbtn2" style="border-color: {{ i.day_31 }}; background-color: {{ i.day_31 }};" onclick="togglebtn('day_31_{{ i.id }}')">
+                                                                                                            <input type="hidden" id="day_31_color_{{ i.id }}" name="day_31_color" value="{{ i.day_31 }}">                                                                                                 
+
+                                                                                                    </td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_32_{{ i.id }}" name="day_32" class="inpbtn2" style="border-color: {{ i.day_32 }}; background-color: {{ i.day_32 }};" onclick="togglebtn('day_32_{{ i.id }}')">
+                                                                                                            <input type="hidden" id="day_32_color_{{ i.id }}" name="day_32_color" value="{{ i.day_32 }}">                                                                                                 
+
+                                                                                                    </td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_33_{{ i.id }}" name="day_33" class="inpbtn2" style="border-color: {{ i.day_33 }}; background-color: {{ i.day_33 }};" onclick="togglebtn('day_33_{{ i.id }}')">
+                                                                                                            <input type="hidden" id="day_33_color_{{ i.id }}" name="day_33_color" value="{{ i.day_33 }}">                                                                                                    
+
+                                                                                                    </td>
+                                                                                                    <td class="td">
+                                                                                                            <input type="button" id="day_34_{{ i.id }}" name="day_34" class="inpbtn2" style="border-color: {{ i.day_34 }}; background-color: {{ i.day_34 }};" onclick="togglebtn('day_34_{{ i.id }}')">
+                                                                                                            <input type="hidden" id="day_34_color_{{ i.id }}" name="day_34_color" value="{{ i.day_34 }}">                                                                                                    
+
+                                                                                                    </td>
+                                                                                                    <td class="td">
+                                                                                                        <input type="button" id="day_35_{{ i.id }}" name="day_35" class="inpbtn2" style="border-color: {{ i.day_35 }}; background-color: {{ i.day_35 }};" onclick="togglebtn('day_35_{{ i.id }}')">
+                                                                                                        <input type="hidden" id="day_35_color_{{ i.id }}" name="day_35_color" value="{{ i.day_35 }}">                                                                                                    
+                                                                                                    </td>
+                                                                                                </tr>
+                                                                                            </tbody>
+                                                                                    </table>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                
+                                                                                <div class="modal-footer">
+                                                                                    <button type="submit" class="btn btn-primary" onsubmit="hideadd">Submit</button>
+                                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>        
+                                                                                </div>
+                                                            
+                                                            
+                                                                </form>
+                                                            </div>
+
+                                                    </div>
+                                                </div>
+                </div>
+                {% endfor %}
+                
+               
+    </div>
+    
+    
+<!-- js -->
+    <script src="/static/index/vendors/scripts/core.js"></script>
+    <script src="/static/index/vendors/scripts/script.min.js"></script>
+    <script src="/static/index/vendors/scripts/process.js"></script>
+    <script src="/static/index/vendors/scripts/layout-settings.js"></script>
+    <script src="/static/index/src/plugins/apexcharts/apexcharts.min.js"></script>
+    <script src="/static/index/src/plugins/datatables/js/jquery.dataTables.min.js"></script>
+    <script src="/static/index/src/plugins/datatables/js/dataTables.bootstrap4.min.js"></script>
+    <script src="/static/index/src/plugins/datatables/js/dataTables.responsive.min.js"></script>
+    <script src="/static/index/src/plugins/datatables/js/responsive.bootstrap4.min.js"></script>
+    <script src="/static/index/vendors/scripts/dashboard.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
+    <script>
+        new DataTable("#data_Table", {
+                paging: true,
+                scrollX: false,
+                scrollY: 350,
+                ordering: false,
+                searching: true,
+			pageLength:50
+
+            })
+    </script>
+
+<script>
+    function togglebtn(elementId) {
+        var ch1 = document.getElementById("half_day_" + elementId.split('_')[2]);
+        var element = document.getElementById(elementId);
+        var colorInput = document.getElementById("day_" + elementId.split('_')[1] + "_color_" + elementId.split('_')[2]);
+        var colors = [];
+
+        if (ch1.checked) {
+            // Colors for the checked (half_day) state.
+            colors = ["#CC0000", "#ffc107", "#28a745"];
+        } else {
+            // Colors for the unchecked state.
+            colors = ["#CC0000", "#28a745"];
+        }
+
+        var currentColorIndex = colors.indexOf(colorInput.value);
+
+        if (currentColorIndex === -1 || currentColorIndex === colors.length - 1) {
+            currentColorIndex = 0;
+        } else {
+            currentColorIndex++;
+        }
+
+        var newColor = colors[currentColorIndex];
+
+        element.style.backgroundColor = newColor;
+        element.style.borderColor = newColor;
+        flags[elementId] = newColor;
+        colorInput.value = newColor;
+    }
+</script>
+
+
+<script>
+    var flags = {};
+
+    function toggleColor(elementId) {
+        var ch1 = document.getElementById("half_day");
+        var element = document.getElementById(elementId);
+        var colorInput = document.getElementById(elementId + '_color');
+        
+
+        if (!flags[elementId]) {
+            flags[elementId] = "#28a745";
+        }
+
+        if (ch1.checked == true) {
+            if (flags[elementId] === "#28a745") {
+                element.style.backgroundColor = "#CC0000";
+                element.style.borderColor = "#CC0000";
+                flags[elementId] = "#CC0000";
+            } else if (flags[elementId] === "#CC0000") {
+                element.style.backgroundColor = "#ffc107";
+                element.style.borderColor = "#ffc107";
+                flags[elementId] = "#ffc107";
+            } else {
+                element.style.backgroundColor = "#28a745";
+                element.style.borderColor = "#28a745";
+                flags[elementId] = "#28a745";
+            }
+        } else {
+            if (flags[elementId] === "#28a745") {
+                element.style.backgroundColor = "#CC0000";
+                element.style.borderColor = "#CC0000";
+                flags[elementId] = "#CC0000";
+            } else {
+                element.style.backgroundColor = "#28a745";
+                element.style.borderColor = "#28a745";
+                flags[elementId] = "#28a745";
+            }
+        }
+
+        colorInput.value = flags[elementId];
+    }
+</script>
+
+
+<!-- <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var halfDayCheckbox = document.getElementById("half_day");
+        var customCheckboxes = document.querySelectorAll('.custom-checkbox input[type="checkbox"]');
+
+        halfDayCheckbox.addEventListener('change', function() {
+            customCheckboxes.forEach(function(checkbox) {
+                if (halfDayCheckbox.checked) {
+                    checkbox.parentElement.classList.add('green');
+                } else {
+                    checkbox.parentElement.classList.remove('green');
+                }
+            });
+        });
+
+        customCheckboxes.forEach(function(checkbox) {
+            checkbox.addEventListener('change', function() {
+                if (halfDayCheckbox.checked) {
+                    if (this.checked) {
+                        if (this.parentElement.classList.contains("green")) {
+                            this.parentElement.classList.remove("green", "red", "yellow");
+                            this.parentElement.classList.add("yellow");
+                        } else if (this.parentElement.classList.contains("yellow")) {
+                            this.parentElement.classList.remove("yellow");
+                            this.parentElement.classList.add("red");
+                        } else {
+                            this.parentElement.classList.remove("red");
+                            this.parentElement.classList.add("green");
+                        }
+                    }
+                }
+            });
+        });
+    });
+</script> -->
+
+
+<!-- <script>
+    document.addEventListener("DOMContentLoaded", function() {
+    var halfDayCheckbox = document.getElementById("half_day");
+    var customCheckboxes = document.querySelectorAll('.custom-checkbox input[type="checkbox"]');
+    var colors = ["green", "red", "yellow"];
+    var colorIndex = 0;
+
+    halfDayCheckbox.addEventListener('change', function() {
+        customCheckboxes.forEach(function(checkbox) {
+            if (halfDayCheckbox.checked) {
+                checkbox.parentElement.classList.add('green');
+            } else {
+                checkbox.parentElement.classList.remove('green', 'red', 'yellow');
+                colorIndex = 0;
+                console.log('gggg',  colorIndex)
+
+            }
+        });
+    });
+
+    customCheckboxes.forEach(function(checkbox) {
+        checkbox.addEventListener('change', function() {
+            if (halfDayCheckbox.checked) {
+                if (this.checked) {
+                    // Increment the color index
+                    colorIndex = (colorIndex + 1) % colors.length;
+                    console.log('c1',  colorIndex)
+
+                }
+                var newColor = colors[colorIndex];
+                this.parentElement.classList.remove('green', 'red', 'yellow');
+                this.parentElement.classList.add(newColor);
+                console.log('c2',  colorIndex)
+            }
+        });
+    });
+});
+</script> -->
+
+<script>
+    function workweek_edit(workweek_id,off_day, description, effective_date, rule_name,) {
+        document.getElementById('workweek_id').innerHTML = workweek_id;
+        document.getElementById('off_day').innerHTML = off_day;
+         document.getElementById('description').innerHTML = description;
+         document.getElementById('effective_date').innerHTML = effective_date;
+         document.getElementById('rule_name').innerHTML = rule_name;
+    }
+</script>
+
+
+<script>
+    $(document).ready(function() {
+        // Hide or show the "row" div based on the checkbox state
+        $('#half_day').on('change', function() {
+            if ($(this).is(':checked')) {
+                $('#halfDayRow').show();
+            } else {
+                $('#halfDayRow').hide();
+            }
+        });
+        
+        // Trigger the change event initially to show/hide the "row" div on page load
+        $('#half_day').trigger('change');
+    });
+</script>
+
+<!-- <script>
+    $(document).ready(function () {
+        $('.square-icon').click(function () {
+            if ($(this).css('color') === 'rgb(0, 128, 0)') {
+                $(this).css('color', 'red');
+            } else {
+                $(this).css('color', 'green');
+            }
+        });
+    });
+</script> -->
+
+
+</body>
+</html>

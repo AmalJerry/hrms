@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html>
+{% load static %}
+<head>
+    <!-- Basic Page Info -->
+    <meta charset="utf-8">
+   
+    <title>HRMS</title>
+      <link rel="icon" href="/static/logo/apple-touch-icon.png" type="image/x-icon"> 
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+      <link rel="apple-touch-icon" sizes="180x180" href="static/index/vendors/images/apple-touch-icon.png">
+      <link rel="icon" type="image/png" sizes="32x32" href="static/index/vendors/images/favicon-32x32.png">
+      <link rel="icon" type="image/png" sizes="16x16" href="static/index/vendors/images/favicon-16x16.png">
+  
+      <!-- Mobile Specific Metas -->
+      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+      <!-- Google Font -->
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+      <!-- CSS -->
+      <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/core.css">
+      <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/icon-font.min.css">
+      <link rel="stylesheet" type="text/css" href="static/index/src/plugins/jquery-steps/jquery.steps.css">
+      <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/style.css">
+  
+  
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
+
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-119386393-1');
+    </script>
+        <style>
+            i{
+                cursor: pointer;
+            }
+            .alert{
+                background-color: white;
+                border: none;
+            }
+            
+        </style>
+
+
+<style>
+    .ps-table-common.br {
+        border: 1px solid #000000;
+        margin-top: 2%;
+        }
+
+        .ps-table-common {
+        width: 100%;
+        height: 100%;
+        table-layout: fixed;
+        border-collapse: collapse;
+    }
+
+    .ps-table-common.br > tbody > tr > td:first-child {
+        border-right: 1px solid #000000;
+    }
+
+    .ps-table-common td{
+        height: 100%;
+    }
+    /* .h-100 {
+        height: 100%!important;
+    } */
+    .half {
+        width: 50%;
+        padding: 5px 0 5px 10px;
+        display: inline-block;
+        text-transform: capitalize;
+        font-size: 13px;
+    }
+    .ps-table-common tr.Header {
+        font-weight: 600;
+        border-bottom: 1px solid #000000;
+    }
+    .half-75 {
+        width: 75%;
+        padding: 5px 0 5px 10px;
+        display: inline-block;
+        text-transform: capitalize;
+        font-size: 14px;
+    }
+    .half:last-child, .half-2:last-child, .half-25:last-child, .half-75:last-child {
+        padding: 5px 10px 5px 0;
+        width: 80%;
+        font-size: 13px;
+    }
+    .half-25 {
+        width: 25%;
+        padding: 5px 0 5px 10px;
+        display: inline-block;
+        text-transform: capitalize;
+    }
+    .text-right {
+        text-align: right!important;
+    }
+    .ps-table-common tr.footer {
+        font-weight: 600;
+        border-top: 1px solid #000000;
+    }
+    .semibold {
+        font-weight: 600 !important;
+    }
+    .ps-wrapper-footer {
+        width: 100%;
+        padding-left: 20px;
+        padding-right: 20px;
+        padding-bottom: 10px;
+    }
+    hr.ps-hr {
+        margin: 10px 0;
+        border-color: #000000;
+    }
+
+    .bordered-cell {
+        border-top: 1px solid black;
+        border-bottom: 1px solid black;
+    }
+
+    .textbold{
+        font-weight: bold;
+    }
+</style>
+    
+</head>
+<body>
+
+    <div class="header">
+        <div class="header-left">
+            <div class="menu-icon dw dw-menu"></div>
+            {% if is_view_payroll %}
+            <h6 class="text-primary" style="padding-left: 20px;">Impersonate Employee: {{data.username}}</h6>
+            {% endif %}
+        </div>
+        <div class="header-right">
+            <div class="dashboard-setting user-notification">
+                <div class="dropdown">
+                    <a class="dropdown-toggle no-arrow" href="javascript:;" data-toggle="right-sidebar">
+                       
+                    </a>
+                </div>
+            </div>
+            <!-- <div class="user-notification">
+                <div class="dropdown">
+                    <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
+                        <i class="icon-copy dw dw-notification"></i>
+                        <span class="badge notification-active"></span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <div class="notification-list mx-h-350 customscroll">
+                            <ul>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/img.jpg" alt="">
+                                        <h3>John Doe</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/photo1.jpg" alt="">
+                                        <h3>Lea R. Frith</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/photo2.jpg" alt="">
+                                        <h3>Erik L. Richards</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/photo3.jpg" alt="">
+                                        <h3>John Doe</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/photo4.jpg" alt="">
+                                        <h3>Renee data. Hansen</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/img.jpg" alt="">
+                                        <h3>Vicki M. Coleman</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+            <div class="user-info-dropdown">
+                <div class="dropdown">
+                    <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                        <span class="user-icon">
+                             
+                        {% if k.image %}
+                            <img src="{{ k.image.url }}" alt="" style="width: 100%; height:100% ">
+                        {% else %}
+                        <img src="/static/logo/userlogo.png" id="photo" style="width: 100%; height:100% ">
+                        {% endif %}   
+                        </span>
+                        <span class="user-name">{{request.user.username}}</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                        <a class="dropdown-item" href="{% url 'createpersonalinfo' %}"><i class="dw dw-user1"></i> Profile</a>
+                        <a class="dropdown-item" href="{% url 'department' %}" data-toggle="right-sidebar"><i class="dw dw-settings2"></i> Settings</a>
+                        <a class="dropdown-item" href="{% url 'help_page' %}"><i class="dw dw-help"></i> Help</a>
+                        <a class="dropdown-item" href="{% url 'logout' %}"><i class="dw dw-logout"></i> Logout</a>
+                    </div>
+                </div>
+            </div>
+            <!--<div class="github-link">
+                <a href="https://github.com/dropways/deskapp" target="_blank"><img src="static/index/vendors/images/github.svg" alt=""></a>
+            </div>-->
+        </div>
+    </div>
+
+    <!-- <div class="right-sidebar"> -->
+        <!-- <div class="sidebar-title"> -->
+            <!-- <h3 class="weight-600 font-16 text-blue"> -->
+                 <!-- Settings -->
+                <!--<span class="btn-block font-weight-400 font-12">User Interface Settings</span>-->
+            <!-- </h3> -->
+            <!-- <div class="close-sidebar" data-toggle="right-sidebar-close">
+                <i class="icon-copy ion-close-round"></i>
+            </div> -->
+        <!-- </div> -->
+
+        <!-- <div class="right-sidebar-body customscroll">
+            <div class="right-sidebar-body-content">
+                				<h4 class="weight-600 font-18 pb-10" ><a href="{% url 'department' %}">Department</a> </h4>
+				<h4 class="weight-600 font-18 pb-10" ><a href="{% url 'subdepartment' %}">Sub Department</a> </h4>
+				<h4 class="weight-600 font-18 pb-10"><a href="{% url 'designation' %}">Designation</a></h4>
+				<h4 class="weight-600 font-18 pb-10"><a href="{% url 'job' %}">Job Title</a></h4>
+				<h4 class="weight-600 font-18 pb-10"><a href="{% url 'wrk' %}">Work location</a></h4>
+            </div>
+        </div> -->
+    <!-- </div> -->
+   
+    <div class="left-side-bar">
+        <div class="brand-logo mt-3">
+        <a href="{% url 'dashboard' %}">
+            {% if request.user.company_type %}
+				{% if request.user.company_type.inverse_logo %}
+				<img src="{{ request.user.company_type.inverse_logo.url }}" style="width: 100%; height: 100%;">
+				{% else %}
+				<img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+				{% endif %}
+				{% else %}
+				<img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+			{% endif %}
+        </a>
+        <div class="close-sidebar" data-toggle="left-sidebar-close">
+           <i class="ion-close-round"></i>
+        </div>
+     </div>
+      
+       <div class="menu-block customscroll">
+
+            <div class="sidebar-menu">
+                <ul id="accordion-menu">
+					
+					<br>
+					<li class="btn-primary active" style="background-color:black">
+						<a href="{% url 'dashboard' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-house-1"></span><span class="mtext"><b>Dashboard</b></span>
+						</a>
+					</li>
+					
+					<li>
+						<a href="{% url 'companyprofile' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-building"></span><span class="mtext"><b>Company Profile</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'personalinfonav' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-user1"></span><span class="mtext"><b>My Profile</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'leave' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-calendar-1"></span><span class="mtext"><b>Leave</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'directory' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-list"></span><span class="mtext"><b>Directory</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'dailylog' %}" class="dropdown-toggle no-arrow">
+							<span class="micon bi bi-check2-square"></span><span class="mtext"><b>Attendance</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'calender' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-calendar"></span><span class="mtext"><b>Holiday Calendar</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'runpayroll_overview' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-money-2"></span><span class="mtext"><b>Payroll</b></span>
+						</a>
+					</li>
+
+
+				</ul>
+            </div>
+        </div>
+    </div>
+  
+
+    <div class="mobile-menu-overlay"></div>
+
+    <div class="main-container">
+        <!-- <div class="pd-ltr-20 xs-pd-20-10">
+            <div class="min-height-200px"> -->
+        <div class="card-box height-100-px overflow-hidden">
+            <ul class="nav nav-tabs customtab" role="tablist" >
+                {% if is_view_payroll %}
+
+                <li class="nav-item">
+                    <a class="nav-link " href="{% url 'view_personalinfo' id=data.id %}">Personal</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'view_work' id=data.id %}">Work</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'view_team' id=data.id %}">Team</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"  href="{% url 'view_education' id=data.id %}" >Education</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"  href="{% url 'view_family' id=data.id %}" >Family</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'view_document' id=data.id %}">Document</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'view_workweek' id=data.id %}">Work Week</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'view_daily_log' id=data.id %}" >Attendance</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'view_payroll' id=data.id %}" >Payroll</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'list_generated_certificates' %}">Experience Certificates</a>
+                </li>
+            </li>
+
+                {% else %}
+
+                <li class="nav-item">
+                    <a class="nav-link " href="{% url 'personalinfonav' %}">Personal</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'worknav' %}">Work</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link " href="{% url 'view_team' request.user.id %}">Team</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'educationnav' %}">Education</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link " href="{% url 'familynav' %}">Family</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'documentsnav' %}">Document</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link " href="{% url 'workweeknav' %}">Work Week</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'pay_slip' %}">Payroll</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'e_exit' %}">E-Exit</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link " href="{% url 'filemanagernav' %}">Filemanager</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'list_generated_certificates' %}">Experience Certificates</a>
+                </li>
+               {% endif %} 
+            </ul>
+            <div class="min-height-100px">
+                <!-- <div class="tab height-100-p"> -->
+                    <!-- <br><h4 class="text-blue h4" style="padding-left:30px">Payroll</h4> -->
+                    <ul class="nav nav-tabs customtab" role="tablist">
+                        {% if is_view_payroll %}
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{% url 'view_payroll' id=data.id %}">Pay Slip</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'view_salarystructure' id=data.id %}" >Salary Structure</a>
+                        </li>
+                        <!-- <li class="nav-item">
+                            <a class="nav-link" href="{% url 'view_declaration' id=data.id %}" >Declaration</a>
+                        </li> -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'view_bankaccount' id=data.id %}" >Bank Account</a>
+                        </li>
+                        {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{% url 'pay_slip' %}">Pay Slip</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'salary_structure' %}">Salary Structure</a>
+                        </li>
+                        
+                        <!-- <li class="nav-item">
+                            <a class="nav-link" href="{% url 'declaration' %}">Declaration</a>
+                        </li> -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'bank_account' %}">Bank Account</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                    
+            </div> 
+            <div class="pd-50 card-box mb-30" style="margin-bottom: 0;"> 
+                <div class="pd-20 clearfix">
+                    {% if is_view_payroll %}
+                    <form action="{% url 'view_payroll' id=data.id %}" method="get" id="search-form">
+
+                        <div class="row">
+
+							<div class="col-md-3">
+								<div class="input-group" style="margin-left: 40%;" >
+                                    <div class="form-group">
+                                    <input id="monthPicker" name="monthselect" class="form-control month-picker" type="text"    />
+                                
+                                    </div>   
+                                    <span onclick="var input = this.previousElementSibling; input.value = ''; input.focus(); " style="position: absolute;margin-left: 90%;margin-top: 7%;cursor:pointer" id="cross">
+                                    <a href="{% url 'view_payroll' id=data.id %}" style="color: grey;"></a>
+							        </span>
+                                </div>
+
+                            </div>
+                            
+
+						</div>
+                    </form>
+                    {% else %}
+
+                    <form action="{% url 'pay_slip' %}" method="get" id="search-form">
+
+                        <div class="row">
+
+							<!-- <label class="col-sm-12 col-md-2 col-form-label">Month</label> -->
+							<div class="col-md-3" style="margin-left: 12%;">
+								<input id="monthPicker" name="monthselect" class="form-control month-picker" type="text" style="margin-top: 5%;"/>
+                                <!-- <i class="icon-copy fa fa-calendar" aria-hidden="true"></i> -->
+                                <span onclick="var input = this.previousElementSibling; input.value = ''; input.focus(); "
+								style="position: absolute;margin-left: 98%;margin-top: -12%;cursor:pointer" id="cross">
+								<a href="{% url 'pay_slip' %}" style="color: grey;"></a>
+							</span>
+
+                            </div>
+                            
+
+						</div>
+                    </form>
+                   
+                    {% endif %}
+
+                </div> 
+                
+                {% for payreg in payregister %}
+
+
+                <div class="row">
+                    <div class="col-12">
+                        <div id="htmlContent">
+
+                        <div class="payslip-box" style="border-style: solid; width: 80%;
+                        margin: 0 auto;
+                        padding: 20px;">
+
+                        <table class="ps-table-common">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        
+                                        <div class="ps-logo-wrapper" style="width: 65%;">
+                                        
+                                            <img src="{{ c.logo.url }}" class="ps-company-logo img-fluid">
+                                        
+                                        </div>
+                                        
+                                    </td>
+                                    <td width="60%" class="for_mobile-res-td-width min-wd-320">
+                                        <div class="col-xs-6">
+                                            <div class="ps-company-title-wrapper text-center">
+                                                <h2 class="ps-main-title" style="font-size: 30px;
+                                                font-weight: 600;
+                                                line-height: 1;
+                                                margin: 10px 0;">{{ c.registeredcompanyname }}</h2>
+                                                <p class="m-0 ps-main-address">
+                                                    {% for i in regaddress%}
+                                                    {{i.regofficeaddress}}, {{i.regdistrict}}, {{i.regstate}}, {{i.regcountry}} - {{i.regpincode}}
+                                                    {% endfor %}
+                                                </p>
+                                                    
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td width="20%"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+
+                        <h5 class="text-center ps-time-period" style="font-weight: 400;margin-top: 1%;margin-top: 1%;">Payslip for the Month of {{payreg.createddate|date:"F, Y"}}</h5>
+                        
+                        <table class="ps-table-common br">
+                            <tbody>
+                                <tr>
+                                    <td class="mobile-res-wd" width="50%">
+                                        <div class="d-flex h-100"><div class="half">Name:</div><div class="half">{{payreg.user_id.username}}</div></div>
+                                    </td>
+                                    <td class="mobile-res-wd" width="50%">
+                                        <div class="d-flex h-100"><div class="half">Employee ID:</div><div class="half">{{payreg.user_id.empid}}</div></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="mobile-res-wd" width="50%">
+                                        <div class="d-flex h-100"><div class="half">Designation:</div><div class="half">{{payreg.user_id.designation.name}}</div></div>
+                                    </td>
+                                    <td class="mobile-res-wd" width="50%">
+                                        <div class="d-flex h-100"><div class="half">Bank Name:</div><div class="half" id="bank_name">
+                                            {% for detail in bank_details%}
+                                            {{detail.bank_name}}
+                                            {% endfor %}
+                                        </div></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="mobile-res-wd" width="50%">
+                                        <div class="d-flex h-100"><div class="half">Department:</div><div class="half">{{payreg.user_id.department.name}}</div></div>
+                                    </td>
+                                    <td class="mobile-res-wd" width="50%">
+                                        <div class="d-flex h-100"><div class="half">Bank Account No.:</div><div class="half">
+                                            {% for detail in bank_details%}
+                                            {{detail.account_number}}
+                                            {% endfor %}
+                                        </div></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="mobile-res-wd" width="50%">
+                                        <div class="d-flex h-100"><div class="half">Location:</div><div class="half">{{payreg.user_id.wrklcn.location}}</div></div>
+                                    </td>
+                                    <td class="mobile-res-wd" width="50%">
+                                        <div class="d-flex h-100"><div class="half">PAN No.:</div><div class="half">
+                                            {% for uploadeddocs in payreg.user_id.uploadeddocs_set.all %}
+                                            {% if uploadeddocs.type1 == 'PAN Card' %}
+                                                {% if uploadeddocs.id_no %} {{uploadeddocs.id_no}} {% endif %} &nbsp;
+                                            {% endif %}
+                                            {% endfor %}
+                                        </div></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="mobile-res-wd" width="50%">
+                                        <div class="d-flex h-100"><div class="half">Effective Work Days:</div><div class="half">{{num_days}}</div></div>
+                                    </td>
+                                    <td class="mobile-res-wd" width="50%">
+                                        
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="mobile-res-wd" width="50%">
+                                        <div class="d-flex h-100"><div class="half">LOP:</div><div class="half">
+                                            {{total_lop}}
+                                        </div></div>
+                                    </td>
+                                    <td width="50%"></td>
+                                </tr>
+
+                                <tr></tr>
+                                    <td class="mobile-res-wd" width="50%">
+                                        <div class="d-flex h-100"><div class="half">WFO:</div><div class="half">
+                                            {{wfo_count}}
+                                        </div></div>
+                                    </td>
+                                    <td width="50%"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <table class="ps-table-common br">
+                            <tbody>
+                                <tr class="Header">
+                                    <td width="50%">
+                                        <div class="d-flex h-100"><div class="half-75 mobile-res-65"><strong>Earnings</strong></div><div class="half-25 mobile-res-35 text-right"><Strong>Amount</Strong></div></div>
+                                    </td>
+                                    <td width="50%">
+                                        <div class="d-flex h-100"><div class="half-75 mobile-res-65"><strong>Contributions</strong></div><div class="half-25 mobile-res-35 text-right"><Strong>Amount</Strong></div></div>
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td class="mobile-res-wd" width="50%">
+                                        {% for data in assign_data %}
+                                            {% for name, amount in data.zipped_data %}
+                                                <div class="d-flex h-100"><div class="half-75">
+                                                    {% for component in name.salarycomponent.all %}
+                                                       {{ component.componentname }}
+                                                    {% endfor %}
+                                                </div>
+                                                <div class="half-25 text-right">{{ amount.amount }}</div></div>
+                                            {% endfor %}
+                                        {% endfor %}
+
+                                        {% for data in adhoc_data %}
+                                        {% if data.adhocearning %}
+                                        <div class="d-flex h-100"><div class="half-75">
+                                            {{ data.adhocearning.component_name }}
+                                        </div>
+                                        <div class="half-25 text-right">{{data.amount}}</div></div>
+                                        {% endif %}
+                                        {% endfor %} 
+
+                                    </td>
+
+                                    <td class="mobile-res-wd" width="50%">
+                                        {% for ctcdata in ctc_assigndata %}
+                                            {% for ctc_name, ctc_amount in ctcdata.ctc_zippeddata %}
+                                                <div class="d-flex">
+                                                    <div class="half-75">
+                                                    {% for comp in ctc_name.salarycomponent.all %}
+                                                        {{ comp.componentname }}
+                                                    {% endfor %}
+                                                    </div>
+                                                    <div class="half-25 text-right">{{ ctc_amount.amount }}</div>
+                                                </div>
+                                            {% endfor %}
+                                        {% endfor %}
+                                    </td>
+  
+                                </tr>
+
+                                <tr class="textbold">
+                                        <td class="mobile-res-wd bordered-cell" width="50%">
+                                            <div class="d-flex h-100">
+                                                <div class="half-75 mobile-res-65">Total Earnings (Rs)</div>
+                                                <div class="half-25 mobile-res-35 text-right">{{total_earnings}}</div>
+                                            </div>
+                                        </td>
+                                    
+                                        <td class="mobile-res-wd bordered-cell" width="50%">
+                                            <div class="d-flex h-100">
+                                                <div class="half-75 mobile-res-65">Total Contributions (Rs)</div>
+                                                <div class="half-25 mobile-res-35 text-right">{{total_ctc_salary}}</div>
+                                            </div>
+                                        </td>
+                                </tr>
+
+                                    <tr class="textbold">
+                                        <td class="mobile-res-wd bordered-cell" width="50%">
+                                            <div class="d-flex h-100"><div class="half-75 mobile-res-65"><strong>Dedactions</strong></div><div class="half-25 mobile-res-35 text-right"><Strong>Amount</Strong></div></div>
+                                        </td>
+                                    </tr>
+    
+                                <tr>
+                                    <td class="mobile-res-wd" width="50%">
+
+                                        {% for data in assigndata %}
+                                            {% for name, amount in data.zippeddata %}
+                                                <div class="d-flex h-100"><div class="half-75">
+                                                    {% for component in name.salarycomponent.all %}
+                                                       {{ component.componentname }}
+                                                    {% endfor %}
+                                                </div>
+                                                <div class="half-25 text-right">{{ amount.amount }}</div></div>
+                                            {% endfor %}
+                                        {% endfor %}
+
+                                        {% for data in adhoc_data %}
+                                        {% if data.adhocdeduction %}
+                                        <div class="d-flex"><div class="half-75">
+                                            {{ data.adhocdeduction.component_name }}
+                                        </div>
+                                        <div class="half-25 text-right">{{data.amount}}</div></div>
+                                        {% endif %}
+                                        {% endfor %}
+
+                                        <div class="d-flex ">
+                                            <div class="half-75">
+                                                LOP Amount
+                                            </div>
+                                            <div class="half-25 text-right">{{lopamount}}
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="d-flex ">
+                                            <div class="half-75">
+                                                WFO
+                                            </div>
+                                            <div class="half-25 text-right">{{WFOamount}}
+                                            </div>
+                                        </div>
+                                        
+                                    </td>
+
+                                </tr>
+
+                                <tr class="textbold">
+                                    <td class="mobile-res-wd bordered-cell" width="50%">
+                                        <div class="d-flex h-100">
+                                            <div class="half-75 mobile-res-65">Total Deductions (Rs)</div>
+                                            <div class="half-25 mobile-res-35 text-right">{{totaldeductions}}</div>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+
+                        <br>
+
+                        <table class="ps-table-common mbott-10">
+                            <tbody>
+                                <tr>
+                                    <td class="mobile-res-wd mtop-10 mbott-10" width="50%">
+                                        <div class="d-flex h-100"><div class="half-75" style="font-weight: 600;">Net Pay for the Month:</div><div class="half-25 text-right"><span class="semibold">{{net_amount}}</span></div></div>
+                                    </td>
+                                    <td class="mobile-res-wd" width="50%"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <br>
+
+                        <span class="amount-text m-0 text-capitalize" style="text-transform: capitalize; font-size: 15px;font-style: normal;">({{net_amount_words}})</span>
+
+                        <div class="ps-wrapper-footer">
+                            <hr class="ps-hr">
+                            <p class="text-center m-0">This is a system generated payslip and does not require signature.</p>
+                        </div>
+
+                        </div>
+                        </div>
+                    </div>
+                </div>
+
+                <br>
+                {% if is_view_payroll %}
+
+                <form action="{% url 'download_emppayslip_pdf' %}?monthselect={{ month_str }}+{{ selected_year }}" method="post">
+                    {% csrf_token %}
+                    <p style="text-align: center;">
+                        <!-- <button type="submit" class="btn btn-primary">Download</button> -->
+                        <input hidden type="text" name="payreg_id" id="" value="{{payreg.id}}">
+                        <input hidden type="text" name="month_str" id="" value="{{month_str}}">
+                        <input hidden type="text" name="selected_year" id="" value="{{selected_year}}">
+                    </p>
+                </form>
+
+                {% else %}
+                <form action="{% url 'download_payslip_pdf' %}?monthselect={{ month_str }}+{{ selected_year }}" method="post">
+                    {% csrf_token %}
+                    <p style="text-align: center;">
+                        <!-- <button type="submit" class="btn btn-primary">Download</button> -->
+                        <input hidden type="text" name="payreg_id" id="" value="{{payreg.id}}">
+                        <input hidden type="text" name="month_str" id="" value="{{month_str}}">
+                        <input hidden type="text" name="selected_year" id="" value="{{selected_year}}">
+                    </p>
+                </form>
+                {% endif %}
+                
+                {% endfor %}
+
+                {% if not payregister %}
+                <p style="text-align: center;">Pay Slip is not generated</p>
+                {% endif %}
+
+                
+                <br>
+                
+                <!-- <div class="invoice-wrap" >
+                    <div class="invoice-box" style="border-style: solid ;">
+                        <div class="invoice-header">
+                            <div class="logo text-center">
+                                <img src="vendors/images/deskapp-logo.png" alt="">
+                            </div>
+                        </div>
+                        <h4 class="text-center mb-30 weight-600">INVOICE</h4>
+                        <div class="row pb-30">
+                            <div class="col-md-6">
+                                <h5 class="mb-15">Client Name</h5>
+                                <p class="font-14 mb-5">Date Issued: <strong class="weight-600">10 Jan 2018</strong></p>
+                                <p class="font-14 mb-5">Invoice No: <strong class="weight-600">4556</strong></p>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="text-right">
+                                    <p class="font-14 mb-5">Your Name </p>
+                                    <p class="font-14 mb-5">Your Address</p>
+                                    <p class="font-14 mb-5">City</p>
+                                    <p class="font-14 mb-5">Postcode</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="invoice-desc pb-30">
+                            <div class="invoice-desc-head clearfix">
+                                <div class="invoice-sub">Description</div>
+                                <div class="invoice-rate">Rate</div>
+                                <div class="invoice-hours">Hours</div>
+                                <div class="invoice-subtotal">Subtotal</div>
+                            </div>
+                            <div class="invoice-desc-body">
+                                <ul>
+                                    <li class="clearfix">
+                                        <div class="invoice-sub">Website Design</div>
+                                        <div class="invoice-rate">$20</div>
+                                        <div class="invoice-hours">100</div>
+                                        <div class="invoice-subtotal"><span class="weight-600">$2000</span></div>
+                                    </li>
+                                    <li class="clearfix">
+                                        <div class="invoice-sub">Logo Design</div>
+                                        <div class="invoice-rate">$20</div>
+                                        <div class="invoice-hours">100</div>
+                                        <div class="invoice-subtotal"><span class="weight-600">$2000</span></div>
+                                    </li>
+                                    <li class="clearfix">
+                                        <div class="invoice-sub">Website Design</div>
+                                        <div class="invoice-rate">$20</div>
+                                        <div class="invoice-hours">100</div>
+                                        <div class="invoice-subtotal"><span class="weight-600">$2000</span></div>
+                                    </li>
+                                    <li class="clearfix">
+                                        <div class="invoice-sub">Logo Design</div>
+                                        <div class="invoice-rate">$20</div>
+                                        <div class="invoice-hours">100</div>
+                                        <div class="invoice-subtotal"><span class="weight-600">$2000</span></div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="invoice-desc-footer">
+                                <div class="invoice-desc-head clearfix">
+                                    <div class="invoice-sub">Bank Info</div>
+                                    <div class="invoice-rate">Due By</div>
+                                    <div class="invoice-subtotal">Total Due</div>
+                                </div>
+                                <div class="invoice-desc-body">
+                                    <ul>
+                                        <li class="clearfix">
+                                            <div class="invoice-sub">
+                                                <p class="font-14 mb-5">Account No: <strong class="weight-600">123 456 789</strong></p>
+                                                <p class="font-14 mb-5">Code: <strong class="weight-600">4556</strong></p>
+                                            </div>
+                                            <div class="invoice-rate font-20 weight-600">10 Jan 2018</div>
+                                            <div class="invoice-subtotal"><span class="weight-600 font-24 text-danger">$8000</span></div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <h4 class="text-center pb-20">Thank You!!</h4>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </div>
+    <!-- js -->
+    <script src="static/index/vendors/scripts/core.js"></script>
+	<script src="static/index/vendors/scripts/script.min.js"></script>
+	<script src="static/index/vendors/scripts/process.js"></script>
+	<script src="static/index/vendors/scripts/layout-settings.js"></script>
+	<script src="static/index/src/plugins/jquery-steps/jquery.steps.js"></script>
+	<script src="static/index/vendors/scripts/steps-setting.js"></script>
+
+    
+    <script>
+        $(document).ready(function () {
+            // Function to get URL parameter value by name
+            function getUrlParameter(name) {
+                name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+                var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+                var results = regex.exec(location.search);
+                return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+            }
+    
+            // Initialize a variable to store the selected date
+            var urlSelectedDate = getUrlParameter('monthselect');
+            var selectedDate = urlSelectedDate || new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    
+            // Initialize datepicker
+            $("#monthPicker").datepicker({
+                dateFormat: 'MM yyyy',
+                defaultDate: urlSelectedDate, // Set the default date from the URL parameter
+    
+                onSelect: function (date) {
+                    // Update the selectedDate variable and the input field value
+                    selectedDate = date;
+                    console.log("Selected Date:", selectedDate);
+                    
+                    // Submit the form when the date is selected
+                    $("#search-form").submit();
+                }
+            });
+    
+            // Set the initial value of the input field
+            $("#monthPicker").val(selectedDate);
+        });
+    </script>
+
+    <!-- <script>
+        const payslipmonth = document.querySelector('input[type="month"]');
+        const month = new Date()
+        const converted_month = month.getMonth() + 1;
+        const converted_year = month.getFullYear();
+        payslipmonth.value = `${converted_year}-0${converted_month}`;
+
+    </script> -->
+
+
+</body>
+</html>

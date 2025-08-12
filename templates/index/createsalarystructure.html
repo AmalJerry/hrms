@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html>
+{% load static %}
+<head>
+    <!-- Basic Page Info -->
+    <meta charset="utf-8">
+    <title>HRMS</title>
+    <link rel="icon" href="/static/logo/apple-touch-icon.png" type="image/x-icon"> 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Mobile Specific Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/core.css">
+    <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/icon-font.min.css">
+    <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/style.css">
+    <!-- AG Grid CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/ag-grid-community@32.1.0/dist/styles/ag-grid.css">
+    <link rel="stylesheet" href="https://unpkg.com/ag-grid-community@32.1.0/dist/styles/ag-theme-alpine.css">
+
+    <!-- Jquery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- AG Grid JS -->
+    <script src="https://unpkg.com/ag-grid-community@32.1.0/dist/ag-grid-community.min.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-119386393-1');
+    </script>
+    <style>
+        i {
+            cursor: pointer;
+        }
+        .alert {
+            background-color: white;
+            border: none;
+        }
+        .btn-link {
+            color: #007BFF;
+            cursor: pointer;
+        }
+        .btn-delete {
+            background-color: transparent;
+            border: none;
+            padding: 0;
+        }
+        .ag-header-cell {
+            background-color: #fff;
+            white-space: nowrap;
+            text-align: left !important;
+            z-index: 10;
+        }
+        .ag-cell {
+            border: 1px solid #e0e0e0;
+            background-color: #fff;
+        }
+        .ag-row-even .ag-cell {
+            background: #fff;
+        }
+        .ag-row-odd .ag-cell {
+            background: #eaeef2;
+        }
+        .ag-cell:nth-child(n+3):nth-child(-n+4):hover {
+            cursor: pointer;
+        }
+        .ag-root-wrapper {
+            width: 100%;
+            margin: 0 auto;
+        }
+        .ag-theme-alpine {
+            --ag-grid-size: 4px;
+            --ag-header-height: 40px;
+            --ag-row-height: 36px;
+        }
+         .ag-header-cell {
+            white-space: nowrap;
+            text-align: left !important;
+            background-color: #3f51b5;
+        }
+        .ag-header-cell:hover {
+            background-color: #ffffff;
+            color: rgb(13, 13, 13);
+            border-right: 1px solid #5c6bc0;
+            padding: 10px 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-left">
+            <div class="menu-icon dw dw-menu"></div>
+        </div>
+        <div class="header-right">
+            <div class="dashboard-setting user-notification">
+                <div class="dropdown">
+                    <a class="dropdown-toggle no-arrow" href="javascript:;" data-toggle="right-sidebar"></a>
+                </div>
+            </div>
+            <div class="user-info-dropdown">
+                <div class="dropdown">
+                    <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                        <span class="user-icon">
+                            {% if k.image %}
+                            <img src="{{ k.image.url }}" alt="" style="width: 100%; height:100% ">
+                            {% else %}
+                            <img src="/static/logo/userlogo.png" id="photo" style="width: 100%; height:100% ">
+                            {% endif %} 
+                        </span>
+                        <span class="user-name">{{request.user.username}}</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                        <a class="dropdown-item" href="{% url 'createpersonalinfo' %}"><i class="dw dw-user1"></i> Profile</a>
+                        <a class="dropdown-item" href="{% url 'department' %}" data-toggle="right-sidebar"><i class="dw dw-settings2"></i> Settings</a>
+                        <a class="dropdown-item" href="{% url 'help_page' %}"><i class="dw dw-help"></i> Help</a>
+                        <a class="dropdown-item" href="{% url 'logout' %}"><i class="dw dw-logout"></i> Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="left-side-bar">
+        <div class="brand-logo mt-3">
+            <a href="{% url 'dashboard' %}">
+                {% if request.user.company_type %}
+                    {% if request.user.company_type.inverse_logo %}
+                    <img src="{{ request.user.company_type.inverse_logo.url }}" style="width: 100%; height: 100%;">
+                    {% else %}
+                    <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+                    {% endif %}
+                {% else %}
+                    <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+                {% endif %}
+            </a>
+            <div class="close-sidebar" data-toggle="left-sidebar-close">
+                <i class="ion-close-round"></i>
+            </div>
+        </div>
+        <div class="menu-block customscroll">
+            <div class="sidebar-menu">
+                <ul id="accordion-menu">
+                    <br>
+                    <li class="btn-primary active" style="background-color:black">
+                        <a href="{% url 'dashboard' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-house-1"></span><span class="mtext"><b>Dashboard</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'companyprofile' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-building"></span><span class="mtext"><b>Company Profile</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'personalinfonav' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-user1"></span><span class="mtext"><b>My Profile</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'leave' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-calendar-1"></span><span class="mtext"><b>Leave</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'directory' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-list"></span><span class="mtext"><b>Directory</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'dailylog' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon bi bi-check2-square"></span><span class="mtext"><b>Attendance</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'calender' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-calendar"></span><span class="mtext"><b>Holiday Calendar</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'runpayroll_overview' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-money-2"></span><span class="mtext"><b>Payroll</b></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="mobile-menu-overlay"></div>
+    <div class="main-container">
+        <div class="card-box height-100-p overflow-hidden">
+            <ul class="nav nav-tabs customtab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'runpayroll_overview' %}">Run Payroll</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'create_salary' %}">Setup Payroll</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'payroll_dec' %}">Declaration</a>
+                </li>
+            </ul>
+            <ul class="nav nav-tabs customtab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'create_salary' %}">Create Salary Structure</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'view_assign_salarystructure' %}">Assign Salary Structure</a>
+                </li>
+            </ul>
+            <div class="pd-20 card-box">
+                <div class="row">
+                    <div class="col-md-10">
+                        <h6 class="float-left">Salary Structure</h6> 
+                    </div>
+                    <div class="col-md-2">
+                        <i class="fa fa-plus-circle" id="add" data-toggle="modal" data-target="#rules_add" style="font-size:24px; color:grey; float:right; cursor:pointer; margin-left:10px;"></i>
+                    </div>
+                </div>
+                <hr>
+                <div class="modal fade bs-example-modal-lg" id="rules_add">
+                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Add Salary Structure</h4>
+                                <button type="button" class="close" data-dismiss="modal">×</button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{% url 'addsalary' %}" method="post" enctype="multipart/form-data" class="form-container" role="form">
+                                    {% csrf_token %}
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Salary Structure Name<span style="color:red">*</span></label>
+                                                <input pattern="[a-zA-Z]+(\s[a-zA-Z]+)*" type="text" class="form-control" name="salaryname" id="rulename" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Description <span style="color:red">*</span></label>
+                                                <input pattern="[a-zA-Z]+(\s[a-zA-Z]+)*" type="text" class="form-control" id="description" name="description" required>
+                                                <span id="instituteError" style="color: red; font-size: small;"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Salary Components <span style="color:red">*</span></label>
+                                                <select class="form-control" type="text" name="structurename" id="sname" required>
+                                                    <option value="">Select Salary Component</option>
+                                                    {% for i in salary %}
+                                                    <option value="{{i.id}}">{{i.componentname}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Amount <span style="color:red">*</span></label>
+                                                <input pattern="\d+" title="Please enter a valid integer" type="text" id="salary" name="csalary" class="form-control" value="" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span class="dynamic-fields-container"></span>
+                                    <a href="#" id="addNewLine" class="btn-link">+ Add a new line</a>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary" onsubmit="hideadd">Submit</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="dataGrid" class="ag-theme-alpine" style="height: 600px; width: 100%;"></div>
+                {% for i in data %}
+                <div class="modal fade bs-example-modal-lg" id="editstructure{{ i.rule.id }}">
+                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Edit Salary Structure</h4>
+                                <button type="button" class="close" data-dismiss="modal">×</button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{% url 'edit_salary_structure' %}" method="post" enctype="multipart/form-data" class="form-container" role="form" id="editworkweek" onsubmit="return validateForm()">
+                                    {% csrf_token %}
+                                    <input type="text" hidden name="structure_id" id="structure_id" value="{{i.rule.id}}">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Salary Structure Name <span style="color:red">*</span></label>
+                                                <input pattern="[a-zA-Z\s]+" type="text" class="form-control" name="rulename" id="rulename" value="{{ i.rule.rule_name }}" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Description <span style="color:red">*</span></label>
+                                                <input type="text" class="form-control" id="description" name="description" value="{{ i.rule.Description }}" required>
+                                                <span id="instituteError" style="color: red; font-size: small;"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Salary Components <span style="color:red">*</span></label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>Amount <span style="color:red">*</span></label>
+                                        </div>
+                                    </div>
+                                    {% for name, amount in i.zipped_data %}
+                                    <div class="row">
+                                        <div class="col-md-6" id="component_{{ name.id }}">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" value="{{ name.salarycomponent.first.componentname }}" disabled>
+                                                <input type="hidden" name="componentname_existing" value="{{name.salarycomponent.first.id}}">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5" id="amount_{{ name.id }}">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" value="{{ amount.amount }}" disabled>
+                                                <input type="hidden" name="amount_existing" value="{{ amount.amount }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1">
+'<a onclick="return confirm('Are you sure to delete?')" href="/delete_salary_structure/${params.data.id}/">'
+        <i class="fa fa-trash" title="Delete" style="font-size: 20px; color:grey"></i>
+</a>'                                                
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                    <span class="newfield{{ i.rule.id }}"></span>
+                                    <a href="#" id="AddNewFields{{ i.rule.id }}" class="btn-link">+ Add a new line</a>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary" onsubmit="hideadd">Submit</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <!-- js -->
+    <script src="static/index/vendors/scripts/core.js"></script>
+    <script src="static/index/vendors/scripts/script.min.js"></script>
+    <script src="static/index/vendors/scripts/process.js"></script>
+    <script src="static/index/vendors/scripts/layout-settings.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Log rowData for debugging
+        const rowData = [
+            {% for i in salaryRule %}
+            {
+                id: {{i.id|default_if_none:0}},
+                rule_name: "{{i.rule_name|escapejs}}",
+                Description: "{{i.Description|escapejs}}"
+            },
+            {% endfor %}
+        ];
+        console.log('Row Data:', rowData); // Debug: Check rowData in console
+
+        const gridOptions = {
+            columnDefs: [
+                { headerName: "Salary Structure Name", field: "rule_name", sortable: false, filter: true, width: 300 },
+                { headerName: "Description", field: "Description", sortable: false, filter: true, flex: 1 },
+                {
+                    headerName: "",
+                    field: "edit",
+                    width: 100,
+                    cellRenderer: params => {
+                        console.log('Edit Row ID:', params.data.id); // Debug: Log ID for edit button
+                        return `<button class="btn btn-link" data-toggle="modal" data-target="#editstructure${params.data.id}">
+                                    <i class="fa fa-edit" style="font-size: 24px; color: grey;"></i>
+                                </button>`;
+                    }
+                },
+                {
+                    headerName: "",
+                    field: "delete",
+                    width: 100,
+                    cellRenderer: params => {
+                        const id = params.data.id;
+                        console.log('Delete Row ID:', id); // Debug: Log ID for delete button
+                        if (!id || id === 0) {
+                            console.error('Invalid ID for deletion:', params.data);
+                            return '<a href="#" onclick="alert(\'Cannot delete: Invalid ID\')"><i class="fa fa-trash" title="Delete" style="font-size: 20px; color:grey"></i></a>';
+                        }
+                        return `<a onclick="return confirm('Are you sure to delete?')" href="/delete_salary_structure/${id}/">
+                                    <i class="fa fa-trash" title="Delete" style="font-size: 20px; color:grey"></i>
+                                </a>`;
+                    }
+                }
+            ],
+            rowData: rowData,
+            pagination: true,
+            paginationPageSize: 50,
+            domLayout: 'autoHeight',
+            suppressHorizontalScroll: true,
+            rowHeight: 36,
+            headerHeight: 40,
+            animateRows: true
+        };
+        const gridDiv = document.querySelector('#dataGrid');
+        new agGrid.Grid(gridDiv, gridOptions);
+    });
+</script>
+    <script>
+        $(document).ready(function() {
+            function updateComponentOptions() {
+                var selectedOptions = [];
+                $(".component-select").each(function() {
+                    var selectedVal = $(this).val();
+                    if (selectedVal) {
+                        selectedOptions.push(selectedVal);
+                    }
+                });
+                $(".component-select").each(function() {
+                    var currentSelect = $(this);
+                    currentSelect.find('option').each(function() {
+                        if (selectedOptions.includes($(this).val()) && $(this).val() !== currentSelect.val()) {
+                            $(this).hide();
+                        } else {
+                            $(this).show();
+                        }
+                    });
+                });
+            }
+            $("#addNewLine").click(function() {
+                var newRow = '<div class="added-row row">' +
+                    '<div class="col-md-6">' +
+                    '<div class="form-group">' +
+                    '<select class="form-control component-select" name="structurename" required>' +
+                    '<option value="">Select Salary Component</option>' +
+                    '{% for i in salary %}' +
+                    '<option value="{{i.id}}" data-percent="{{i.percent}}">{{i.componentname}}</option>' +
+                    '{% endfor %}' +
+                    '</select>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="col-md-5 amount-field">' +
+                    '<div class="form-group">' +
+                    '<input type="text" name="csalary" class="form-control" placeholder="Amount" required>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="col-md-1">' +
+                    '<a href="#" class="delete-row"><i class="fa fa-trash" title="Delete" style="font-size: 20px; margin-top: 28%; color:grey"></i></a>' +
+                    '</div>' +
+                    '</div>';
+                $(".dynamic-fields-container").append(newRow);
+                updateComponentOptions();
+            });
+            $(".dynamic-fields-container").on("click", ".delete-row", function(e) {
+                e.preventDefault();
+                $(this).closest(".added-row").remove();
+                updateComponentOptions();
+            });
+            $(".dynamic-fields-container").on("change", ".component-select", function() {
+                var selectedOption = $(this).find('option:selected');
+                var percentage = parseFloat(selectedOption.data('percent'));
+                var componentName = selectedOption.text().trim();
+                var amountField = $(this).closest(".added-row").find(".amount-field");
+                if (percentage > 0 || componentName === "CTC" || componentName === "Professional tax" || componentName === "Professional Tax" || componentName === "Net Salary" || componentName === "Other Allowance") {
+                    amountField.hide();
+                    amountField.find('input').val('0');
+                } else {
+                    amountField.show();
+                }
+                updateComponentOptions();
+            });
+        });
+    </script>
+    <script>
+        {% for i in data %}
+        $(document).ready(function() {
+            function updateComponentOptions() {
+                var selectedOptions = [];
+                $(".component-select").each(function() {
+                    var selectedVal = $(this).val();
+                    if (selectedVal) {
+                        selectedOptions.push(selectedVal);
+                    }
+                });
+                $(".component-select").each(function() {
+                    var currentSelect = $(this);
+                    currentSelect.find('option').each(function() {
+                        if (selectedOptions.includes($(this).val()) && $(this).val() !== currentSelect.val()) {
+                            $(this).hide();
+                        } else {
+                            $(this).show();
+                        }
+                    });
+                });
+            }
+            $("#AddNewFields{{ i.rule.id }}").click(function() {
+                var newRow = '<div class="row added-row">' +
+                    '<div class="col-md-6">' +
+                    '<div class="form-group">' +
+                    '<select class="form-control component-select" name="componentname_new" required>' +
+                    '<option value="">Select Salary Component</option>' +
+                    '{% for comp in salary %}' +
+                    '<option value="{{comp.id}}" data-percent="{{comp.percent}}" data-name="{{comp.componentname}}">{{comp.componentname}}</option>' +
+                    '{% endfor %}' +
+                    '</select>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="col-md-5 amount-field">' +
+                    '<div class="form-group">' +
+                    '<input type="text" name="amount_new" class="form-control" value="">' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="col-md-1">' +
+                    '<a href="#" class="delete-row"><i class="fa fa-trash" title="Delete" style="font-size: 20px; margin-top: 28%; color:grey"></i></a>' +
+                    '</div>' +
+                    '</div>';
+                $(".newfield{{ i.rule.id }}").append(newRow);
+                updateComponentOptions();
+            });
+            $(".newfield{{ i.rule.id }}").on("change", ".component-select", function() {
+                var selectedOption = $(this).find('option:selected');
+                var percentage = parseFloat(selectedOption.data('percent'));
+                var componentName = selectedOption.data('name');
+                var amountField = $(this).closest(".added-row").find(".amount-field");
+                if (percentage > 0 || componentName === "Professional tax" || componentName === "Professional Tax" || componentName === "CTC" || componentName === "Net Salary" || componentName === "Other Allowance") {
+                    amountField.hide();
+                    amountField.find('input').val('0');
+                } else {
+                    amountField.show();
+                }
+                updateComponentOptions();
+            });
+            $(".newfield{{ i.rule.id }}").on("click", ".delete-row", function(e) {
+                e.preventDefault();
+                $(this).closest(".added-row").remove();
+                updateComponentOptions();
+            });
+            updateComponentOptions();
+        });
+        {% endfor %}
+    </script>
+</body>
+</html>

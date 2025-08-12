@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+{% load location_tags %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Summary - {{ date }}</title>
+
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --secondary-color: #6b7280;
+            --success-color: #10b981;
+            --danger-color: #ef4444;
+            --warning-color: #f59e0b;
+            --info-color: #3b82f6;
+            --light-bg: #f8fafc;
+            --dark-text: #1f2937;
+            --border-color: #e5e7eb;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --card-shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--dark-text);
+            line-height: 1.6;
+        }
+
+        .main-container {
+            background: var(--light-bg);
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Header Section */
+        .header-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100" fill="white" opacity="0.1"><polygon points="0,0 0,100 1000,100"/></svg>');
+            background-size: cover;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .page-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Date Filter Section */
+        .date-filter-section {
+            background: white;
+            padding: 2rem;
+            margin: -2rem 1rem 2rem;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            position: relative;
+            z-index: 3;
+        }
+
+        .filter-card {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .filter-label {
+            font-weight: 600;
+            color: var(--dark-text);
+            font-size: 1.1rem;
+        }
+
+        .date-input {
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            min-width: 200px;
+        }
+
+        .date-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .view-btn {
+            background: linear-gradient(135deg, var(--primary-color), #6366f1);
+            border: none;
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+
+        .view-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
+        }
+
+        /* Stats Cards */
+        .stats-section {
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--card-shadow-hover);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+        }
+
+        .stat-icon.success {
+            background: linear-gradient(135deg, var(--success-color), #059669);
+            color: white;
+        }
+
+        .stat-icon.danger {
+            background: linear-gradient(135deg, var(--danger-color), #dc2626);
+            color: white;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--secondary-color);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        /* Modern Cards */
+        .modern-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        .modern-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--card-shadow-hover);
+        }
+
+        .modern-card-header {
+            padding: 1.5rem;
+            font-weight: 600;
+            font-size: 1.2rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .modern-card-header.success {
+            background: linear-gradient(135deg, var(--success-color), #059669);
+            color: white;
+            border-bottom: none;
+        }
+
+        .modern-card-header.danger {
+            background: linear-gradient(135deg, var(--danger-color), #dc2626);
+            color: white;
+            border-bottom: none;
+        }
+
+        .modern-card-body {
+            padding: 0;
+        }
+
+        /* Modern Table */
+        .modern-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+
+        .modern-table th {
+            background: var(--light-bg);
+            color: var(--dark-text);
+            font-weight: 600;
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 2px solid var(--border-color);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .modern-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: middle;
+        }
+
+        .modern-table tbody tr {
+            transition: all 0.3s ease;
+        }
+
+        .modern-table tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        .modern-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* User Links */
+        .user-link {
+            color: var(--dark-text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .user-link:hover {
+            color: #034694;
+            text-decoration: none;
+        }
+
+        /* Location Links */
+        .location-link {
+            color: var(--dark-text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .location-link:hover {
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        /* Status Badges */
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-badge.on-leave {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-badge.not-on-leave {
+            background: #fecaca;
+            color: #991b1b;
+        }
+
+        /* Action Buttons */
+        .action-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 80px;
+        }
+
+        .action-btn.activate {
+            background: linear-gradient(135deg, var(--success-color), #059669);
+            color: white;
+        }
+
+        .action-btn.activate:hover {
+            background: linear-gradient(135deg, #059669, #047857);
+            transform: translateY(-1px);
+        }
+
+        .action-btn.deactivate {
+            background: linear-gradient(135deg, var(--danger-color), #dc2626);
+            color: white;
+        }
+
+        .action-btn.deactivate:hover {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            transform: translateY(-1px);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--secondary-color);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+
+        .empty-state h4 {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state p {
+            font-size: 0.95rem;
+        }
+
+        /* Custom Modal */
+        .custom-modal {
+            display: none;
+            position: fixed;
+            z-index: 1050;
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+        }
+
+        .custom-modal-content {
+            background: white;
+            margin: 10% auto;
+            padding: 2rem;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(-30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--danger-color), #dc2626);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark-text);
+        }
+
+        .modal-text {
+            color: var(--secondary-color);
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 100px;
+        }
+
+        .modal-btn.danger {
+            background: linear-gradient(135deg, var(--danger-color), #dc2626);
+            color: white;
+        }
+
+        .modal-btn.danger:hover {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            transform: translateY(-1px);
+        }
+
+        .modal-btn.secondary {
+            background: #f3f4f6;
+            color: var(--dark-text);
+        }
+
+        .modal-btn.secondary:hover {
+            background: #e5e7eb;
+            transform: translateY(-1px);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .date-filter-section {
+                margin: -1rem 0.5rem 1rem;
+                padding: 1.5rem;
+            }
+
+            .filter-card {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .date-input {
+                width: 100%;
+            }
+
+            .modern-table {
+                font-size: 0.85rem;
+            }
+
+            .modern-table th,
+            .modern-table td {
+                padding: 0.75rem 0.5rem;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--primary-color);
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="main-container">
+    <!-- Header Section -->
+    <div class="header-section">
+        <div class="container header-content">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <a href="{% url 'dashboard' %}" class="back-btn">
+                    <i class="fas fa-arrow-left me-2"></i>Dashboard
+                </a>
+                <div class="text-end">
+                    <div class="page-title">Attendance Summary</div>
+                    <div class="page-subtitle">Track and manage daily attendance</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Date Filter Section -->
+        <div class="date-filter-section">
+            <form method="get" action="{% url 'attendance_summary' %}">
+                <div class="filter-card">
+                    <label for="summaryDate" class="filter-label">
+                        <i class="fas fa-calendar-alt me-2"></i>Select Date:
+                    </label>
+                    <input type="date" id="summaryDate" name="date" class="date-input"
+                        value="{{ date|date:'Y-m-d' }}" max="{{ today|date:'Y-m-d' }}">
+                    <button type="submit" class="view-btn">
+                        <i class="fas fa-eye me-2"></i>View Summary
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="stats-section">
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="stat-card">
+                        <div class="stat-icon success">
+                            <i class="fas fa-user-check"></i>
+                        </div>
+                        <div class="stat-number">{{ clocked_in_users|length }}</div>
+                        <div class="stat-label">Users Logged In</div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="stat-card">
+                        <div class="stat-icon danger">
+                            <i class="fas fa-user-times"></i>
+                        </div>
+                        <div class="stat-number">{{ not_logged_users_with_flag|length }}</div>
+                        <div class="stat-label">Users Not Logged In</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="row g-2">
+            <!-- Logged In Users -->
+            <div class="col-lg-6">
+                <div class="modern-card">
+                    <div class="modern-card-header success">
+                        <i class="fas fa-user-check"></i>
+                        <span>Logged In Users</span>
+                    </div>
+                    <div class="modern-card-body">
+                        {% if clocked_in_users %}
+                            <table class="modern-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Employee</th>
+                                        <th>In Time</th>
+                                        <th>Out Time</th>
+                                        <th>Location</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% load location_tags %}
+                                    {% for user in clocked_in_users %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>
+                                            <a href="/view_personalinfo{{ user.id }}" class="user-link">
+                                               {{ user.username }}
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <span class="text-success" style="display: flex;">
+                                                {% if user.in_time %}
+                                                    {{ user.in_time|date:"h:i" }} <span style="font-size:0.95em;">{{ user.in_time|date:"A"|lower }}</span>
+                                                {% else %}
+                                                    -
+                                                {% endif %}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="text-danger" style="display: flex;">
+                                                {{ user.out_time|date:"h:i"}} <span style="font-size:0.95em;">{{ user.out_time|date:"A"|lower }}</span>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            {% get_clocked_in_location user.user date as location_name %}
+                                            <a href="https://www.google.com/maps/search/?api=1&query={{ location_name|urlencode }}" target="_blank" class="location-link">
+                                                {{ location_name|slice:":15" }}{% if location_name|length > 15 %}...{% endif %}
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <div class="empty-state">
+                                <i class="fas fa-user-slash"></i>
+                                <h4>No Users Logged In</h4>
+                                <p>There are currently no users logged in for the selected date.</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Not Logged In Users -->
+            <div class="col-lg-6">
+                <div class="modern-card">
+                    <div class="modern-card-header danger">
+                        <i class="fas fa-user-times"></i>
+                        <span>Not Logged In Users</span>
+                    </div>
+                    <div class="modern-card-body">
+                        {% if not_logged_users_with_flag %}
+                            <table class="modern-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Employee</th>
+                                        <th>Leave Status</th>
+                                        <th>Reason</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for user in not_logged_users_with_flag %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>
+                                            <a href="/view_personalinfo{{ user.id }}" class="user-link">
+                                                {{ user.username }}
+                                            </a>
+                                        </td>
+                                        <td>
+                                            {% if user.on_leave %}
+                                                <span class="status-badge on-leave">
+                                                    On Leave
+                                                </span>
+                                            {% else %}
+                                                <span class="status-badge not-on-leave">
+                                                    N/A
+                                                </span>
+                                            {% endif %}
+                                        </td>
+                                        <td data-label="Reason">
+                                            <span class="text-muted">
+                                                {% if user.on_leave %}
+                                                    {{ user.leave_reason|default:"No reason provided" }}
+                                                {% else %}
+                                                    N/A
+                                                {% endif %}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <button class="action-btn toggle-status-btn 
+                                                {% if user.status == 'Inactive' %}activate{% else %}deactivate{% endif %}"
+                                                data-user-id="{{ user.id }}"
+                                                data-current-status="{{ user.status }}">
+                                                {% if user.status == 'Inactive' %}
+                                                    Activate
+                                                {% else %}
+                                                    Inactivate
+                                                {% endif %}
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <div class="empty-state">
+                                <i class="fas fa-user-check"></i>
+                                <h4>All Users Logged In</h4>
+                                <p>Great! All users are logged in for the selected date.</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Custom Modal -->
+<div id="confirmModal" class="custom-modal">
+    <div class="custom-modal-content">
+        <div class="modal-icon">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <div class="modal-title">Confirm Action</div>
+        <p id="confirmText" class="modal-text">Are you sure you want to make this user Inactive?</p>
+        <div class="modal-actions">
+            <button id="confirmBtn" class="modal-btn danger">
+                <i class="fas fa-check me-2"></i>Confirm
+            </button>
+            <button id="cancelBtn" class="modal-btn secondary">
+                <i class="fas fa-times me-2"></i>Cancel
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const buttons = document.querySelectorAll('.toggle-status-btn');
+    const modal = document.getElementById('confirmModal');
+    const confirmBtn = document.getElementById('confirmBtn');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const confirmText = document.getElementById('confirmText');
+
+    let selectedButton = null;
+    let selectedUserId = null;
+    let selectedNewStatus = null;
+
+    buttons.forEach(btn => {
+        btn.addEventListener('click', function () {
+            const currentStatus = this.getAttribute('data-current-status');
+            const newStatus = currentStatus === 'Active' ? 'Inactive' : 'Active';
+
+            if (newStatus === 'Inactive') {
+                selectedButton = this;
+                selectedUserId = this.getAttribute('data-user-id');
+                selectedNewStatus = newStatus;
+
+                confirmText.textContent = "Are you sure you want to make this user Inactive?";
+                modal.style.display = 'block';
+            } else {
+                toggleUserStatus(this, this.getAttribute('data-user-id'), newStatus);
+            }
+        });
+    });
+
+    confirmBtn.addEventListener('click', function () {
+        if (selectedButton && selectedUserId && selectedNewStatus) {
+            toggleUserStatus(selectedButton, selectedUserId, selectedNewStatus);
+            resetModal();
+        }
+    });
+
+    cancelBtn.addEventListener('click', function () {
+        resetModal();
+    });
+
+    // Close modal when clicking outside
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            resetModal();
+        }
+    });
+
+    function resetModal() {
+        modal.style.display = 'none';
+        selectedButton = null;
+        selectedUserId = null;
+        selectedNewStatus = null;
+    }
+
+    function toggleUserStatus(button, userId, newStatus) {
+        // Add loading state
+        button.classList.add('loading');
+        
+        fetch("{% url 'attendance_summary' %}", {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}",
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: `user_id=${userId}&new_status=${newStatus}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                // Update button text and classes
+                if (data.new_status === 'Active') {
+                    button.innerHTML = '<i class="fas fa-user-minus me-1"></i>Deactivate';
+                    button.classList.remove('activate');
+                    button.classList.add('deactivate');
+                } else {
+                    button.innerHTML = '<i class="fas fa-user-plus me-1"></i>Activate';
+                    button.classList.remove('deactivate');
+                    button.classList.add('activate');
+                }
+                button.setAttribute('data-current-status', data.new_status);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        })
+        .finally(() => {
+            button.classList.remove('loading');
+        });
+    }
+});
+</script>
+
+</body>
+</html>

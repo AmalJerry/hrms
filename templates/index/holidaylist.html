@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html>
+{% load static %}
+<head>
+    <!-- Basic Page Info -->
+    <meta charset="utf-8">
+    <title>HRMS</title>
+    <link rel="icon" href="/static/logo/apple-touch-icon.png" type="image/x-icon"> 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Mobile Specific Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/core.css">
+    <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/icon-font.min.css">
+    <link rel="stylesheet" type="text/css" href="static/index/src/plugins/jquery-steps/jquery.steps.css">
+    <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/style.css">
+    <!-- AG Grid CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/ag-grid-community@32.1.0/styles/ag-grid.css">
+    <link rel="stylesheet" href="https://unpkg.com/ag-grid-community@32.1.0/styles/ag-theme-alpine.css">
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-119386393-1');
+    </script>
+
+    <style>
+        .switch-label {
+            margin-right: 10px;
+            color: #333;
+        }  
+        .switch { 
+            position: relative; 
+            display: inline-block; 
+            width: 50px; 
+            height: 25px; 
+        } 
+        .switch input { 
+            opacity: 0; 
+            width: 0; 
+            height: 0; 
+        } 
+        .slider { 
+            position: absolute; 
+            cursor: pointer; 
+            top: 0; 
+            left: 0; 
+            right: 0; 
+            bottom: 0; 
+            background-color: #6c757d; 
+            -webkit-transition: .4s; 
+            transition: .4s; 
+        }
+        .slider:before { 
+            position: absolute; 
+            content: ""; 
+            height: 18px; 
+            width: 20px; 
+            left: 4px; 
+            bottom: 4px; 
+            background-color: white; 
+            -webkit-transition: .4s; 
+            transition: .4s; 
+        } 
+        input:checked + .slider { 
+            background-color: #2196F3; 
+        }
+        input:focus + .slider { 
+            box-shadow: 0 0 1px #2196F3; 
+        }
+        input:checked + .slider:before { 
+            -webkit-transform: translateX(26px); 
+            -ms-transform: translateX(26px); 
+            transform: translateX(26px); 
+        } 
+        .slider { 
+            border-radius: 34px; 
+        } 
+        .slider:before { 
+            border-radius: 50%; 
+        }
+        .switch-container input[type="checkbox"] {
+            width: 40px;
+            height: 20px; 
+        }
+        /* AG Grid styling to match existing table */
+        .ag-theme-alpine {
+            --ag-header-background-color: rgb(233, 227, 227);
+            --ag-header-foreground-color: #333;
+            --ag-row-hover-background-color: #f5f5f5;
+        }
+        .ag-theme-alpine .ag-cell {
+            display: flex;
+            align-items: center;
+        }
+        /* Ensure all rows are visible */
+        .ag-theme-alpine .ag-row {
+            min-height: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-left">
+            <div class="menu-icon dw dw-menu"></div>
+        </div>
+        <div class="header-right">
+            <div class="dashboard-setting user-notification">
+                <div class="dropdown">
+                    <a class="dropdown-toggle no-arrow" href="javascript:;" data-toggle="right-sidebar"></a>
+                </div>
+            </div>
+            <div class="user-info-dropdown">
+                <div class="dropdown">
+                    <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                        <span class="user-icon">
+                            {% if k.image %}
+                                <img src="{{ k.image.url }}" alt="" style="width: 100%; height:100% ">
+                            {% else %}
+                                <img src="/static/logo/userlogo.png" id="photo" style="width: 100%; height:100% ">
+                            {% endif %}
+                        </span>
+                        <span class="user-name">{{request.user.username}}</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                        <a class="dropdown-item" href="{% url 'createpersonalinfo' %}"><i class="dw dw-user1"></i> Profile</a>
+                        <a class="dropdown-item" href="{% url 'department' %}" data-toggle="right-sidebar"><i class="dw dw-settings2"></i> Settings</a>
+                        <a class="dropdown-item" href="{% url 'help_page' %}"><i class="dw dw-help"></i> Help</a>
+                        <a class="dropdown-item" href="{% url 'logout' %}"><i class="dw dw-logout"></i> Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+    <div class="left-side-bar">
+        <div class="brand-logo mt-3">
+            <a href="{% url 'dashboard' %}">
+                {% if request.user.company_type %}
+                    {% if request.user.company_type.inverse_logo %}
+                        <img src="{{ request.user.company_type.inverse_logo.url }}" style="width: 100%; height: 100%;">
+                    {% else %}
+                        <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+                    {% endif %}
+                {% else %}
+                    <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+                {% endif %}
+            </a>
+            <div class="close-sidebar" data-toggle="left-sidebar-close">
+                <i class="ion-close-round"></i>
+            </div>
+        </div>
+        <div class="menu-block customscroll">
+            <div class="sidebar-menu">
+                <ul id="accordion-menu">
+                    <br>
+                    <li class="btn-primary active" style="background-color:black">
+                        <a href="{% url 'dashboard' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-house-1"></span><span class="mtext"><b>Dashboard</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'companyprofile' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-building"></span><span class="mtext"><b>Company Profile</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'personalinfonav' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-user1"></span><span class="mtext"><b>My Profile</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'leave' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-calendar-1"></span><span class="mtext"><b>Leave</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'directory' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-list"></span><span class="mtext"><b>Directory</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'dailylog' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon bi bi-check2-square"></span><span class="mtext"><b>Attendance</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'calender' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-calendar"></span><span class="mtext"><b>Holiday Calendar</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'runpayroll_overview' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-money-2"></span><span class="mtext"><b>Payroll</b></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="card-box height-100-p overflow-hidden">
+            <ul class="nav nav-tabs customtab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'calender' %}">Calendar</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'Holidayview' %}">Holiday List</a>
+                </li>
+            </ul>
+            
+            <div class="pd-20 card-box">
+                <div class="row">
+                    <div class="col-md-10">
+                        <h6 class="float-left">Holiday List</h6> 
+                    </div>
+                    <div class="col-md-2">
+                        <i class="fa fa-plus-circle" id="add" data-toggle="modal" data-target="#rules_add" style="font-size:24px; color:grey; float:right; cursor:pointer; margin-left:10px;"></i>
+                    </div>
+                </div>
+                <hr>
+
+                <div class="modal fade bs-example-modal-md" id="rules_add">
+                    <div class="modal-dialog modal-md modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Holiday List</h4>
+                                <button type="button" class="close" data-dismiss="modal">×</button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{% url 'addholiday' %}" method="post" enctype="multipart/form-data" id="holidayform" class="form-container" role="form">
+                                    {% csrf_token %}
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Name<span style="color:red"> *</span></label>  
+                                                <input type="text" class="form-control" name="holiday_name" id="holiday_name" required>  
+                                                <span id="nameError" style="color: red;"></span>                                                                    
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <style>
+                                                    .inputWithIcon input[type="text"] {  
+                                                        padding-left: 30px;  
+                                                    }  
+                                                    .inputWithIcon {  
+                                                        position: relative;  
+                                                    }  
+                                                    .inputWithIcon i {  
+                                                        position: absolute;  
+                                                        left: 10px;  
+                                                        top: 6px;  
+                                                        padding: 9px 8px;  
+                                                        color: rgb(148, 145, 145);  
+                                                        transition: 0.3s;  
+                                                    }  
+                                                </style>
+                                                <label>Date<span style="color:red"> *</span></label>
+                                                <div class="inputWithIcon">
+                                                    <i class="icon-copy fa fa-calendar" aria-hidden="true"></i>
+                                                    <input class="form-control date-picker" name="holiday_date" id="holiday_date" readonly placeholder="Select Date" type="text">
+                                                    <span id="dateError" style="color: red;"></span>                                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <h6 class="applicable-for">Applicable For <span style="color:red"> *</span></h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        {% for i in work_location %}
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="checkbox-label">
+                                                        <input type="checkbox" style="transform: scale(1.5); margin-right: 11px;" name="holiday_location" value="{{ i.id }}" class="holiday_location">
+                                                        {{i.location}}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="switch-label">Optional</label>
+                                                    <label class="switch">
+                                                        <input type="checkbox" class="switch-btn" name="toggle_optional_{{ i.id }}" id="toggle_optional" data-size="small">
+                                                        <span class="slider"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                        <div class="col-md-12" id="checkboxErrorMessage" style="color:red; display:none;">
+                                            <div class="form-group">
+                                                Please select at least one location.
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="checkbox" style="transform: scale(1.5); margin-right: 11px;" id="check-all" name="check-all">
+                                            <label>Check All</label>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>        
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AG Grid Container -->
+                <div id="holidayGrid" class="ag-theme-alpine" style="width: 100%;"></div>
+
+                {% for item in data %}
+                <div class="modal fade bs-example-modal-md" id="editholidaylist{{ item.holidaylist.id }}">
+                    <div class="modal-dialog modal-md modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Edit Holiday</h4>
+                                <button type="button" class="close" data-dismiss="modal">×</button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{% url 'editholiday' %}" method="post" enctype="multipart/form-data" class="form-container" role="form" id="editholidayform_{{item.holidaylist.id}}" onsubmit="return editvalidateForm()">
+                                    {% csrf_token %}
+                                    <input hidden type="text" name="holidaylist_id" value="{{item.holidaylist.id}}"> 
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Name<span style="color:red"> *</span></label>  
+                                                <input type="text" class="form-control" name="holiday_name" id="holiday_name_{{item.holidaylist.id}}" value="{{item.holidaylist.HolidayName}}" required>  
+                                                <span id="nameError_{{item.holidaylist.id}}" style="color: red; font-size: small;"></span>                                                                    
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <style>
+                                                    .inputWithIcon input[type="text"] {  
+                                                        padding-left: 30px;  
+                                                    }  
+                                                    .inputWithIcon {  
+                                                        position: relative;  
+                                                    }  
+                                                    .inputWithIcon i {  
+                                                        position: absolute;  
+                                                        left: 10px;  
+                                                        top: 6px;  
+                                                        padding: 9px 8px;  
+                                                        color: rgb(148, 145, 145);  
+                                                        transition: 0.3s;  
+                                                    }  
+                                                </style>
+                                                <label>Date<span style="color:red"> *</span></label>
+                                                <div class="inputWithIcon">
+                                                    <i class="icon-copy fa fa-calendar" aria-hidden="true"></i>
+                                                    <input class="form-control date-picker" name="holiday_date" id="holiday_date" value="{{item.holidaylist.HolidayDate}}" readonly placeholder="Select Date" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <h6 class="applicable-for">Applicable For<span style="color:red"> *</span></h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        {% for location_info in item.location_info %}
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="checkbox-label">
+                                                        <input type="checkbox" style="transform: scale(1.5); margin-right: 11px;" name="holiday_location" value="{{ location_info.location.id }}" class="editloc_{{item.holidaylist.id}}"
+                                                            {% if location_info.location.id in item.selected_location_ids %} checked {% endif %}>
+                                                        {{ location_info.location.location }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="switch-label">Optional</label>
+                                                    <label class="switch">
+                                                        <input type="checkbox" class="switch-btn" name="toggle_optional_{{ location_info.location.id }}" id="toggle_optional_{{ location_info.location.id }}" data-size="small" 
+                                                            {% if location_info.info and location_info.info.HolidayToggleBtn_ON == 'on' %} checked {% endif %}>
+                                                        <span class="slider"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                        <div class="col-md-12" id="ErrorMessage_{{item.holidaylist.id}}" style="color:red; display:none;">
+                                            <div class="form-group">
+                                                Please select at least one location.
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="checkbox" style="transform: scale(1.5); margin-right: 11px;" class="checkall_{{item.holidaylist.id}}" name="checkall">
+                                            <label>Check All</label>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- JS -->
+    <script src="static/index/vendors/scripts/core.js"></script>
+    <script src="static/index/vendors/scripts/script.min.js"></script>
+    <script src="static/index/vendors/scripts/process.js"></script>
+    <script src="static/index/vendors/scripts/layout-settings.js"></script>
+    <script src="static/index/src/plugins/jquery-steps/jquery.steps.js"></script>
+    <script src="static/index/vendors/scripts/steps-setting.js"></script>
+    <!-- AG Grid JS -->
+    <script src="https://unpkg.com/ag-grid-community@32.1.0/dist/ag-grid-community.min.js"></script>
+
+    <script>
+        // Define the base URL for delete action
+        const deleteHolidayBaseUrl = "{% url 'deleteholiday_list' id=0 %}".replace('0', '');
+
+        // AG Grid column definitions
+        const columnDefs = [
+            { headerName: "Name", field: "holidayName", sortable: true, filter: true },
+            { headerName: "Date", field: "holidayDate", sortable: true, filter: true },
+            { 
+                headerName: "Locations", 
+                field: "locations", 
+                sortable: false, 
+                filter: true,
+                cellRenderer: params => {
+                    return params.value ? params.value.join(', ') : '';
+                }
+            },
+            {
+                headerName: "",
+                field: "edit",
+                width: 80,
+                sortable: false,
+                cellRenderer: params => {
+                    return `<button class="btn btn-link" data-toggle="modal" data-target="#editholidaylist${params.data.id}">
+                                <i class="fas fa-edit" style="font-size: 24px; color: grey;"></i>
+                            </button>`;
+                }
+            },
+            {
+                headerName: "",
+                field: "delete",
+                width: 80,
+                sortable: false,
+                cellRenderer: params => {
+                    return `<a onclick="return confirm('Are you sure to delete?')" href="${deleteHolidayBaseUrl}${params.data.id}">
+                                <i class="fas fa-trash" title="Delete" style="font-size: 20px; color:grey"></i>
+                            </a>`;
+                }
+            }
+        ];
+
+        // AG Grid row data
+        const rowData = [
+            {% for entry in data %}
+            {
+                id: {{ entry.holidaylist.id }},
+                holidayName: "{{ entry.holidaylist.HolidayName|escapejs }}",
+                holidayDate: "{{ entry.holidaylist.HolidayDate|escapejs }}",
+                locations: [
+                    {% for holiday_location in entry.holidaylocation.all %}
+                        {% for location in holiday_location.HolidayLocation.all %}
+                            "{{ location.location|escapejs }}"{% if not forloop.last %},{% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                ]
+            }{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ];
+
+        // AG Grid options
+        const gridOptions = {
+            columnDefs: columnDefs,
+            rowData: rowData,
+            defaultColDef: {
+                flex: 1,
+                minWidth: 100,
+                resizable: true
+            },
+            domLayout: 'autoHeight',
+            pagination: true,
+            paginationPageSize: 10,
+            animateRows: true // Smooth row additions
+        };
+
+        // Initialize AG Grid
+        let gridApi;
+        document.addEventListener('DOMContentLoaded', () => {
+            const gridDiv = document.querySelector('#holidayGrid');
+            new agGrid.Grid(gridDiv, gridOptions);
+            gridApi = gridOptions.api; // Store grid API for later use
+        });
+
+        // Handle form submission with AJAX
+        $(document).ready(function () {
+            $('#holidayform').on('submit', function (e) {
+                e.preventDefault(); // Prevent default form submission
+
+                if (!validateForm()) {
+                    return; // Stop if validation fails
+                }
+
+                $.ajax({
+                    url: "{% url 'addholiday' %}",
+                    type: 'POST',
+                    data: new FormData(this),
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        if (response.success) {
+                            // Add new row to AG Grid
+                            const newRow = {
+                                id: response.holiday.id,
+                                holidayName: response.holiday.holidayName,
+                                holidayDate: response.holiday.holidayDate,
+                                locations: response.holiday.locations || []
+                            };
+                            gridApi.applyTransaction({ add: [newRow] });
+
+                            // Navigate to the page with the new row
+                            const rowCount = gridApi.getDisplayedRowCount();
+                            const pageSize = gridOptions.paginationPageSize;
+                            const lastPage = Math.ceil(rowCount / pageSize) - 1;
+                            gridApi.paginationGoToPage(lastPage);
+
+                            // Clear form and close modal
+                            $('#holidayform')[0].reset();
+                            $('#rules_add').modal('hide');
+                        } else {
+                            alert('Error adding holiday: ' + (response.error || 'Unknown error'));
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        alert('Error adding holiday: ' + error);
+                    }
+                });
+            });
+
+            // Existing checkbox logic
+            $('#check-all').on('click', function () {
+                $('.holiday_location').prop('checked', this.checked);
+            });
+
+            $('.holiday_location').on('click', function () {
+                var allChecked = $('.holiday_location:checked').length === $('.holiday_location').length;
+                $('#check-all').prop('checked', allChecked);
+            });
+        });
+
+        {% for item in data %}
+        $(document).ready(function () {
+            $('.checkall_{{item.holidaylist.id}}').on('click', function () {
+                $('.editloc_{{item.holidaylist.id}}').prop('checked', this.checked);
+            });
+
+            $('.editloc_{{item.holidaylist.id}}').on('click', function () {
+                var allChecked = $('.editloc_{{item.holidaylist.id}}:checked').length === $('.editloc_{{item.holidaylist.id}}').length;
+                $('.checkall_{{item.holidaylist.id}}').prop('checked', allChecked);
+            });
+
+            var allEditLocChecked = $('.editloc_{{item.holidaylist.id}}:checked').length === $('.editloc_{{item.holidaylist.id}}').length;
+            $('.checkall_{{item.holidaylist.id}}').prop('checked', allEditLocChecked);
+        });
+        {% endfor %}
+
+        {% for item in data %}
+        function editvalidateForm() {
+            var nameInput = document.getElementById("holiday_name_{{item.holidaylist.id}}");
+            var trimmednameInput = nameInput.value.trim();
+            var nameError = document.getElementById("nameError_{{item.holidaylist.id}}");
+            
+            var form = document.getElementById('editholidayform_{{item.holidaylist.id}}');
+            var checkboxes = form.querySelectorAll('.editloc_{{item.holidaylist.id}}');
+            var isChecked = Array.prototype.slice.call(checkboxes).some(function (checkbox) {
+                return checkbox.checked;
+            });
+
+            if (trimmednameInput === "") {
+                nameError.textContent = "Name required";
+                return false; 
+            }
+            nameError.textContent = ""; 
+
+            if (!isChecked) {
+                document.getElementById('ErrorMessage_{{item.holidaylist.id}}').style.display = 'block';
+                return false;
+            } else {
+                document.getElementById('ErrorMessage_{{item.holidaylist.id}}').style.display = 'none';
+                return true;
+            }
+        }
+        {% endfor %}
+
+        function validateForm() {
+            var nameInput = document.getElementById("holiday_name");
+            var trimmednameInput = nameInput.value.trim();
+            var nameError = document.getElementById("nameError");
+            var dateInput = document.getElementById("holiday_date");
+            var trimmeddateInput = dateInput.value.trim();
+            var dateError = document.getElementById("dateError");
+            var form = document.getElementById('holidayform');
+            var checkboxes = form.querySelectorAll('.holiday_location');
+            var isChecked = Array.prototype.slice.call(checkboxes).some(function (checkbox) {
+                return checkbox.checked;
+            });
+
+            if (trimmednameInput === "") {
+                nameError.textContent = "Name required";
+                return false; 
+            }
+            if (trimmeddateInput === "") {
+                dateError.textContent = "Date required";
+                return false; 
+            }
+            nameError.textContent = ""; 
+            dateError.textContent = ""; 
+
+            if (!isChecked) {
+                document.getElementById('checkboxErrorMessage').style.display = 'block';
+                return false;
+            } else {
+                document.getElementById('checkboxErrorMessage').style.display = 'none';
+                return true;
+            }
+        }
+    </script>
+</body>
+</html>

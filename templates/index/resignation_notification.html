@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Arial, sans-serif; font-size: 15px; }
+    </style>
+</head>
+<body>
+    <h3>Resignation Alert</h3>
+    <p><strong>Employee Name:</strong> {{ employee.username }}</p>
+    <p><strong>Employee Email:</strong> {{ employee.email }}</p>
+    <p><strong>Resignation Date:</strong> {{ resignation.resignation_date }}</p>
+    <p><strong>Actual Last Working Day</strong> {{ resignation.actual_last_working_day }} </p>
+    <p><strong>Requested Last Working Day:</strong> {{ resignation.last_workingday }}</p>
+    <p><strong>Reason:</strong> {{ resignation.reason }}</p>
+    <p><strong>Letter:</strong><br>{{ resignation.resignation_letter }}</p>
+</body>
+</html>

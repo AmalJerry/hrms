@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Leave Application Notification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #171717;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 24px;
+            border: 1px solid #ddd;
+            background-color: #fffcfc;
+        }
+        h2 {
+            color: #016695;
+        }
+        p {
+            margin: 12px 0;
+        }
+        .footer {
+            margin-top: 30px;
+            font-size: 0.9em;
+            color: #313131;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Dear {{ to }},</h2>
+
+    <p>
+        I hope this email finds you well.  
+        This is to notify you that <strong>{{ data.applicant_email.username }}</strong> has submitted a leave application through the HRMS system.
+    </p>
+
+    <p><strong>Employee Information:</strong><br>
+        <span style="margin-left: 12px;">Name: {{ data.applicant_email.username }}</span><br>
+        <span style="margin-left: 12px;">Employee ID: {{ data.applicant_email.empid }}</span><br>
+        <span style="margin-left: 12px;">Department: {{ data.applicant_email.department }}</span><br>
+    </p>
+
+    <p><strong>Leave Details:</strong><br>
+        <span style="margin-left: 12px;">Leave Type: {{ data.leavetyp }}</span><br>
+        <span style="margin-left: 12px;">Start Date: {{ std }}</span><br>
+        <span style="margin-left: 12px;">End Date: {{ edt }}</span><br>
+        <span style="margin-left: 12px;">Number of Days: {{ data.Days }}</span><br>
+        <span style="margin-left: 12px;">Reason: {{ data.Reason }}</span><br>
+    </p>
+
+    <p>
+        Please review the leave request and take appropriate action in the HRMS system.<br>
+        Your prompt attention to this matter is appreciated.
+    </p>
+
+    <div class="footer">
+        <p>
+            Best regards,<br>
+            <strong>Cydez Technologies</strong><br>
+            Email: <a href="mailto:cydezt@gmail.com">cydezt@gmail.com</a><br>
+            HRMS Support Team
+        </p>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+{% load custom_tags %}
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>HRMS</title>
+    <link rel="icon" href="/static/logo/apple-touch-icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="static/index/vendors/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="static/index/vendors/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="static/index/vendors/images/favicon-16x16.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/static/index/vendors/styles/core.css">
+    <link rel="stylesheet" type="text/css" href="/static/index/vendors/styles/icon-font.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/index/vendors/styles/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ag-grid-community@31.3.2/styles/ag-grid.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ag-grid-community@31.3.2/styles/ag-theme-alpine.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ag-grid-community@31.3.2/dist/ag-grid-community.min.js"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-119386393-1');
+    </script>
+<style>
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+    span.close {
+        padding-left: 428px;
+        position: absolute;
+        top: 10px;
+        right: 50%;
+        transform: translateX(50%);
+    }
+    .user-info-dropdown.approve {
+        margin-top: 9%;
+        margin-left: -57%;
+    }
+    .ag-header-cell {
+        background-color: #fff;
+        white-space: nowrap;
+        text-align: left !important;
+        z-index: 10;
+    }
+    .ag-cell {
+        border: 1px solid #e0e0e0;
+        background-color: #fff;
+        line-height: 1.5 !important;
+    }
+    .ag-row-even .ag-cell {
+        background: #fff;
+    }
+    .ag-row-odd .ag-cell {
+        background: #eaeef2;
+    }
+    .ag-cell:not(.ag-cell-first):not(.ag-cell-last):hover {
+        cursor: pointer;
+    }
+    .ag-theme-alpine {
+        width: 100%;
+        margin: 0 auto;
+        --ag-grid-size: 4px;
+        --ag-border-color: #e0e0e0;
+    }
+    .ag-pinned-left-cols-container .ag-cell {
+        position: sticky;
+        left: 0;
+        z-index: 30;
+        background-color: #fff;
+    }
+    .btn-warning {
+        background-color: #ffc107;
+        border-color: #ffc107;
+        color: #fff;
+    }
+    .btn-warning:hover {
+        background-color: #e0a800;
+        border-color: #d39e00;
+        color: #fff;
+    }
+    /* Full height adjustments */
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+    .main-container {
+        height: calc(100vh - 80px); /* Increased to account for ticker */
+        overflow: auto;
+    }
+    .card-box {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    .pd-20.card-box {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+    }
+    #data_Grid {
+        flex: 1;
+        width: 100%;
+        min-height: 0;
+    }
+    /* Ticker adjustments for visibility */
+    .leave-ticker-wrapper {
+        width: 100%;
+        background: #faf4e9;
+        border-top: 1px solid #ffc107;
+        border-bottom: 1px solid #ffc107;
+        padding: 8px 0;
+        z-index: 100;
+        position: relative;
+        display: block !important;
+        min-height: 30px;
+    }
+    .leave-ticker-track {
+        display: inline-block;
+        white-space: nowrap;
+        padding-left: 100%;
+        animation: tickerMove 20s linear infinite;
+    }
+    .leave-ticker-item {
+        display: inline-block;
+        color: #ff9800;
+        font-size: 15px;
+        font-weight: 500;
+        padding: 0 20px;
+    }
+    @keyframes tickerMove {
+        0% { transform: translateX(0%); }
+        100% { transform: translateX(-100%); }
+    }
+    .ag-header {
+            background-color: #3f51b5;
+            /* Change to match your theme */
+            color: white;
+            font-weight: 600;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .ag-header-cell {
+            background-color: #3f51b5;
+            color: white;
+            border-right: 1px solid #5c6bc0;
+            padding: 10px 8px;
+        }
+
+        .ag-header-cell:hover {
+            background-color: #ffffff;
+            color: rgb(13, 13, 13);
+            border-right: 1px solid #5c6bc0;
+            padding: 10px 8px;
+        }
+</style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-left">
+            <div class="menu-icon dw dw-menu"></div>
+        </div>
+        <div class="header-right">
+            <div class="dashboard-setting user-notification">
+                <div class="dropdown">
+                    <a class="dropdown-toggle no-arrow" href="javascript:;" data-toggle="right-sidebar"></a>
+                </div>
+            </div>
+            <div class="user-info-dropdown" style="margin-top: 2%;margin-right: 15%;">
+                <div class="dropdown">
+                    <button class="btn btn-primary" data-toggle="modal" href="#export_Modal" style="border-color: white;">Export</button>
+                </div>
+            </div>
+            <form method="post" action="{% url 'bulk_approve_leave' %}">
+                {% csrf_token %}
+                <div class="user-info-dropdown approve">
+                    <div class="dropdown">
+                        <button class="btn btn-primary" data-toggle="modal" href="" style="border-color: white;">Bulk Approve</button>
+                    </div>
+                </div>
+            </form>
+            <div class="user-info-dropdown">
+                <div class="dropdown">
+                    <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                        <span class="user-icon">
+                        {% if k.image %}
+                            <img src="{{ k.image.url }}" alt="" style="width: 100%; height:100% ">
+                        {% else %}
+                        <img src="/static/logo/userlogo.png" id="photo" style="width: 100%; height:100% ">
+                        {% endif %}
+                        </span>
+                        <span class="user-name">{{request.user.username}}</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                        <a class="dropdown-item" href="{% url 'createpersonalinfo' %}"><i class="dw dw-user1"></i> Profile</a>
+                        <a class="dropdown-item" href="{% url 'department' %}" data-toggle="right-sidebar"><i class="dw dw-settings2"></i> Settings</a>
+                        <a class="dropdown-item" href="{% url 'help_page' %}"><i class="dw dw-help"></i> Help</a>
+                        <a class="dropdown-item" href="{% url 'logout' %}"><i class="dw dw-logout"></i> Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>  
+    <div class="left-side-bar">
+        <div class="brand-logo mt-3">
+            <a href="{% url 'dashboard' %}">
+                {% if request.user.company_type %}
+                    {% if request.user.company_type.inverse_logo %}
+                    <img src="{{ request.user.company_type.inverse_logo.url }}" style="width: 100%; height: 100%;">
+                    {% else %}
+                    <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+                    {% endif %}
+                {% else %}
+                    <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+                {% endif %}
+            </a>
+            <div class="close-sidebar" data-toggle="left-sidebar-close">
+                <i class="ion-close-round"></i>
+            </div>
+        </div>
+        <div class="menu-block customscroll">
+            <div class="sidebar-menu">
+                <ul id="accordion-menu">
+                    <br>
+                    <li class="btn-primary active" style="background-color:black">
+                        <a href="{% url 'dashboard' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-house-1"></span><span class="mtext"><b>Dashboard</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'companyprofile' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-building"></span><span class="mtext"><b>Company Profile</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'personalinfonav' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-user1"></span><span class="mtext"><b>My Profile</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'leave' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-calendar-1"></span><span class="mtext"><b>Leave</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'directory' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-list"></span><span class="mtext"><b>Directory</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'dailylog' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon bi bi-check2-square"></span><span class="mtext"><b>Attendance</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'calender' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-calendar"></span><span class="mtext"><b>Holiday Calendar</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'runpayroll_overview' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-money-2"></span><span class="mtext"><b>Payroll</b></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div> 
+    <form action="{% url 'export_leave_data' %}" method="post" onsubmit="return validateForm()">
+        {% csrf_token %}    
+        <div class="modal fade bs-example-modal-sm" id="export_Modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Export</h4>
+                        <button type="button" class="close" data-dismiss="modal">×</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label>Select Month and Year</label>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <input class="form-control month-picker" type="text" id="monthPicker" name="monthselect" placeholder="Month , Year" readonly />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" id="exportButton" class="btn btn-primary">Export</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="mobile-menu-overlay"></div>
+    <div class="main-container">
+        <div class="card-box height-100-p overflow-hidden"> 
+            <ul class="nav nav-tabs customtab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'leave' %}" role="tab">Apply Leave</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'admin_log' %}" role="tab">My Logs</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'log' %}" role="tab">Team Logs</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'balance' %}" >Balance</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'Rules' %}" role="tab">Rules</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'assignrule' %}" role="tab">Assign Rules</a>
+                </li>
+            </ul>
+            {% if pending_alerts %}
+                <div class="leave-ticker-wrapper">
+                    <div class="leave-ticker-track">
+                        {% for alert in pending_alerts reversed %}
+                            <span class="leave-ticker-item">
+                                ⚠️ {{ alert.username }}'s leave is still Pending - It Auto-approves in {{ alert.remaining_days }} day{{ alert.remaining_days|pluralize }}.    
+                            </span>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% else %}
+                <!-- Fallback for debugging -->
+                <div class="leave-ticker-wrapper">
+                    <div class="leave-ticker-track">
+                        <span class="leave-ticker-item">⚠️ No pending leave alerts available.</span>
+                    </div>
+                </div>
+            {% endif %}
+            <div class="pd-20 card-box">
+                <div id="data_Grid" class="ag-theme-alpine"></div>
+            </div>
+            {% if not data %}
+                <p style="text-align: center;">No Data Found</p>
+            {% endif %}
+            <div id="rejection-modal" class="modal bs-example-modal-md rejection-modal">
+                <div class="modal-dialog modal-md modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Rejection Leave</h4>
+                            <button type="button" class="close" data-dismiss="modal">×</button>                        
+                        </div>
+                        <div class="modal-body">
+                            <form id="rejection-form" method="POST" action="{% url 'reject_leave' %}">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-md">
+                                        <div class="form-group">
+                                            <label>Rejection Reason<span style="color:red">*</span></label>
+                                            <textarea rows="4" cols="50" class="form-control" id="rejection-reason" name="rejection_reason" required></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="hidden" id="leave-id" name="leave_id" value="">
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-outline-primary">Submit</button>
+                                </div> 
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="static/index/vendors/scripts/core.js"></script>
+    <script src="static/index/vendors/scripts/script.min.js"></script>
+    <script src="static/index/vendors/scripts/process.js"></script>
+    <script src="static/index/vendors/scripts/layout-settings.js"></script>
+    <script src="static/index/src/plugins/jquery-steps/jquery.steps.js"></script>
+    <script src="static/index/vendors/scripts/steps-setting.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Export button validation
+            $('#exportButton').on('click', function (e) {
+                var monthPicker = $('#monthPicker').val();
+                if (!monthPicker) {
+                    e.preventDefault();
+                    alert('Please select a month and year.');
+                }
+            });
+
+            // CSRF Setup
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.startsWith(name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+            const csrftoken = getCookie('csrftoken');
+            if (!csrftoken) {
+                console.error('CSRF token not found');
+                alert('Session error. Please refresh the page and try again.');
+            }
+
+            // Cache elements
+            const rejectionModal = $('#rejection-modal');
+            const rejectionForm = $('#rejection-form');
+            const leaveIdInput = $('#leave-id');
+            const rejectionReason = $('#rejection-reason');
+
+            // Debug ticker visibility
+            console.log('Pending alerts available:', {{ pending_alerts|length|default:0 }});
+            if ($('.leave-ticker-wrapper').length) {
+                console.log('Ticker wrapper found in DOM');
+            } else {
+                console.warn('Ticker wrapper not found in DOM');
+            }
+
+            // AG Grid Configuration
+            const columnDefs = [
+                {
+                    headerName: "Employee Name",
+                    field: "employeeName",
+                    pinned: 'left',
+                    width: 200,
+                    cellRenderer: params => {
+                        if (!params.data) return '';
+                        return `
+                            <a href="{% url 'view_personalinfo' 0 %}" class="employee-link">${params.value || ''}</a>
+                            <br><small>(${params.data.primaryManager || ''})</small>
+                        `.replace('0', params.data.applicantId || '');
+                    }
+                },
+                { headerName: "Leave Type", field: "leaveType", width: 120 },
+                { headerName: "Start Date", field: "startDate", width: 120 },
+                { headerName: "End Date", field: "endDate", width: 120 },
+                { headerName: "Days", field: "days", width: 80 },
+                { headerName: "Reason", field: "reason", width: 200 },
+                { headerName: "Applied on", field: "appliedOn", width: 120 },
+                {
+                    headerName: "Status",
+                    field: "status",
+                    width: 120,
+                    cellRenderer: params => {
+                        if (!params.data) return '';
+                        if (params.value === 'Approved') {
+                            return `<span class="text-success">Approved</span><br><small>${params.data.approverName || ''}</small>`;
+                        } else if (params.value === 'Rejected') {
+                            return `<span class="text-danger">Rejected</span><br><small>${params.data.approverName || ''}</small>`;
+                        } else {
+                            return `<span class="text-warning">Pending</span>`;
+                        }
+                    }
+                },
+                {
+                    headerName: "Actions",
+                    field: "actions",
+                    width: 150,
+                    cellRenderer: params => {
+                        if (!params.data) return '';
+                        const leaveId = params.data.id;
+                        const status = params.data.status;
+                        if (status === 'Approved') {
+                            return `
+                                <form class="cancel-leave-form" data-leave-id="${leaveId}" style="display: inline;">
+                                    <input type="hidden" name="csrfmiddlewaretoken" value="${csrftoken}">
+                                    <input type="hidden" name="leave_id" value="${leaveId}">
+                                    <button type="submit" class="btn btn-sm btn-warning" title="Revert Approval">Revert</button>
+                                </form>
+                            `;
+                        } else if (status === 'Rejected') {
+                            return `
+                                <form class="cancel-leave-form" data-leave-id="${leaveId}" style="display: inline;">
+                                    <input type="hidden" name="csrfmiddlewaretoken" value="${csrftoken}">
+                                    <input type="hidden" name="leave_id" value="${leaveId}">
+                                    <button type="submit" class="btn btn-sm btn-warning" title="Revert Rejection">Revert</button>
+                                </form>
+                            `;
+                        } else {
+                            return `
+                                <form class="approve-leave-form" data-leave-id="${leaveId}" style="display: inline;">
+                                    <input type="hidden" name="csrfmiddlewaretoken" value="${csrftoken}">
+                                    <input type="hidden" name="leave_id" value="${leaveId}">
+                                    <button type="submit" class="btn btn-sm btn-success" title="Approve">
+                                        <i class="icon-copy ion-checkmark-round"></i>
+                                    </button>
+                                </form>
+                                <button class="btn btn-sm btn-danger reject-link" data-leave-id="${leaveId}" title="Reject">
+                                    <i class="icon-copy ion-close-round"></i>
+                                </button>
+                            `;
+                        }
+                    }
+                }
+            ];
+
+            const rowData = [
+                {% for i in data %}
+                {
+                    id: "{{ i.id | escapejs }}",
+                    employeeName: "{{ i.applicant_email.username | escapejs }}",
+                    applicantId: "{{ i.applicant_email.id | escapejs }}",
+                    primaryManager: "{{ i.applicant_email.primary_manager_name | escapejs }}",
+                    leaveType: "{{ i.leavetyp | escapejs }}",
+                    startDate: "{{ i.strtDate | escapejs }}",
+                    endDate: "{{ i.endDate | escapejs }}",
+                    days: "{{ i.Days | escapejs }}",
+                    reason: "{{ i.Reason | escapejs }}",
+                    appliedOn: "{{ i.Appliedon | escapejs }}",
+                    status: "{{ i.status | escapejs }}",
+                    approverName: "{{ i.approver_name | escapejs }}"
+                }{% if not forloop.last %},{% endif %}
+                {% endfor %}
+            ];
+
+            const gridOptions = {
+                columnDefs: columnDefs,
+                rowData: rowData,
+                defaultColDef: {
+                    sortable: false,
+                    filter: true,
+                    resizable: true
+                },
+                getRowId: params => params.data.id,
+                pagination: true,
+                paginationPageSize: 50,
+                domLayout: 'normal',
+                animateRows: true,
+                rowHeight: 50,
+                headerHeight: 40,
+                onGridReady: params => {
+                    console.log('Grid initialized with', rowData.length, 'rows');
+                    if (!rowData.length) {
+                        console.warn('No data available for the grid');
+                    }
+                    params.api.sizeColumnsToFit();
+                }
+            };
+
+            // Initialize AG Grid
+            const gridDiv = document.querySelector('#data_Grid');
+            if (gridDiv) {
+                new agGrid.Grid(gridDiv, gridOptions).gridOptions.api;
+                console.log('AG Grid initialized');
+            } else {
+                console.error('Grid container #data_Grid not found');
+            }
+
+            // Status Update Function
+            function updateStatusCell(rowNode, status) {
+                if (!rowNode) {
+                    console.error('Row node is null');
+                    return;
+                }
+                rowNode.data.status = status;
+                rowNode.data.approverName = status !== 'Pending' ? "{{ request.user.username | escapejs }}" : "";
+                gridOptions.api.redrawRows({ rowNodes: [rowNode] });
+            }
+
+            // Event Handlers
+            $(document).on('submit', '.approve-leave-form', function(e) {
+                e.preventDefault();
+                const form = $(this);
+                const leaveId = form.find('input[name="leave_id"]').val();
+                const rowNode = gridOptions.api.getRowNode(leaveId);
+                
+                if (!rowNode) {
+                    console.error('Row node not found for leave_id:', leaveId);
+                    alert('Error: Leave record not found.');
+                    return;
+                }
+
+                form.find('button[type="submit"]').prop('disabled', true).text('Processing...');
+
+                $.ajax({
+                    url: "{% url 'approve_leave' %}",
+                    method: 'POST',
+                    headers: { 'X-CSRFToken': csrftoken },
+                    data: { leave_id: leaveId },
+                    success: () => {
+                        updateStatusCell(rowNode, 'Approved');
+                        console.log('Leave approved:', leaveId);
+                    },
+                    error: (xhr, status, error) => {
+                        console.error('Approval failed:', leaveId, error, xhr.responseText);
+                        alert('Approval failed. Please try again.');
+                    },
+                    complete: () => {
+                        form.find('button[type="submit"]').prop('disabled', false).html('<i class="icon-copy ion-checkmark-round"></i>');
+                    }
+                });
+            });
+
+            $(document).on('click', '.reject-link', function(e) {
+                e.preventDefault();
+                const leaveId = $(this).data('leave-id');
+                if (!leaveId) {
+                    console.error('Leave ID not found on reject button');
+                    return;
+                }
+                leaveIdInput.val(leaveId);
+                rejectionModal.data('row-id', leaveId);
+                rejectionModal.modal('show');
+                rejectionReason.val('').trigger('focus');
+            });
+
+            rejectionForm.on('submit', function(e) {
+                e.preventDefault();
+                const submitBtn = $(this).find('[type="submit"]');
+                const rowId = rejectionModal.data('row-id');
+                const rowNode = gridOptions.api.getRowNode(rowId);
+                
+                if (!rowNode) {
+                    console.error('Row node not found for leave_id:', rowId);
+                    alert('Error: Leave record not found.');
+                    return;
+                }
+
+                if (!rejectionReason.val().trim()) {
+                    alert('Please provide a rejection reason.');
+                    rejectionReason.trigger('focus');
+                    return;
+                }
+
+                submitBtn.prop('disabled', true).text('Processing...');
+
+                $.ajax({
+                    url: "{% url 'reject_leave' %}",
+                    method: 'POST',
+                    headers: { 'X-CSRFToken': csrftoken },
+                    data: {
+                        leave_id: rowId,
+                        rejection_reason: rejectionReason.val()
+                    },
+                    success: () => {
+                        updateStatusCell(rowNode, 'Rejected');
+                        rejectionModal.modal('hide');
+                        rejectionReason.val('');
+                        console.log('Leave rejected:', rowId);
+                    },
+                    error: (xhr, status, error) => {
+                        console.error('Rejection failed:', rowId, error, xhr.responseText);
+                        alert('Rejection failed. Please try again.');
+                        rejectionModal.modal('show');
+                    },
+                    complete: () => {
+                        submitBtn.prop('disabled', false).text('Submit');
+                    }
+                });
+            });
+
+            $(document).on('submit', '.cancel-leave-form', function(e) {
+                e.preventDefault();
+                const form = $(this);
+                const leaveId = form.find('input[name="leave_id"]').val();
+                const rowNode = gridOptions.api.getRowNode(leaveId);
+                
+                if (!rowNode) {
+                    console.error('Row node not found for leave_id:', leaveId);
+                    alert('Error: Leave record not found.');
+                    return;
+                }
+
+                form.find('button[type="submit"]').prop('disabled', true).text('Processing...');
+
+                $.ajax({
+                    url: "{% url 'cancel_leave' %}",
+                    method: 'POST',
+                    headers: { 'X-CSRFToken': csrftoken },
+                    data: { leave_id: leaveId },
+                    success: () => {
+                        updateStatusCell(rowNode, 'Pending');
+                        console.log('Leave status reverted to Pending:', leaveId);
+                    },
+                    error: (xhr, status, error) => {
+                        console.error('Revert failed:', leaveId, error, xhr.responseText);
+                        alert('Failed to revert status. Please try again.');
+                    },
+                    complete: () => {
+                        form.find('button[type="submit"]').prop('disabled', false).text('Revert');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

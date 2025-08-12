@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html>
+{% load static %}
+<head>
+    <!-- Basic Page Info -->
+    <meta charset="utf-8">
+   
+    <title>HRMS</title>
+      <link rel="icon" href="/static/logo/apple-touch-icon.png" type="image/x-icon"> 
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+      <link rel="apple-touch-icon" sizes="180x180" href="static/index/vendors/images/apple-touch-icon.png">
+      <link rel="icon" type="image/png" sizes="32x32" href="static/index/vendors/images/favicon-32x32.png">
+      <link rel="icon" type="image/png" sizes="16x16" href="static/index/vendors/images/favicon-16x16.png">
+  
+      <!-- Mobile Specific Metas -->
+      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+      <!-- Google Font -->
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+      <!-- CSS -->
+      <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/core.css">
+      <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/icon-font.min.css">
+      <link rel="stylesheet" type="text/css" href="static/index/src/plugins/jquery-steps/jquery.steps.css">
+      <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/style.css">
+  
+  
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
+
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-119386393-1');
+    </script>
+    <script>
+       
+        flatpickr("[data-behavior='flatpickr']", {
+            allowInput: true,
+            dateFormat: "Y-m-d"
+        });
+    </script>
+    
+</head>
+<body>
+
+    <div class="header">
+        <div class="header-left">
+            <div class="menu-icon dw dw-menu"></div>
+            {% if is_view_payroll %}
+            <h6 class="text-primary" style="padding-left: 20px;">Impersonate Employee: {{data.username}}</h6>
+            {% endif %}
+        </div>
+        <div class="header-right">
+            <div class="dashboard-setting user-notification">
+                <div class="dropdown">
+                    <a class="dropdown-toggle no-arrow" href="javascript:;" data-toggle="right-sidebar">
+                       
+                    </a>
+                </div>
+            </div>
+            <!-- <div class="user-notification">
+                <div class="dropdown">
+                    <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
+                        <i class="icon-copy dw dw-notification"></i>
+                        <span class="badge notification-active"></span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <div class="notification-list mx-h-350 customscroll">
+                            <ul>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/img.jpg" alt="">
+                                        <h3>John Doe</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/photo1.jpg" alt="">
+                                        <h3>Lea R. Frith</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/photo2.jpg" alt="">
+                                        <h3>Erik L. Richards</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/photo3.jpg" alt="">
+                                        <h3>John Doe</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/photo4.jpg" alt="">
+                                        <h3>Renee data. Hansen</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/img.jpg" alt="">
+                                        <h3>Vicki M. Coleman</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+            <div class="user-info-dropdown">
+                <div class="dropdown">
+                    <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                        <span class="user-icon">
+                             
+                        {% if k.image %}
+                            <img src="{{ k.image.url }}" alt="" style="width: 100%; height:100% ">
+                        {% else %}
+                        <img src="/static/logo/userlogo.png" id="photo" style="width: 100%; height:100% ">
+                        {% endif %}   
+                        </span>
+                        <span class="user-name">{{request.user.username}}</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                        <a class="dropdown-item" href="{% url 'createpersonalinfo' %}"><i class="dw dw-user1"></i> Profile</a>
+                        <a class="dropdown-item" href="{% url 'department' %}" data-toggle="right-sidebar"><i class="dw dw-settings2"></i> Settings</a>
+                        <a class="dropdown-item" href="{% url 'help_page' %}"><i class="dw dw-help"></i> Help</a>
+                        <a class="dropdown-item" href="{% url 'logout' %}"><i class="dw dw-logout"></i> Logout</a>
+                    </div>
+                </div>
+            </div>
+            <!--<div class="github-link">
+                <a href="https://github.com/dropways/deskapp" target="_blank"><img src="static/index/vendors/images/github.svg" alt=""></a>
+            </div>-->
+        </div>
+    </div>
+
+    <!-- <div class="right-sidebar"> -->
+        <!-- <div class="sidebar-title"> -->
+            <!-- <h3 class="weight-600 font-16 text-blue"> -->
+                 <!-- Settings -->
+                <!--<span class="btn-block font-weight-400 font-12">User Interface Settings</span>-->
+            <!-- </h3> -->
+            <!-- <div class="close-sidebar" data-toggle="right-sidebar-close">
+                <i class="icon-copy ion-close-round"></i>
+            </div> -->
+        <!-- </div> -->
+
+        <!-- <div class="right-sidebar-body customscroll">
+            <div class="right-sidebar-body-content">
+                				<h4 class="weight-600 font-18 pb-10" ><a href="{% url 'department' %}">Department</a> </h4>
+				<h4 class="weight-600 font-18 pb-10" ><a href="{% url 'subdepartment' %}">Sub Department</a> </h4>
+				<h4 class="weight-600 font-18 pb-10"><a href="{% url 'designation' %}">Designation</a></h4>
+				<h4 class="weight-600 font-18 pb-10"><a href="{% url 'job' %}">Job Title</a></h4>
+				<h4 class="weight-600 font-18 pb-10"><a href="{% url 'wrk' %}">Work location</a></h4>
+            </div>
+        </div> -->
+    <!-- </div> -->
+   
+    <div class="left-side-bar">
+        <div class="brand-logo mt-3">
+        <a href="{% url 'dashboard' %}">
+            {% if request.user.company_type %}
+				{% if request.user.company_type.inverse_logo %}
+				<img src="{{ request.user.company_type.inverse_logo.url }}" style="width: 100%; height: 100%;">
+				{% else %}
+				<img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+				{% endif %}
+				{% else %}
+				<img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+			{% endif %}
+        </a>
+        <div class="close-sidebar" data-toggle="left-sidebar-close">
+           <i class="ion-close-round"></i>
+        </div>
+     </div>
+      
+       <div class="menu-block customscroll">
+
+            <div class="sidebar-menu">
+                <ul id="accordion-menu">
+					
+					<br>
+					<li class="btn-primary active" style="background-color:black">
+						<a href="{% url 'dashboard' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-house-1"></span><span class="mtext"><b>Dashboard</b></span>
+						</a>
+					</li>
+					
+					<li>
+						<a href="{% url 'companyprofile' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-building"></span><span class="mtext"><b>Company Profile</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'personalinfonav' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-user1"></span><span class="mtext"><b>My Profile</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'leave' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-calendar-1"></span><span class="mtext"><b>Leave</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'directory' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-list"></span><span class="mtext"><b>Directory</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'dailylog' %}" class="dropdown-toggle no-arrow">
+							<span class="micon bi bi-check2-square"></span><span class="mtext"><b>Attendance</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'calender' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-calendar"></span><span class="mtext"><b>Holiday Calendar</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'runpayroll_overview' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-money-2"></span><span class="mtext"><b>Payroll</b></span>
+						</a>
+					</li>
+
+
+				</ul>
+            </div>
+        </div>
+    </div>
+  
+
+    <div class="mobile-menu-overlay"></div>
+
+    
+    <div class="main-container" >
+          
+         <!-- <div class="pd-ltr-20 xs-pd-20-10" > -->
+
+         <!-- <div class=""> -->
+                    <div class="card-box height-100-px overflow-hidden">
+                        <!-- <div class="profile-tab "> -->
+                            <!-- <div class="tab height"> -->
+                                <!-- <br><h4 class="text-blue h4" style="padding-left:30px">COMPANY PROFILE</h4> -->
+                                <ul class="nav nav-tabs customtab" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{% url 'personalinfonav' %}">Personal</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{% url 'worknav' %}">Work</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link " href="{% url 'view_team' request.user.id %}">Team</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{% url 'educationnav' %}">Education</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link " href="{% url 'familynav' %}">Family</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{% url 'documentsnav' %}">Document</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link " href="{% url 'workweeknav' %}">Work Week</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{% url 'pay_slip' %}">Payroll</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link active" href="{% url 'e_exit' %}">E-Exit</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{% url 'filemanagernav' %}">File Manager</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{% url 'list_generated_certificates' %}">Experience Certificates</a>
+                                    </li>
+                                   
+                                </ul>
+                                <div class="min-height-100px">
+                                    <!-- <div class="tab height-100-p"> -->
+                                        <!-- <br><h4 class="text-blue h4" style="padding-left:30px">Payroll</h4> -->
+                                        <ul class="nav nav-tabs customtab" role="tablist">
+                                            <li class="nav-item">
+                                                <a class="nav-link active" href="{% url 'e_exit' %}">E-Exit</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="{% url 'resignationlist' %}">Resignation Applied</a>
+                                            </li>
+                                        </ul>
+                                        
+                                </div> 
+    
+                                <div class="pd-20 card-box mb-30" style="margin-bottom: 0;">
+                                
+                                    
+                                        
+                                                                        
+                                            <div class="modal fade bs-example-modal-lg" id="apply" >
+                                                <div class="modal-dialog modal-lg modal-dialog-centered" >
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title">Add Resignation</h4>
+                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form action="{% url 'add_e_exit' %}" method="post" enctype="multipart/form-data" class="form-container" role="form">
+                                                                {% csrf_token %}
+                                                                <div class="row">
+
+                                                                    <div class="col-md-6">
+                                                                        <div class="form-group">
+                                                                            <label>Date of Resignation</label><span style="color:red">&#42</span>
+                                                                            <input readonly class="form-control date-picker"  placeholder="Select Date" type="text" name="resignation_date" id="resignation_date" required >
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="col-md-6">
+                                                                        <div class="form-group">
+                                                                            <label>Reason for Leaving</label><span style="color:red">&#42</span>
+                                                                            <select class="custom-select form-control" name="reason" required>
+                                                                                <option value="" selected >Select Reason</option>
+                                                                                <option>Resignation</option>
+                                                                                <option>Retirement</option>
+                                                                                <option>End of Contract</option>
+                                                                                <option>Voluntary Separation</option>
+                                                                                <option>Termination</option>
+                                                                                <option>Layoff</option>
+                                                                                <option>Relocation</option>
+                                                                                <option>Career Change</option>
+                                                                                <option>Personal Reasons</option>
+                                                                                <option>Promotion/Internal Transfer</option>
+                                                                                <option>Higher Education Pursuit</option>
+                                                                                <option>Health Issues</option>
+                                                                                <option>Family Responsibilities</option>
+                                                                                <option>Company Restructuring</option>
+                                                                                <option>Dissatisfaction with the Work Environment</option>
+                                                                                <option>Unfulfilled Growth Opportunities</option>
+                                                                                <option>Change in the Job Market</option>
+                                                                                <option>Entrepreneurship/Starting Own Business</option>
+                                                                                <option>Job Redundancy</option>
+                                                                                <option>End of Project/Contract Completion</option>
+                                                                                <option>Others</option>
+                                                                            </select>                                                                    
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="col-md-6">
+                                                                        <div class="form-group">
+                                                                            <label>Last Working Day Requested</label><span style="color:red">&#42</span>
+                                                                            <input readonly class="form-control date-picker"  placeholder="Select Date" type="text" name="last_workingday" id="last_workingday" required  >
+                                                                        </div>
+                                                                    </div>
+                  
+                                                                    <div class="col-md-6">
+                                                                        <div class="form-group">
+                                                                            <label>Notice Period Days</label>
+                                                                            <input type="number" class="form-control" id="notice_period" name="notice_period" >  
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="col-md-6">
+                                                                        <div class="form-group">
+                                                                            <label>Shortfall/Excess in Notice Period days</label><span style="color:red">&#42</span>
+                                                                            <input type="number" class="form-control" id="Shortfall" name="Shortfall" required >  
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="col-md-6">
+                                                                        <div class="form-group">
+                                                                            <label>Personal Email</label>
+                                                                            <input type="text" class="form-control" value={{request.user.email}} readonly >  
+                                                                        </div>
+                                                                    </div>
+                                                                    
+                                                                </div>
+
+                                                                <div class="row">
+                                                                    <div class="col-md-12">
+                                                                        <div class="form-group">
+                                                                            <label>Resignation Letter</label><span style="color:red">&#42</span>
+                                                                            <textarea class="form-control" name="resignation_letter" id="resignation_letter" required></textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>        
+                                                                    <button type="submit" class="btn btn-primary" onsubmit="hideadd">Submit</button>
+                                                                
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+    {% for i in resignation %}
+    <hr>   
+    <div  class="row">
+        <div class="col-md-8">
+            <h6 class="float-left">Resignation</h6> 
+        </div>
+        <div class="col-md-2">
+            <i class="fa fa-edit" data-toggle="modal" data-target="#myModal4" style="font-size:24px; float: right;color:grey"></i>
+        </div>
+        <div class=" col-md-2">
+            <a  onclick="return confirm('Are you sure to delete?')" href="{% url 'delete_resignation' id=i.id %}"><i class="fa fa-trash" style="font-size:24px; ;color:grey" title="Delete">
+            </i></a>
+        </div>
+    </div><hr>
+        <div class="row">
+                <div class="col-md-4">
+                    <strong>Resignation Date </strong> 
+                    <p>{{ i.resignation_date }}</p>
+                </div>
+                <div class="col-md-4">
+                    <strong>Reason</strong> 
+                    <p> {{ i.reason }} </p>
+                </div>
+                <div class="col-md-4">
+                    <strong>Last Working Day</strong> <p>{{ i.last_workingday }}</p>
+                </div>
+                <div class="col-md-4">
+                    <strong>Shortfall/Excess in Notice Period days</strong> <p>{{ i.Shortfall }}</p>
+                </div>
+                <div class="col-md-4">
+                    <strong>Resignation Letter</strong> <p>{{ i.resignation_letter }}</p>
+                </div>
+
+                <div class="modal  fade bs-example-modal-lg" id="myModal4" >
+                    <div class="modal-dialog modal-lg modal-dialog-centered" >
+                       <div class="modal-content">
+                          <div class="modal-header">
+                             <h4 class="modal-title">Edit Resignation</h4>
+                             <button type="button" class="close" data-dismiss="modal">&times;</button>
+                          </div>
+                          <div class="modal-body">
+                            <form action="{% url 'update_e_exit' %}" method="post" enctype="multipart/form-data" class="form-container" role="form">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Date of Resignation</label><span style="color:red">&#42</span>
+                                            <input class="form-control date-picker"  placeholder="Select Date" type="text" name="resignation_date" id="resignation_date" value="{{ i.resignation_date|date:'d F Y' }}" required >
+                                        </div>
+                                    </div>
+            
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Reason for Leaving</label><span style="color:red">&#42</span>
+                                            <select class="custom-select form-control" name="reason" required>
+                                                <option value="" selected >Select Reason</option>
+                                                <option value="Resignation" {% if i.reason == 'Resignation' %}selected{% endif %}>Resignation</option>
+                                                <option value="Retirement" {% if i.reason == 'Retirement' %}selected{% endif %}>Retirement</option>
+                                                <option value="End of Contract" {% if i.reason == 'End of Contract' %}selected{% endif %}>End of Contract</option>
+                                                <option value="Voluntary Separation" {% if i.reason == 'Voluntary Separation' %}selected{% endif %}>Voluntary Separation</option>
+                                                <option value="Termination" {% if i.reason == 'Termination' %}selected{% endif %}>Termination</option>
+                                                <option value="Layoff" {% if i.reason == 'Layoff' %}selected{% endif %}>Layoff</option>
+                                                <option value="Relocation" {% if i.reason == 'Relocation' %}selected{% endif %}>Relocation</option>
+                                                <option value="Career Change" {% if i.reason == 'Career Change' %}selected{% endif %}>Career Change</option>
+                                                <option value="Personal Reasons" {% if i.reason == 'Personal Reasons' %}selected{% endif %}>Personal Reasons</option>
+                                                <option value="Promotion/Internal Transfer" {% if i.reason == 'Promotion/Internal Transfer' %}selected{% endif %}>Promotion/Internal Transfer</option>
+                                                <option value="Higher Education Pursuit" {% if i.reason == 'Higher Education Pursuit' %}selected{% endif %}>Higher Education Pursuit</option>
+                                                <option value="Health Issues" {% if i.reason == 'Health Issues' %}selected{% endif %}>Health Issues</option>
+                                                <option value="Family Responsibilities" {% if i.reason == 'Family Responsibilities' %}selected{% endif %}>Family Responsibilities</option>
+                                                <option value="Company Restructuring" {% if i.reason == 'Company Restructuring' %}selected{% endif %}>Company Restructuring</option>
+                                                <option value="Dissatisfaction with the Work Environment" {% if i.reason == 'Dissatisfaction with the Work Environment' %}selected{% endif %}>Dissatisfaction with the Work Environment</option>
+                                                <option value="Unfulfilled Growth Opportunities" {% if i.reason == 'Unfulfilled Growth Opportunities' %}selected{% endif %}>Unfulfilled Growth Opportunities</option>
+                                                <option value="Change in the Job Market" {% if i.reason == 'Change in the Job Market' %}selected{% endif %}>Change in the Job Market</option>
+                                                <option value="Entrepreneurship/Starting Own Business" {% if i.reason == 'Entrepreneurship/Starting Own Business' %}selected{% endif %}>Entrepreneurship/Starting Own Business</option>
+                                                <option value="Job Redundancy" {% if i.reason == 'Job Redundancy' %}selected{% endif %}>Job Redundancy</option>
+                                                <option value="End of Project/Contract Completion" {% if i.reason == 'End of Project/Contract Completion' %}selected{% endif %}>End of Project/Contract Completion</option>
+                                                <option value="Others" {% if i.reason == 'Others' %}selected{% endif %}>Others</option>
+                                            </select>                                                                    
+                                        </div>
+                                    </div>
+            
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Last Working Day Requested</label><span style="color:red">&#42</span>
+                                            <input class="form-control date-picker"  placeholder="Select Date" type="text" name="last_workingday" id="last_workingday" value="{{ i.last_workingday|date:'d F Y' }}" required >
+                                        </div>
+                                    </div>
+            
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Notice Period Days</label>
+                                            <input type="text" class="form-control" id="notice_period" name="notice_period" value="{{ i.notice_period }}">  
+                                        </div>
+                                    </div>
+            
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Shortfall/Excess in Notice Period days</label><span style="color:red">&#42</span>
+                                            <input type="text" class="form-control" id="Shortfall" name="Shortfall" value="{{ i.Shortfall }}" required >  
+                                        </div>
+                                    </div>
+            
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Personal Email</label>
+                                            <input type="text" class="form-control" value={{request.user.email}} readonly >  
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+            
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Resignation Letter</label><span style="color:red">&#42</span>
+                                            <textarea class="form-control" name="resignation_letter" id="resignation_letter" required>{{ i.resignation_letter }}</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+            
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>        
+                                    <button type="submit" class="btn btn-primary" onsubmit="hideadd">Submit</button>
+                                
+                                </div>
+                            </form>
+                        </div>
+                       </div>
+                    </div>
+                </div>
+
+    {% empty %}
+            <div style="margin-left: 35%;">
+                <a href=""  type="button" class="btn btn-primary btn-sm " data-toggle="modal" data-target="#apply">Apply for Resignation</a>
+            </div>
+            
+        </div>
+    {% endfor %}
+
+                                    
+                                </div>
+            </div>
+    </div>
+        
+        
+    <!-- js -->
+    <script src="static/index/vendors/scripts/core.js"></script>
+    <script src="static/index/vendors/scripts/script.min.js"></script>
+    <script src="static/index/vendors/scripts/process.js"></script>
+    <script src="static/index/vendors/scripts/layout-settings.js"></script>
+    <script src="static/index/src/plugins/jquery-steps/jquery.steps.js"></script>
+    <script src="static/index/vendors/scripts/steps-setting.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+</body>
+</html>

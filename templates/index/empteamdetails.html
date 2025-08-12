@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+{% load custom_filters %}
+
+<html>
+<head>
+    <!-- Basic Page Info -->
+    <meta charset="utf-8">
+    <title>HRMS</title>
+    <link rel="icon" href="/static/logo/apple-touch-icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Mobile Specific Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- AG Grid CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ag-grid-community@31.0.2/styles/ag-grid.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ag-grid-community@31.0.2/styles/ag-theme-alpine.css">
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/core.css">
+    <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/icon-font.min.css">
+    <link rel="stylesheet" type="text/css" href="static/index/src/plugins/jquery-steps/jquery.steps.css">
+    <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/style.css">
+    <!-- Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <!-- AG Grid JS -->
+    <script src="https://cdn.jsdelivr.net/npm/ag-grid-community@31.0.2/dist/ag-grid-community.min.js"></script>
+
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'UA-119386393-1');
+    </script>
+    <script>
+        flatpickr("[data-behavior='flatpickr']", {
+            allowInput: true,
+            dateFormat: "Y-m-d"
+        });
+    </script>
+    <style>
+        .form-popup {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            z-index: 1;
+            margin-left: -400px;
+        }
+        .form-popup1 {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            z-index: 1;
+            margin-left: -400px;
+        }
+        .popup-message {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: rgb(204, 119, 102);
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            z-index: 1000;
+            transition: opacity 0.5s ease;
+        }
+        .ag-theme-alpine {
+            --ag-header-background-color: rgb(233, 227, 227);
+        }
+        .ag-header {
+            background-color: #3f51b5;
+            /* Change to match your theme */
+            color: white;
+            font-weight: 600;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .ag-header-cell {
+            background-color: #3f51b5;
+            color: white;
+            border-right: 1px solid #5c6bc0;
+            padding: 10px 8px;
+        }
+
+        .ag-header-cell:hover {
+            background-color: #ffffff;
+            color: rgb(13, 13, 13);
+            border-right: 1px solid #5c6bc0;
+            padding: 10px 8px;
+        }
+    </style>
+</head>
+
+<body>
+ {% if messages %}
+    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999;">
+        {% for message in messages %}
+        {% if message.tags == "success" or "bg-success" in message.tags %}
+        <div class="toast show alignアイテム-center text-white bg-success border-0 mb-2" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">{{ message }}</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+    {% endif %}
+
+<div class="header">
+    <div class="header-left">
+        <div class="menu-icon dw dw-menu"></div>
+        <h6 class="text-primary" style="padding-left: 20px;">Impersonate Employee: {{data.username}}</h6>
+    </div>
+    <div class="header-right">
+        <div class="dashboard-setting user-notification">
+            <div class="dropdown">
+                <a class="dropdown-toggle no-arrow" href="javascript:;" data-toggle="right-sidebar"></a>
+            </div>
+        </div>
+        <div class="user-info-dropdown">
+            <div class="dropdown">
+                <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                    <span class="user-icon">
+                        {% if k.image %}
+                        <img src="{{ k.image.url }}" alt="" style="width: 100%; height:100% ">
+                        {% else %}
+                        <img src="/static/logo/userlogo.png" id="photo" style="width: 100%; height:100% ">
+                        {% endif %}
+                    </span>
+                    <span class="user-name">{{request.user.username}}</span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                    <a class="dropdown-item" href="{% url 'createpersonalinfo' %}"><i class="dw dw-user1"></i> Profile</a>
+                    <a class="dropdown-item" href="{% url 'department' %}" data-toggle="right-sidebar"><i class="dw dw-settings2"></i> Settings</a>
+                    <a class="dropdown-item" href="{% url 'help_page' %}"><i class="dw dw-help"></i> Help</a>
+                    <a class="dropdown-item" href="{% url 'logout' %}"><i class="dw dw-logout"></i> Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="left-side-bar">
+    <div class="brand-logo mt-3">
+        <a href="{% url 'dashboard' %}">
+            {% if request.user.company_type %}
+            {% if request.user.company_type.inverse_logo %}
+            <img src="{{ request.user.company_type.inverse_logo.url }}" style="width: 100%; height: 100%;">
+            {% else %}
+            <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+            {% endif %}
+            {% else %}
+            <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+            {% endif %}
+        </a>
+        <div class="close-sidebar" data-toggle="left-sidebar-close">
+            <i class="ion-close-round"></i>
+        </div>
+    </div>
+    <div class="menu-block customscroll">
+        <div class="sidebar-menu">
+            <ul id="accordion-menu">
+                <br>
+                <li class="btn-primary active" style="background-color:black">
+                    <a href="{% url 'dashboard' %}" class="dropdown-toggle no-arrow">
+                        <span class="micon dw dw-house-1"></span><span class="mtext"><b>Dashboard</b></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'companyprofile' %}" class="dropdown-toggle no-arrow">
+                        <span class="micon dw dw-building"></span><span class="mtext"><b>Company Profile</b></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'personalinfonav' %}" class="dropdown-toggle no-arrow">
+                        <span class="micon dw dw-user1"></span><span class="mtext"><b>My Profile</b></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'leave' %}" class="dropdown-toggle no-arrow">
+                        <span class="micon dw dw-calendar-1"></span><span class="mtext"><b>Leave</b></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'directory' %}" class="dropdown-toggle no-arrow">
+                        <span class="micon dw dw-list"></span><span class="mtext"><b>Directory</b></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'dailylog' %}" class="dropdown-toggle no-arrow">
+                        <span class="micon bi bi-check2-square"></span><span class="mtext"><b>Attendance</b></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'calender' %}" class="dropdown-toggle no-arrow">
+                        <span class="micon dsp dw dw-calendar"></span><span class="mtext"><b>Holiday Calendar</b></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'runpayroll_overview' %}" class="dropdown-toggle no-arrow">
+                        <span class="micon dw dw-money-2"></span><span class="mtext"><b>Payroll</b></span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="main-container">
+    <div class="card-box height-100-px overflow-hidden">
+        <ul class="nav nav-tabs customtab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'view_personalinfo' id=data.id %}">Personal</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'view_work' id=data.id %}">Work</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="{% url 'view_team' request.user.id %}">Team</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'view_education' id=data.id %}">Education</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'view_family' id=data.id %}">Family</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'view_document' id=data.id %}">Document</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'view_workweek' id=data.id %}">Work Week</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'view_daily_log' id=data.id %}">Attendance</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'view_payroll' id=data.id %}">Payroll</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'list_generated_certificates' %}">Experience Certificates</a>
+            </li>
+        </ul>
+
+        <div class="pd-20 card-box">
+            <div class="row">
+                <div class="col-md-10">
+                    <h6 class="float-left">Reporting Manager</h6>
+                </div>
+                <div class="col-md-2">
+                    <i class="fa fa-plus-circle float-right" data-toggle="modal" data-target="#reportingManager" style="font-size: 24px;color:grey;cursor: pointer;"></i>
+                </div>
+            </div>
+
+            <div class="modal fade bs-example-modal-md" id="reportingManager">
+                <div class="modal-dialog modal-md modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Reporting Manager</h4>
+                            <button type="button" class="close" data-dismiss="modal">×</button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="{% url 'adminadd_reportingmanager' id=data.id %}" method="post" enctype="multipart/form-data" class="form-container" role="form">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <input hidden type="text" value="{{ data.id }}">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Name <span style="color:red">*</span></label>
+                                            <input type="text" class="form-control" list="namelist" name="Name1_display" id="nameInput" value="Select User" required>
+                                            <input type="hidden" name="Name1" id="nameInputId">
+                                            <datalist id="namelist">
+                                                {% for user in users %}
+                                                <option value="{{ user.username }}" data-id="{{ user.id }}">
+                                                {% endfor %}
+                                            </datalist>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Type <span style="color:red">*</span></label>
+                                            <select class="custom-select form-control" name="Type" id="Type" required>
+                                                <option value="Primary">Primary</option>
+                                                <option value="Secondary">Secondary</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <input id="kid" name="kid" type="hidden">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <div id="popupMessage" class="popup-message" style="display: {% if messages %}block{% else %}none{% endif %}">
+                {% for message in messages %}
+                {% if message.tags == "error" or "warning" in message.tags %}
+                <p>{{ message }}</p>
+                {% endif %}
+                {% endfor %}
+            </div>
+
+            <div id="reportingManagerGrid" class="ag-theme-alpine" style="height: 200px; width: 100%;"></div>
+            <br>
+
+            <div class="row">
+                <div class="col-md-10">
+                    <h6 class="float-left">Direct Report</h6>
+                </div>
+                <div class="col-md-2">
+                    <i class="fa fa-plus-circle float-right" data-toggle="modal" data-target="#directreport" style="font-size: 24px;color:grey;cursor: pointer;"></i>
+                </div>
+            </div>
+
+            <div class="modal fade" id="directreport" tabindex="-1" role="dialog" aria-labelledby="directreportLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <form method="post" id="direct-report-form">
+                        {% csrf_token %}
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Add Direct Reports</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span>×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <label>Select Employees:</label>
+                                <select name="direct_report_user" class="form-control select2-multiple" multiple required>
+                                    {% for emp in eligible_users %}
+                                    {% if emp.status == "Active" %}
+                                    <option value="{{ emp.id }}">{{ emp.username }}</option>
+                                    {% endif %}
+                                    {% endfor %}
+                                </select>
+                                <small class="text-muted">Hold Ctrl (or ⌘) to select multiple users.</small>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">Add Selected</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div id="directReportGrid" class="ag-theme-alpine" style="height: 300px; width: 100%;"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Conflict Confirmation -->
+<div class="modal fade" id="conflictModal" tabindex="-1" role="dialog" aria-labelledby="conflictModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-dark">
+                <h5 class="modal-title" id="conflictModalLabel">Conflict Detected</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>The following users are already assigned to another manager:</p>
+                <ul id="conflictedUserList"></ul>
+                <p>Do you want to reassign them to this manager?</p>
+            </div>
+            <div class="modal-footer">
+                <button id="confirmReassign" type="button" class="btn btn-danger">Reassign</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+$(document).ready(function () {
+    $('#reportingManager').on('hidden.bs.modal', function () {
+        window.location.href = "{% url 'view_team' data.id %}";
+    });
+    $('.select2-multiple').select2({
+        placeholder: "Search and select employees",
+        width: '100%'
+    });
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    const popupMessage = document.getElementById('popupMessage');
+    if (popupMessage && popupMessage.innerHTML.trim() !== "") {
+        popupMessage.style.display = 'block';
+        setTimeout(() => {
+            popupMessage.style.opacity = '0';
+            setTimeout(() => {
+                popupMessage.style.display = 'none';
+            }, 500);
+        }, 1500);
+    }
+
+    // Reporting Manager Grid
+    const reportingColumnDefs = [
+        { 
+            headerName: "Name", 
+            field: "name",
+             cellRenderer: params => {
+        if (params.data.id) {
+            return `<a href="/view_personalinfo${params.data.id}">${params.value}</a>`;
+        }
+        return params.value;
+    
+}
+        },
+        { headerName: "Type", field: "type" },
+        { headerName: "Department", field: "department" },
+        { headerName: "Designation", field: "designation" },
+        { 
+            headerName: "Action", 
+            field: "action",
+            cellRenderer: params => {
+                if (params.data.managerId) {
+                    return `<a href="{% url 'admindelete_reportingmanager' 0 %}"
+                            onclick="return confirm('Are you sure you want to delete this reporting manager?');"
+                            class="text-danger"
+                            data-id="${params.data.managerId}">
+                            <button type="submit" class="btn btn-sm btn-danger">Un-Tag</button></a>`
+                            .replace('0', params.data.managerId);
+                }
+                return '';
+            }
+        }
+    ];
+
+    const reportingRowData = [];
+    {% if no_data %}
+    reportingRowData.push({ name: "{{ no_data }}", type: "", department: "", designation: "", colSpan: true });
+    {% else %}
+    {% if primary_manager %}
+    reportingRowData.push({
+        name: "{{ primary_manager }}",
+        type: "{{ primary_manager_type }}",
+        department: "{{ primary_manager_department }}",
+        designation: "{{ primary_manager_designation }}",
+        id: "{{ primary_manager_user_id|default_if_none:'' }}",
+        managerId: "{{ primary_manager_id|default_if_none:'' }}"
+    });
+    {% endif %}
+    {% if secondary_manager %}
+    reportingRowData.push({
+        name: "{{ secondary_manager }}",
+        type: "{{ secondary_manager_type }}",
+        department: "{{ secondary_manager_department }}",
+        designation: "{{ secondary_manager_designation }}",
+        id: "{{ secondary_manager_user_id|default_if_none:'' }}",
+        managerId: "{{ secondary_manager_id|default_if_none:'' }}"
+    });
+    {% endif %}
+    {% endif %}
+
+    const reportingGridOptions = {
+        columnDefs: reportingColumnDefs,
+        rowData: reportingRowData,
+        defaultColDef: {
+            sortable: true,
+            filter: true,
+            resizable: true
+        },
+        getRowStyle: params => {
+            if (params.data.colSpan) {
+                return { textAlign: 'center' };
+            }
+        },
+        onGridReady: params => {
+            params.api.sizeColumnsToFit();
+        }
+    };
+
+    const reportingGridDiv = document.querySelector('#reportingManagerGrid');
+    new agGrid.Grid(reportingGridDiv, reportingGridOptions);
+
+    // Direct Report Grid
+    const directReportColumnDefs = [
+        { 
+            headerName: "Name", 
+            field: "name",
+           cellRenderer: params => {
+            if (params.data.id) {
+                return `<a href="/view_personalinfo${params.data.id}">${params.value}</a>`;
+            }
+            return params.value;
+    
+}        },
+        { headerName: "Department", field: "department" },
+        { headerName: "Designation", field: "designation" },
+        { headerName: "Manager Type", field: "managerType" },
+        { 
+            headerName: "Action", 
+            field: "action",
+            cellRenderer: params => `
+                <form method="get" onsubmit="return confirm('Are you sure you want to un-tag this direct report?');" style="display:inline;">
+                    <input type="hidden" name="delete" value="${params.data.id}">
+                    <button type="submit" class="btn btn-sm btn-danger">Un-Tag</button>
+                </form>`
+        }
+    ];
+
+    const directReportRowData = [
+        {% for report in directreport_users %}
+        {% if report.status == "Active" %}
+        {
+            id: "{{ report.id }}",
+            name: "{{ report.username }}",
+            department: "{% if report.department %}{{ report.department }}{% endif %}",
+            designation: "{% if report.designation %}{{ report.designation }}{% endif %}",
+            managerType: "{{ report_manager_types|get_item:report.id }}"
+        },
+        {% endif %}
+        {% endfor %}
+    ];
+
+    const directReportGridOptions = {
+        columnDefs: directReportColumnDefs,
+        rowData: directReportRowData,
+        defaultColDef: {
+            sortable: true,
+            filter: true,
+            resizable: true
+        },
+        onGridReady: params => {
+            params.api.sizeColumnsToFit();
+        }
+    };
+
+    const directReportGridDiv = document.querySelector('#directReportGrid');
+    new agGrid.Grid(directReportGridDiv, directReportGridOptions);
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    const nameInput = document.getElementById('nameInput');
+    const nameInputId = document.getElementById('nameInputId');
+    const nameList = document.getElementById('namelist').children;
+    const form = nameInput.closest('form');
+    const placeholder = "Select User";
+
+    nameInput.addEventListener('focus', function () {
+        if (nameInput.value === placeholder) {
+            nameInput.value = "";
+        }
+    });
+
+    nameInput.addEventListener('blur', function () {
+        if (!nameInput.value) {
+            nameInput.value = placeholder;
+        }
+    });
+
+    nameInput.addEventListener('input', function () {
+        let matchFound = false;
+        for (let option of nameList) {
+            if (option.value === nameInput.value) {
+                nameInputId.value = option.dataset.id;
+                matchFound = true;
+                break;
+            }
+        }
+        if (!matchFound) {
+            nameInputId.value = "";
+        }
+    });
+
+    if (form) {
+        form.addEventListener('submit', function (event) {
+            if (!nameInputId.value) {
+                event.preventDefault();
+                alert("Please select a valid user.");
+            }
+        });
+    }
+});
+
+$(document).ready(function() {
+    const form = $('#directreport form');
+    if (!form.length) return;
+
+    let selectedUsers = [];
+    const csrfToken = $('[name=csrfmiddlewaretoken]').val();
+
+    form.on('submit', function(e) {
+        e.preventDefault();
+        
+        const submitBtn = form.find('button[type="submit"]');
+        submitBtn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...');
+        
+        selectedUsers = form.find('select[name="direct_report_user"]').val() || [];
+        
+        $.ajax({
+            url: window.location.href,
+            method: "POST",
+            headers: {
+                "X-CSRFToken": csrfToken
+            },
+            data: {
+                "direct_report_user[]": selectedUsers,
+                "override": false
+            },
+            success: function(data) {
+                if (data.conflict && data.conflicted_users?.length) {
+                    const list = $('#conflictedUserList').empty();
+                    data.conflicted_users.forEach(user => {
+                        list.append($('<li>').text(user));
+                    });
+                    $('#conflictModal').modal('show');
+                } else if (data.success) {
+                    window.location.reload();
+                }
+            },
+            complete: function() {
+                submitBtn.prop('disabled', false).text('Submit');
+            }
+        });
+    });
+
+    $('#confirmReassign').on('click', function() {
+        const btn = $(this);
+        btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Reassigning...');
+        
+        $.ajax({
+            url: window.location.href,
+            method: "POST",
+            headers: {
+                "X-CSRFToken": csrfToken
+            },
+            data: {
+                "direct_report_user[]": selectedUsers,
+                "override": true
+            },
+            success: function(data) {
+                if (data.success) {
+                    $('#conflictModal').modal('hide');
+                    window.location.reload();
+                }
+            },
+            complete: function() {
+                btn.prop('disabled', false).text('Reassign');
+            }
+        });
+    });
+});
+</script>
+
+<script src="static/index/vendors/scripts/core.js"></script>
+<script src="static/index/vendors/scripts/script.min.js"></script>
+<script src="static/index/vendors/scripts/process.js"></script>
+<script src="static/index/vendors/scripts/layout-settings.js"></script>
+<script src="static/index/src/plugins/jquery-steps/jquery.steps.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

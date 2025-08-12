@@ -1,0 +1,8 @@
+
+		WebElement mh=driver.findElement(By.cssSelector("button.dropbtn"));
+		Actions act=new Actions(driver);
+		act.moveToElement(mh).perform();
+		
+
+                WebElement bikes=driver.findElement(By.linkText("Bikes"));
+		act.click(bikes).perform();

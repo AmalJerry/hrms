@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+ <html lang="en">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Document</title>
+ 
+     <style>
+         p{
+             font-family: Nunito;
+             font-size: 18px;
+             max-width: 85%;
+         }
+     </style>
+ 
+ </head>
+ <body>
+<!-- Leave Application Accepted<br> -->
+
+<h2>Dear {{ data.applicant_email.username}},</h2>
+
+<p>
+I hope this email finds you well. 
+</p>
+
+<p>
+I wanted to inform you that your recent leave application has been reviewed and accepted. We appreciate your timely submission and the thorough details provided.<br>
+</p>
+
+<p>
+Leave Details: <br>
+    <span style="margin-left: 12px;">Start Date: {{startdate}}<br>
+    <span style="margin-left: 12px;"> End Date: {{enddate}}<br>
+    <span style="margin-left: 12px;">Number of Days: {{ data.Days }}<br>
+    <span style="margin-left: 12px;">Leave Type: {{ data.leavetyp }}
+</p>
+   
+ <p>
+ Your leave has been approved, and we trust that you will make the necessary arrangements to ensure a smooth workflow during your absence. If you have any pending tasks or responsibilities, please make sure to hand them over to your designated colleague or provide clear instructions on how to proceed.
+ </p>
+
+ <p>
+ If you have any questions or concerns regarding your approved leave, please feel free to reach out to the HR department. We wish you a restful and rejuvenating break.
+ </p>
+
+ <p>
+ Thank you for your understanding and cooperation.
+ </p>
+
+ <p>
+ Best regards,<br>
+ Cydez Technologies<br>
+ cydezt@gmail.com <br>
+ HRMS Support Team <br>
+</p>
+
+</body>
+</html>

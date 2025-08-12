@@ -1,0 +1,16 @@
+/* admin/css/maps_widget.css */
+
+.map-container {
+  width: 100%;
+  height: 400px;
+  margin: 20px 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+@media (max-width: 768px) {
+  .map-container {
+    height: 300px;
+  }
+}

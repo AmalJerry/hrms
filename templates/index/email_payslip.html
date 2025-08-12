@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        p{
+            font-family: Nunito;
+            font-size: 18px;
+            max-width: 85%;
+        }
+    </style>
+
+</head>
+<body>
+       
+<h2> Dear {{user.username}}, </h2>
+
+<p>
+    Your payslip for the month of {{monthselect}} {{yearselect}} has been generated
+</p>
+
+
+<p style="text-align: center;">
+    <button style="    width: auto;
+    height: 50px;
+    background: #00c29b;
+    font-size: 18px;
+    font-weight: bold;
+    border: 0;
+    border-radius: 3px;
+    padding: 0 30px;">
+        <a href="https://hrms.cydeztechnologies.com/" style="text-decoration: none; color: white;">Click Here To View</a>
+    </button>
+</p>
+
+<p>
+Best regards,<br>
+{{company_details.registeredcompanyname}}
+</p>
+
+</body>
+</html>

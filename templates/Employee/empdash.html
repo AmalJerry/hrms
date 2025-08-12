@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html>
+{% load static %}
+
+<head>
+  <!-- Basic Page Info -->
+  <meta charset="utf-8" />
+
+  <title>HRMS</title>
+  <link rel="icon" href="/static/logo/apple-touch-icon.png" type="image/x-icon" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <!-- <link rel="shortcut icon" type="image/png" href=".../static/index/src/images/cydezlogo.png"> -->
+
+  <!-- Site favicon -->
+  <!-- <link rel="apple-touch-icon" sizes="180x180" href="/static/index/vendors/images/apple-touch-icon.png"> -->
+
+  <!-- Mobile Specific Metas -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <!-- CSS -->
+  <link rel="stylesheet" type="text/css" href="/static/index/vendors/styles/core.css" />
+  <link rel="stylesheet" type="text/css" href="/static/index/vendors/styles/icon-font.min.css" />
+  <link rel="stylesheet" type="text/css"
+    href="/static/index/src/plugins/datatables/css/dataTables.bootstrap4.min.css" />
+  <link rel="stylesheet" type="text/css"
+    href="/static/index/src/plugins/datatables/css/responsive.bootstrap4.min.css" />
+  <link rel="stylesheet" type="text/css" href="/static/index/vendors/styles/style.css" />
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+  <style>
+    .flex-wrapper {
+      display: flex;
+      flex-flow: row nowrap;
+    }
+
+    .single-chart {
+      width: 33%;
+      justify-content: space-around;
+    }
+
+    .circular-chart {
+      display: block;
+      margin: 10px auto;
+      max-width: 80%;
+      max-height: 250px;
+    }
+
+    .circle-bg {
+      fill: none;
+      stroke: #eee;
+      stroke-width: 3.8;
+    }
+
+    .circle {
+      fill: none;
+      stroke-width: 2.8;
+      stroke-linecap: round;
+      animation: progress 1s ease-out forwards;
+    }
+
+    @keyframes progress {
+      0% {
+        stroke-dasharray: 0 100;
+      }
+    }
+
+    .circular-chart.orange .circle {
+      stroke: #ff9f00;
+    }
+
+    .circular-chart.green .circle {
+      stroke: #4CC790;
+    }
+
+    .circular-chart.blue .circle {
+      stroke: #3c9ee5;
+    }
+
+    .circular-chart.red .circle {
+      stroke: #dc3545
+    }
+
+    .percentage {
+      fill: #666;
+      font-family: sans-serif;
+      font-size: 0.5em;
+      text-anchor: middle;
+    }
+
+    #search-result {
+      position: absolute;
+      border: 1px solid #ddd;
+      max-height: 200px;
+      overflow-y: scroll;
+      display: none;
+      /* text-align: center; */
+      background-color: #f9f9f9;
+    }
+
+    .search-data {
+      padding: 0 16px;
+      margin: 5px 0;
+    }
+
+    .search-data:hover {
+      background-color: #e4e1e1;
+    }
+
+    #no-notification-message {
+      display: none;
+      text-align: center;
+      font-size: 18px;
+      margin-top: 20px;
+      /* Adjust this value for desired spacing from the notifications */
+    }
+
+    #notification-container {
+      display: flex;
+      /* flex-direction: column;
+      			align-items: center; */
+      justify-content: center;
+
+    }
+
+    #no-notification-message {
+      text-align: center;
+      /* font-size: 18px; */
+    }
+
+    .revert-button {
+      background: #0093ff;
+      color: white;
+      font-family: Arial, Helvetica, sans-serif;
+      padding: 5px;
+      border: 0;
+      width: 150px;
+      font-weight: 600;
+      box-shadow: -1px 0px 3px 0px gray;
+      transition-duration: 0.4s;
+    }
+
+    .revert-button:hover {
+      background-color: orange;
+    }
+  </style>
+
+
+
+</head>
+
+<body>
+  <div class="header">
+
+    <div class="header-left">
+      <div class="menu-icon dw dw-menu"></div>
+      <div class="search-toggle-icon dw dw-search2" data-toggle="header_search"></div>
+      <div class="header-search">
+        <div class="form-group mb-0">
+          <i class="dw dw-search2 search-icon"></i>
+          <input type="text" class="form-control search-input" placeholder="Search Employee" id="search-input">
+
+          <div class="dropdown show">
+            <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown" aria-expanded="true">
+              <i class="ion-search"></i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right show "
+              style="position: absolute; transform: translate3d(0px, 39px, 0px); top: 0px; left: 0px; will-change: transform;"
+              id="search-result">
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <div class="dashboard-setting" id="myDIV">
+        {% include 'messages.html' %}
+        <!-- For Toast Message-->
+        {% if button_flag %}
+
+        {% if clock_in_type %}
+        <div style="display:flex;justify-content:center;flex-direction: row; flex-wrap: wrap;align-items: baseline;">
+          {% if clock_in_type == 2 %}
+          <form action="{% url 'clock_in_out' %}" method="post" id="modal_clock_form" onsubmit="return validateAndSubmitLocation(this)" style="margin-top: 0.2rem;">
+            {% csrf_token %}
+            <input name="clock_in_type" type="hidden" value="1" id="clock_type_value" />
+            <input type="hidden" name="lat" id="lat_input_modal">
+            <input type="hidden" name="lon" id="lon_input_modal">
+            <input type="hidden" name="location" id="hidden_location_field">
+ 
+            <button type="button" class="btn btn-success" id="show-location-options" style=" margin-top: 5px; width: 150px; height: 55px; font-weight: 600;">
+              <i class="bi bi-clock"></i> Clock In
+            </button>
+
+            <div id="location-options" style="display: none; margin-top: 1rem;">
+              <div class="custom-radio mb-2" style="display: flex; gap: 3rem; align-items: center;">
+                <label style="margin-bottom: 0; display: flex; align-items: center; gap: 0.5rem;">
+                  <input type="radio" name="location_option" value="WFH" required style="margin-right: 0.5rem;">
+                  <span style="font-weight: 500;">WFH</span>
+                </label>
+                <label style="margin-bottom: 0; display: flex; align-items: center; gap: 0.5rem;">
+                  <input type="radio" name="location_option" value="WFO" required style="margin-right: 0.5rem;">
+                  <span style="font-weight: 500;">WFO</span>
+                </label>
+              </div>
+              <input type="submit" class="btn btn-primary" value="Confirm" style="width: 100px; font-weight: 400;">
+              <button type="button" class="btn btn-secondary ml-2" id="cancel-location-options" style="width: 80px;">Cancel</button>
+            </div>
+          </form>
+          <script>
+            document.addEventListener('DOMContentLoaded', function () {
+              const showBtn = document.getElementById('show-location-options');
+              const optionsDiv = document.getElementById('location-options');
+              const cancelBtn = document.getElementById('cancel-location-options');
+
+              showBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                showBtn.style.display = 'none';
+                optionsDiv.style.display = 'block';
+              });
+
+              cancelBtn.addEventListener('click', function () {
+                optionsDiv.style.display = 'none';
+                showBtn.style.display = 'inline-block';
+                // Optionally clear radio selection
+                const radios = optionsDiv.querySelectorAll('input[type="radio"]');
+                radios.forEach(r => r.checked = false);
+              });
+            });
+          </script>
+<script>
+function validateAndSubmitLocation(form) {
+  const selectedLocation = form.querySelector('input[name="location_option"]:checked');
+  if (!selectedLocation) {
+    alert("Please select a location (WFH/WFO).");
+    return false;
+  }
+
+  document.getElementById("hidden_location_field").value = selectedLocation.value;
+
+  if (!navigator.geolocation) {
+    alert("❌ Geolocation not supported.");
+    return false;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    function(position) {
+      const lat = position.coords.latitude.toFixed(8);
+      const lon = position.coords.longitude.toFixed(8);
+
+      document.getElementById("lat_input_modal").value = lat;
+      document.getElementById("lon_input_modal").value = lon;
+
+      console.log("📍 Clock In Location:", lat, lon);
+      form.submit();
+    },
+    function(error) {
+      alert("❌ Location access denied: " + error.message);
+    },
+    {
+      enableHighAccuracy: true,
+      timeout: 15000,
+      maximumAge: 0
+    }
+  );
+
+  return false; // wait for location before submit
+}
+</script>
+</form>
+          {% else %}
+          <form action="{% url 'clock_in_out' %}" method="post" autocomplete="off" id="clock_out_form" onsubmit="return validateAndSubmitClockOut(this)" style="margin-top: 0.2rem;">
+            {% csrf_token %}
+            <input type="hidden" name="clock_out_type" value="2">
+            <input type="hidden" name="lat" id="lat_input_out">
+            <input type="hidden" name="lon" id="lon_input_out">
+            <input type="hidden" name="location" id="hidden_location_out">
+
+            <button type="button" class="btn btn-danger" id="show-clockout-options" style=" margin-top: 5px; width: 150px; height: 55px; font-weight: 600;">
+              <i class="bi bi-clock"></i> Clock Out
+              <div style="font-size: 0.9em; margin-top: 2px;">
+                <span id="timer-id">00:00:00</span>
+              </div>
+            </button>
+
+            <div id="clockout-options" style="display: none; margin-top: 1rem;">
+              <div class="custom-radio mb-2" style="display: flex; gap: 2rem; align-items: center;">
+                <label style="margin-bottom: 0; display: flex; align-items: center; gap: 0.5rem;">
+                  <input type="radio" name="location_option_out" value="WFH" required style="margin-right: 0.5rem;">
+                  <span style="font-weight: 500;">WFH</span>
+                </label>
+                <label style="margin-bottom: 0; display: flex; align-items: center; gap: 0.5rem;">
+                  <input type="radio" name="location_option_out" value="WFO" required style="margin-right: 0.5rem;">
+                  <span style="font-weight: 500;">WFO</span>
+                </label>
+              </div>
+              <input type="submit" class="btn btn-primary" value="Confirm" style="width: 100px; font-weight: 400;">
+              <button type="button" class="btn btn-secondary ml-2" id="cancel-clockout-options" style="width: 80px;">Cancel</button>
+            </div>
+          </form>
+
+          <script>
+            document.addEventListener('DOMContentLoaded', function () {
+              const showBtn = document.getElementById('show-clockout-options');
+              const optionsDiv = document.getElementById('clockout-options');
+              const cancelBtn = document.getElementById('cancel-clockout-options');
+
+              showBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                showBtn.style.display = 'none';
+                optionsDiv.style.display = 'block';
+              });
+
+              cancelBtn.addEventListener('click', function () {
+                optionsDiv.style.display = 'none';
+                showBtn.style.display = 'inline-block';
+                // Optionally clear radio selection
+                const radios = optionsDiv.querySelectorAll('input[type="radio"]');
+                radios.forEach(r => r.checked = false);
+              });
+            });
+
+            function validateAndSubmitClockOut(form) {
+
+              const selectedLocation = form.querySelector('input[name="location_option_out"]:checked');
+              if (!selectedLocation) {
+                alert("Please select a location (WFH/WFO).");
+                return false;
+              }
+
+              document.getElementById("hidden_location_out").value = selectedLocation.value;
+
+              if (!navigator.geolocation) {
+                alert("❌ Geolocation not supported.");
+                return false;
+              }
+
+              navigator.geolocation.getCurrentPosition(
+                function(position) {
+                  const lat = position.coords.latitude.toFixed(8);
+                  const lon = position.coords.longitude.toFixed(8);
+
+                  document.getElementById("lat_input_out").value = lat;
+                  document.getElementById("lon_input_out").value = lon;
+
+                  console.log("📍 Clock out Location:", lat, lon);
+                  form.submit();
+                },
+                function(error) {
+                  alert("❌ Location access denied: " + error.message);
+                },
+                {
+                  enableHighAccuracy: true,
+                  timeout: 15000,
+                  maximumAge: 0
+                }
+              );
+
+              return false; // wait for location before submit
+            }
+          </script>
+          {% endif %}
+
+        </div>
+        {% endif %}
+
+        {% endif %}
+      </div>
+      <!-- <div > -->
+
+      <div class="user-notification">
+        <div class="dropdown">
+          <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
+            <i class="icon-copy dw dw-notification"></i>
+            <span class="badge notification-active"></span>
+          </a>
+          <div class="dropdown-menu dropdown-menu-right">
+            <div class="notification-list mx-h-350 customscroll">
+              <ul class="notification-list mx-h-350 customscroll">
+                {% for notification in notifications|slice:":-1" %}
+                  {% if notification.readuser == 0 %}
+                    <li class="notification" data-notification-id="{{ notification.notification_id }}">
+                      <a href="#" onclick="handleNotificationClick('{{ notification.notification_id }}')">
+                        <img src="{{ notification.image_url }}" alt="">
+
+                        {% if notification.user.id == request.user.id and notification.admin_id == 0 and not notification.events %}
+                          <span style="color: black;">Leave request has been created</span>
+
+                        {% elif notification.user.id == request.user.id and notification.admin_id == 0 and notification.events == 1 %}
+                          <span style="color: black;">Your birthday is coming up in 15 days</span>
+
+                        {% elif notification.user.id == request.user.id and notification.admin_id == 0 and notification.events == 2 %}
+                          <span style="color: black;">Your work anniversary is coming up in 15 days</span>
+
+                        {% elif notification.user.id == request.user.id and notification.is_approved == True %}
+                          <span style="color: black;">Leave request has been approved</span>
+
+                        {% elif notification.user.id == request.user.id and notification.is_approved == False and not notification.events %}
+                          <span style="color: black;">Leave request has been rejected</span>
+
+                        {% else %}
+                          <span style="color: black;">{{ notification.message }}</span>
+                        {% endif %}
+                      </a>
+                    </li>
+                  {% endif %}
+                {% endfor %}
+              </ul>
+
+              <div id="notification-container">
+                <p id="no-notification-message" style="display: none;">No new notifications</p>
+              </div>
+
+              <div id="notification-container">
+                <a href="{% url 'empnotification' %}" type="button" class="btn btn-primary btn-sm "
+                  style="width: 60%;">Notifications</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="user-info-dropdown">
+        <div class="dropdown">
+          <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+            <span class="user-icon">
+              {% if k.image %}
+              <img src="{{ k.image.url }}" alt="" style="width: 100%; height:100% ">
+              {% else %}
+              <img src="/static/logo/userlogo.png" id="photo" style="width: 100%; height:100% ">
+              {% endif %}
+            </span>
+            <span class="user-name">{{request.user.username}}</span>
+          </a>
+          <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+            <a class="dropdown-item" href="{% url 'empcreatepersonalinfo' %}"><i class="dw dw-user1"></i> Profile</a>
+            <!-- <a
+                class="dropdown-item"
+                href="{% url 'department' %}"
+                data-toggle="right-sidebar"
+                >
+                <i class="dw dw-settings2"></i> Settings</a> -->
+            <!-- <a class="dropdown-item" href="{% url 'help_page' %}"
+                ><i class="dw dw-help"></i> Help</a
+              > -->
+            <a class="dropdown-item" href="{% url 'logout' %}"><i class="dw dw-logout"></i> Logout</a>
+          </div>
+        </div>
+      </div>
+      <!-- </div> -->
+    </div>
+  </div>
+
+
+
+  <div class="left-side-bar">
+
+    <div class="brand-logo mt-3">
+      <a href="{% url 'empdash' %}">
+        {% if request.user.company_type %}
+        {% if request.user.company_type.inverse_logo %}
+        <img src="{{ request.user.company_type.inverse_logo.url }}" alt="company logo" style="width: 100%; height: 100%;">
+        {% else %}
+        <img src="/static/logo/deskapp-logo-white.svg" alt="deskapp logo" class="light-logo">
+        {% endif %}
+        {% else %}
+        <img src="/static/logo/deskapp-logo-white.svg" alt="deskapp logo 2" class="light-logo">
+        {% endif %}
+      </a>
+      <div class="close-sidebar" data-toggle="left-sidebar-close">
+        <i class="ion-close-round"></i>
+      </div>
+    </div> <br>
+
+    <div class="menu-block customscroll">
+      <div class="sidebar-menu">
+        <ul id="accordion-menu">
+          <li class="dropdown">
+          </li>
+          <li class="btn-primary active" style="background-color: black">
+            <a href="{% url 'empdash' %}" class="dropdown-toggle no-arrow">
+              <span class="micon dw dw-house-1"></span><span class="mtext"><b>Dashboard</b></span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'empoverview' %}" class="dropdown-toggle no-arrow">
+              <span class="micon dw dw-building"></span><span class="mtext"><b>Company Profile</b></span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'emppersonalinfonav' %}" class="dropdown-toggle no-arrow">
+              <span class="micon dw dw-user1"></span><span class="mtext"><b>My Profile</b></span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'empleave' %}" class="dropdown-toggle no-arrow">
+              <span class="micon dw dw-calendar-1"></span><span class="mtext"><b>Leave</b></span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'empdirectory' %}" class="dropdown-toggle no-arrow">
+              <span class="micon dw dw-list"></span><span class="mtext"><b>Directory</b></span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'empdailylog' %}" class="dropdown-toggle no-arrow">
+              <span class="micon bi bi-check2-square"></span><span class="mtext"><b>Attendance</b></span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'emp_calender' %}" class="dropdown-toggle no-arrow">
+              <span class="micon dw dw-calendar"></span><span class="mtext"><b>Holiday Calendar</b></span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-container">
+    <div class="modal fade bs-example-modal-md" id="Medium-modal" tabindex="-1" role="dialog"
+      aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-md modal-dialog-centered">
+        <form action="{% url 'clock_in_out' %}" method="post" id="modal_clock_form" onsubmit="return validateForm()">
+          {% csrf_token %}
+          <input name="clock_in_type" type="hidden" value="1" id="clock_type_value" />
+
+          <div class="modal-content" id="dasboard-pop" style="margin-top: -90%; margin-left: 65%;">
+            <div class="modal-body">
+              {% csrf_token %}
+              <div class="col-md-12">
+                <label for="">Are you sure you want to clock in?</label>
+                <div class="d-flex">
+                  <div class="custom-radio">
+                    <input type="radio" name="location" value="WFH" required>
+                    <label>WFH</label>
+                    &nbsp;&nbsp;
+                    <input type="radio" name="location" value="WFO" required>
+                    <label>WFO</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+              <input type="submit" class="btn btn-primary" value="OK">
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="">
+      <div class="card-box pd-20 height-100-p mb-30">
+        <div class="row align-items-center">
+          <div class="col-md-4">
+            <img src="/static/index/vendors/images/banner-img.png" alt="">
+          </div>
+          <div class="col-md-8">
+            <br<br><br><br>
+              <h4 class="font-20 weight-500 mb-10 text-capitalize">
+                <div class="weight-600 font-30 text-blue">Welcome Back {{request.user.username}}!</div>
+              </h4>
+              <p class="font-18">
+                You've entered the realm of HRMS, where your work experience is about to be transformed. Access your
+                personalized dashboard, update your information seamlessly, request time off effortlessly, and explore
+                the myriad features designed to make your work life smoother. Your journey with HRMS is a journey toward
+                enhanced collaboration, productivity, and engagement. Let's embark on this exciting adventure together!
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-3 col-md-6 col-sm-12 mb-30">
+          <div class="card-box pd-30 pt-10">
+            <h2 class="mb-30 h4">Easy Access Links</h2>
+            <div class="browser-visits">
+              <ul>
+                <li class="d-flex flex-wrap align-items-center">
+										<a href="{% url 'set_home_location' %}" class="browser-name">Set Home Location</a>
+										<a href="{% url 'set_home_location' %}" style="color: inherit;">
+											<div class="visit"><span class="badge badge-pill-xl badge-info"> Here </span></div>
+										</a>
+								</li>
+                <li class="d-flex flex-wrap align-items-center">
+                  <a href="{% url 'emp_monthly_log' %}" class="browser-name">{{month_name}} Attendance</a>
+                  <div class="visit"><span class="badge badge-pill badge-primary">{{attendance_count}}</span></div>
+                </li>
+                <li class="d-flex flex-wrap align-items-center">
+                  <a href="{% url 'emplog' %}" class="browser-name">Pending Leaves Request</a>
+                  <div class="visit"><span class="badge badge-pill badge-secondary">{{pending_leavecount}}</span></div>
+                </li>
+                <li class="d-flex flex-wrap align-items-center">
+                  <a href="{% url 'empautomationlog' %}" class="browser-name">Anomalies</a>
+                  <div class="visit"><span class="badge badge-pill badge-success">{{AN_count}}</span></div>
+                </li>
+                <li class="d-flex flex-wrap align-items-center">
+                  <a href="{% url 'emp_calender' %}" class="browser-name">{{month_name}} Holiday</a>
+                  <div class="visit"><span class="badge badge-pill badge-warning">{{holiday_count}}</span></div>
+                </li>
+
+                <li class="d-flex flex-wrap align-items-center upcoming-birthday-section" style="position:relative;">
+                  <a href="{% url 'emp_calender' %}" class="browser-name">Upcoming Birthdays</a>
+                  <div class="visit"><span class="badge badge-pill badge-warning">{{upcoming_birthday}}</span></div>
+                  <span class="upcoming-birthday-tooltip" style="display:none; position:absolute; top:-22px; left:0; background:#333; color:#fff; padding:2px 8px; border-radius:4px; font-size:12px; white-space:nowrap; z-index:10;">
+                    Upcoming Birthdays For Next 30 Days
+                  </span>
+                </li>
+              <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                  const section = document.querySelector('.upcoming-birthday-section');
+                  if (section) {
+                    const tooltip = section.querySelector('.upcoming-birthday-tooltip');
+                    section.addEventListener('mouseenter', function() {
+                      tooltip.style.display = 'block';
+                    });
+                    section.addEventListener('mouseleave', function() {
+                      tooltip.style.display = 'none';
+                    });
+                  }
+                });
+              </script>
+
+                <li class="d-flex flex-wrap align-items-center upcoming-workann-section" style="position:relative;">
+                  <a href="{% url 'emp_calender' %}" class="browser-name">Work Anniversaries</a>
+                  <div class="visit"><span class="badge badge-pill badge-warning">{{upcoming_work_anniversary}}</span></div>
+                  <span class="upcoming-workann-tooltip" style="display:none; position:absolute; top:-22px; left:0; background:#333; color:#fff; padding:2px 8px; border-radius:4px; font-size:12px; white-space:nowrap; z-index:10;">
+                    Work Anniversaries For Next 30 Days
+                  </span>
+                </li>
+                <script>
+                  document.addEventListener('DOMContentLoaded', function() {
+                    const section = document.querySelector('.upcoming-workann-section');
+                    if (section) {
+                      const tooltip = section.querySelector('.upcoming-workann-tooltip');
+                      section.addEventListener('mouseenter', function() {
+                        tooltip.style.display = 'block';
+                      });
+                      section.addEventListener('mouseleave', function() {
+                        tooltip.style.display = 'none';
+                      });
+                    }
+                  });
+                </script>
+
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-9 col-md-6 col-sm-12 mb-30">
+          <div class="card-box pd-30 pt-10">
+            <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
+              <div class="carousel-inner">
+                {% if show_workann_image %}
+                  <div class="carousel-item active">
+                    <h2 class="h4">
+                      {% if work_ann|length > 1 %}
+                        {% if request.user in work_ann %}
+                          Congratulations on another year of outstanding work
+                          {% for user in work_ann %}
+                            {% if user != request.user %}
+                              and {{ user.get_full_name|default:user.first_name|default:user.username }}{% if not forloop.last %}, {% endif %}
+                            {% endif %}
+                          {% endfor %}!
+                        {% else %}
+                          {% for user in work_ann %}
+                            {{ user.get_full_name|default:user.first_name|default:user.username }}{% if not forloop.last %}, {% endif %}
+                          {% endfor %}'s work anniversary is today!
+                        {% endif %}
+                      {% elif work_ann|length == 1 %}
+                        {% with user=work_ann.0 %}
+                          {% if request.user.id == user.id %}
+                            Congratulations on another year of outstanding work!
+                          {% else %}
+                            {{ user.get_full_name|default:user.first_name|default:user.username }}'s work anniversary is today!
+                          {% endif %}
+                        {% endwith %}
+                      {% endif %}
+                      {% if work_ann|length > 1 %}
+                        <img class="d-block w-100" src="/static/index/vendors/images/Congrats on 1 ar of incredible work!.gif" alt="Work Anniversary">
+                      {% elif work_ann|length == 1 and request.user in work_ann %}
+                        <img class="d-block w-100" src="/static/index/vendors/images/Congrats on 1 ar of incredible work!.gif" alt="Work Anniversary">
+                      {% else %}
+                        <img class="d-block w-100" src="/static/index/vendors/images/happy anniversary!.gif" alt="Work Anniversary">
+                      {% endif %}
+                    </h2>
+                  </div>
+                {% endif %}
+
+
+                {% if birthday_users %}
+                  <div class="carousel-item{% if not work_anniversaries %} active{% endif %}">
+                    <h2 class="h4">
+                      {% if birthday_users|length > 1 %}
+                        {% with usernames=birthday_users|join:", " %}
+                          {% comment %}
+                            To display names instead of emails, we need to join the 'get_full_name' or 'first_name' attribute of each user.
+                            Since Django's join filter only works on strings, we need to loop.
+                          {% endcomment %}
+                          {% if request.user in birthday_users %}
+                            Warmest wishes to you
+                            {% for user in birthday_users %}
+                              {% if user != request.user %}
+                                and {{ user.get_full_name|default:user.first_name|default:user.username }}{% if not forloop.last %},{% endif %}
+                              {% endif %}
+                            {% endfor %}
+                            on your very special day.
+                            <img class="d-block w-100" src="/static/index/vendors/images/Employee birthday (1).gif" alt="Birthday">
+                          {% else %}
+                            {% for user in birthday_users %}
+                              {{ user.get_full_name|default:user.first_name|default:user.username }}{% if not forloop.last %}, {% endif %}
+                            {% endfor %}'s birthday is today!
+                            <img class="d-block w-100" src="/static/index/vendors/images/Birthday (1).gif" alt="Birthday">
+                          {% endif %}
+                        {% endwith %}
+                      {% else %}
+
+                        {% for user in birthday_users %}
+                          {% if request.user.id == user.id %}
+                            Warmest wishes to you on your very special day.
+                            <img class="d-block w-100" src="/static/index/vendors/images/Employee birthday (1).gif" alt="Birthday">
+                          {% else %}
+                            {{ user.get_full_name|default:user.first_name|default:user.username }}'s birthday is today!
+                            <img class="d-block w-100" src="/static/index/vendors/images/Birthday (1).gif" alt="Birthday">
+                          {% endif %}
+                        {% endfor %}
+                      {% endif %}
+                    </h2>
+                  </div>
+                {% endif %}
+
+                {% if not show_workann_image and not show_birthday_image %}
+                <br>
+                <div class="carousel-item active">
+                  <img class="d-block w-100" src="/static/index/vendors/images/Have a great day at work!.gif"
+                    alt="Have a great day">
+                </div>
+                {% endif %}
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- js -->
+  <script src="/static/index/vendors/scripts/core.js"></script>
+  <script src="/static/index/vendors/scripts/script.min.js"></script>
+  <script src="/static/index/vendors/scripts/process.js"></script>
+  <script src="/static/index/vendors/scripts/layout-settings.js"></script>
+  <script src="/static/index/src/plugins/apexcharts/apexcharts.min.js"></script>
+  <script src="/static/index/src/plugins/datatables/js/jquery.dataTables.min.js"></script>
+  <script src="/static/index/src/plugins/datatables/js/dataTables.bootstrap4.min.js"></script>
+  <script src="/static/index/src/plugins/datatables/js/dataTables.responsive.min.js"></script>
+  <script src="/static/index/src/plugins/datatables/js/responsive.bootstrap4.min.js"></script>
+  <script src="/static/index/vendors/scripts/dashboard.js"></script>
+
+  <script>
+    function handleNotificationClick(notificationId) {
+      // Remove the notification element with the matching notificationId
+      const notificationElement = document.querySelector(`.notification[data-notification-id='${notificationId}']`);
+      if (notificationElement) {
+        notificationElement.remove();
+
+        // Store the notification ID in localStorage to remember it's been clicked
+        const clickedNotifications = JSON.parse(localStorage.getItem('clickedNotifications')) || [];
+        clickedNotifications.push(notificationId);
+        localStorage.setItem('clickedNotifications', JSON.stringify(clickedNotifications));
+
+        // Check if there are any notifications left
+        const notificationContainer = document.querySelector('.notification-list');
+        if (!notificationContainer.querySelector('.notification')) {
+          // If no notifications, display the message
+          const noNotificationMessage = document.getElementById('no-notification-message');
+          if (noNotificationMessage) {
+            noNotificationMessage.style.display = 'block';
+          }
+        }
+      }
+
+      // Redirect to the 'notification' URL
+      window.location.href = "{% url 'empnotification' %}";
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const clickedNotifications = JSON.parse(localStorage.getItem('clickedNotifications')) || [];
+      clickedNotifications.forEach(notificationId => {
+        const notificationElement = document.querySelector(`.notification[data-notification-id='${notificationId}']`);
+        if (notificationElement) {
+          notificationElement.remove();
+        }
+      });
+
+      // Check if there are any notifications left and display the 'No new notifications' message
+      const notificationContainer = document.querySelector('.notification-list');
+      const red_color_dot = document.querySelector('.notification-active');
+      if (!notificationContainer.querySelector('.notification')) {
+        const noNotificationMessage = document.getElementById('no-notification-message');
+        if (noNotificationMessage) {
+          noNotificationMessage.style.display = 'block';
+          red_color_dot.remove();
+        }
+      }
+    });
+  </script>
+
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+
+    gtag("config", "UA-119386393-1");
+  </script>
+
+  <script>
+    function showform() {
+      document.getElementById("form").style.display = "block";
+    }
+    function closedrp() {
+      document.getElementById("drpdwn").style.display = "none";
+    }
+    function showdrp() {
+      document.getElementById("drpdwn").style.display = "block";
+    }
+    function closeform() {
+      document.getElementById("form").style.display = "none";
+    }
+    document.getElementById("id").addEventListener("click", function (event) {
+      event.preventDefault;
+    });
+  </script>
+
+  <script>
+    $(element).on("click", function (e) {
+      e.preventDefault();
+    });
+
+    function myFunction() {
+      document.getElementById("myDropdown").classList.toggle("show");
+    }
+
+    function filterFunction() {
+      var input, filter, ul, li, a, i;
+      input = document.getElementById("myInput");
+      filter = input.value.toUpperCase();
+      div = document.getElementById("myDropdown");
+      a = div.getElementsByTagName("a");
+      for (i = 0; i < a.length; i++) {
+        txtValue = a[i].textContent || a[i].innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          a[i].style.display = "";
+        } else {
+          a[i].style.display = "none";
+        }
+      }
+    }
+  </script>
+
+  <script>
+    function fetchData(query) {
+      fetch("/employee_details")
+        .then((response) => response.json())
+        .then((data) => {
+          var searchResults = document.getElementById("search-result");
+          searchResults.innerHTML = "";
+          if (Array.isArray(data)) {
+            if (query.length > 0) {
+              if (data.length === 0) {
+                searchResults.innerHTML = "<p>No data found</p>";
+              } else {
+                var filteredData = data.filter(function (item) {
+                  return item.username.toLowerCase().includes(query.toLowerCase());
+                });
+
+                console.log(filteredData, filteredData.length);
+                if (filteredData.length === 0) {
+                  searchResults.innerHTML =
+                    "<div class='col-md-12' style='display:block;margin-top:0.5rem;'><ul><li id='search-item'>No matching data found</li></ul></div>";
+                } else {
+                  filteredData.forEach(function (item) {
+                    searchResults.innerHTML +=
+                      `
+                        <a href="/emplodetails${item.id}">
+                          <div class="col-md-12 search-data" style='display:block;margin-top:0.5rem;'>
+                            <ul><li id='search-item'> 
+                            ${item.username}
+                            </li></ul>
+                          </div>
+                        </a>                       
+                        `;
+                    searchResults.style.display = 'block';
+                    searchResults.style.fontSize = 'large';
+                    // searchResults.style.width ='100%'
+                  });
+                }
+              }
+            }
+          } else {
+            // Handle cases where data is not an array (e.g., an error occurred)
+            console.log("Data is not an array:", data);
+            searchResults.innerHTML = "<p>No Data Found</p>";
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          var searchResults = document.getElementById("search-result");
+          searchResults.innerHTML = "<p>No data found</p>";
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      var searchInput = document.getElementById("search-input");
+      searchInput.addEventListener("input", function () {
+        var query = searchInput.value.trim();
+        fetchData(query);
+      });
+    });
+  </script>
+
+  <script>
+    function submitForm(button) {
+      var clock_type_value = button.form.querySelector("#clock_type_value").value;
+      if (clock_type_value == 1 && !button.disabled) {
+        $('#Medium-modal').modal('show');
+        return false;
+      } else if (clock_type_value == 2 && !button.disabled) {
+        if (confirm("Are you sure you want to clock out?")) {
+          button.disabled = true;
+          button.form.submit();
+          return true;
+        } else {
+          return false;
+        }
+      }
+      return false;
+    }
+
+    // function validateForm() {
+    //   var selectedLocation = document.querySelector("input[name='location']:checked");
+    //   if (!selectedLocation) {
+    //     alert("Please select a location.");
+    //     return false;
+    //   }
+    //   return true;
+    // }
+  </script>
+
+  <script>
+    function validateForm() {
+      var selectedLocation = document.querySelector("input[name='location']:checked");
+      if (!selectedLocation) {
+        alert("Please select a location.");
+        return false;
+      }
+
+      // Disable submit button after first click
+      var submitButton = document.querySelector("input[type='submit']");
+      submitButton.disabled = true;
+      submitButton.value = "Requesintg...";
+
+      return true;
+    }
+  </script>
+
+  <script>
+    /* Duration */
+
+    $(document).ready(function () {
+      var $timer = $('#timer-id');
+      var startTime = null;
+      var intervalID = null;
+
+      function updateDuration() {
+        if (startTime === null) {
+          return;
+        }
+        var currentTime = new Date();
+        var duration = currentTime - startTime;
+
+        var days = Math.floor(duration / (1000 * 60 * 60 * 24));
+        duration -= days * (1000 * 60 * 60 * 24);
+        var hours = Math.floor(duration / (1000 * 60 * 60));
+        duration -= hours * (1000 * 60 * 60);
+        var minutes = Math.floor(duration / (1000 * 60));
+        duration -= minutes * (1000 * 60);
+        var seconds = Math.floor(duration / 1000);
+
+        var formattedTime = (days > 0 ? pad(days, 2) + ":" : "") + (hours >= 0 ? pad(hours, 2) + ":" : "") + (minutes >= 0 ? pad(minutes, 2) + ":" : "") + (seconds >= 0 ? pad(seconds, 2) : "");
+        // console.log("Formatted time: ", formattedTime);
+        $timer.text(formattedTime);
+      }
+
+      function fetchStartTime() {
+        var start_time = "{{in_time|safe}}" || "00:00:00";
+
+        startTime = new Date();
+        startTime.setHours(0); // Reset hours, minutes, and seconds
+        startTime.setMinutes(0);
+        startTime.setSeconds(0);
+        startTime.setMilliseconds(0);
+        var startHours = parseInt(start_time.split(':')[0], 10);
+        var startMinutes = parseInt(start_time.split(':')[1], 10);
+        // console.log("start time: ", start_time);
+        startTime.setHours(startHours);
+        startTime.setMinutes(startMinutes);
+        setInterval(updateDuration, 1000);
+
+      }
+
+      fetchStartTime();
+
+      // Function to pad single digits with leading zeros
+      function pad(number, length) {
+        var str = '' + number;
+        while (str.length < length) {
+          str = '0' + str;
+        }
+        return str;
+      }
+    });
+  </script>
+</body>
+
+</html>

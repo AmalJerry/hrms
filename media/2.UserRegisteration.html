@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>User Reg</title>
+<style>
+span
+{
+color:red;	
+}
+</style>
+
+<style> 
+        h1 { 
+            color: green; 
+        } 
+          
+        
+         	
+    </style> 
+
+</head>
+
+<body>
+<h1>USER REGISTRATION FORM</h1>
+
+<form  method="post">
+<table width="467" border="1" cellspacing="0" cellpadding="0">
+
+<!--USERNAME TEXTBOX MARKUP LANGUAGE-->
+  <tr>
+    <td width="82" height="39">Name:<span>*</span></td>
+    <td width="161"><input type="text" name="name"  /></td>  
+   
+  </tr>
+
+<!--AGE TEXTBOX MARKUP LANGUAGE-->
+<tr>
+    <td height="44">Age:<span>*</span></td>
+    <td><input type="text" name="age" maxlength="2"/>(25-30)</td>
+    
+  
+</tr>
+
+<tr>
+    <td height="44">Gender:<span>*</span></td>
+    <td> <input type="radio" name="gender" value="male"> Male<br>
+  <input type="radio" name="gender" value="female"> Female<br> 
+<br></td>
+    
+  
+</tr>
+<tr>
+    <td height="44">Qualification:<span>*</span></td>
+    <td><select id="quali" name="degree">
+  <option value="bca">BCA</option>
+<option value="mca">MCA</option>
+  <option value="bsc">Bsc</option>
+  <option value="msc">Msc</option>
+  <option value="btech">Btech</option>
+<option value="mtech">Mtech</option>
+  <option value="bba">BBA</option>
+  <option value="mba">MBA</option>
+<option value="others">Others</option>
+</select></td>
+    
+  
+</tr>
+<tr>
+    <td height="44">Email:<span>*</span></td>
+    <td><input type="email" name="email" /></td>
+    
+  
+</tr>
+<tr>
+    <td height="44">Phone:<span>*</span></td>
+    <td><input type="text" name="phone" maxlength="10" /></td>
+    
+  
+</tr>
+<tr>
+    <td height="44">Language:<span>*</span></td>
+    <td>Malayalam :<input type="checkbox" name="lang" /> English: <input type="checkbox" name="lang2" /> Hindi: <input type="checkbox" name="lang3" /></td>
+    
+  
+</tr>
+
+<tr>
+
+    <td><label for="myfile">Image Upload:</label></td>
+    <td><input type="file" id="myfile" name="myfile"></td>
+</tr>
+
+
+
+
+
+  <tr>
+	<td>&nbsp;</td>
+   	<td> 
+ <button onclick="myFunction()">Submit</button>
+
+<script>
+function myFunction() {
+  alert("Successfully Submitted!");
+}
+
+</script>
+    </td>
+    
+  </tr>
+</table>
+</form>
+
+</body>
+</html>

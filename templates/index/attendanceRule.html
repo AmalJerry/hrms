@@ -1,0 +1,2043 @@
+<!DOCTYPE html>
+<html lang="en">
+   {% load static %}
+   <head>
+      <meta charset="UTF-8">
+      <title>HRMS</title>
+      <link rel="icon" href="/static/logo/apple-touch-icon.png" type="image/x-icon">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+      <!-- CSS -->
+      <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/core.css">
+      <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/icon-font.min.css">
+      <link rel="stylesheet" type="text/css" href="static/index/src/plugins/jquery-steps/jquery.steps.css">
+      <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/style.css">
+      <link rel="stylesheet" type="text/css" href="static/index/src/plugins/datatables/css/dataTables.bootstrap4.min.css">
+
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      
+      <link rel="stylesheet" type="text/css" href="static/index/src/plugins/datatables/css/responsive.bootstrap4.min.css">
+      <!-- Global site tag (gtag.js) - Google Analytics -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>
+      <script>
+         window.dataLayer = window.dataLayer || [];
+         function gtag(){dataLayer.push(arguments);}
+         gtag('js', new Date());
+         
+         gtag('config', 'UA-119386393-1');
+      </script>
+
+      <style>
+         .shift-timings {
+         background-color: #f2f2f2;
+         padding: 10px;
+         margin-bottom: 10px;
+         border-radius: 4px;
+         } 
+
+         .switch-label {
+         margin-right: 10px;
+         color: #333;
+         }  
+         .switch { position: relative; display: inline-block; width: 54px; height: 26px; } 
+         .switch input { opacity: 0; width: 0; height: 0; } 
+         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color:#6c757d; -webkit-transition: .4s; transition: .4s; }
+         .slider:before { position: absolute; content: ""; height: 18px; width: 20px; left: 4px; bottom: 4px; background-color: white; -webkit-transition: .4s; transition: .4s; } 
+         input:checked + .slider { background-color: #2196F3; }
+         input:focus + .slider { box-shadow: 0 0 1px #2196F3; }
+         input:checked + .slider:before { -webkit-transform: translateX(26px); -ms-transform: translateX(26px); transform: translateX(26px); } /* Rounded sliders */ 
+         .slider { border-radius: 34px; } 
+         .slider:before { border-radius: 50%; }
+         .switch-container input[type="checkbox"] {
+         width: 40px;
+         height: 20px; 
+         } 
+
+         #time_input {
+         border: 2px solid var(--inactive);
+         /* width: fit-content; */
+         color: #86c288;
+         display: flex;
+         align-items: center;
+         border:2px solid #d4d4d4;
+         }
+
+         .time-input {
+         width: 60px;
+         height: 60px;
+         border: none;
+         box-sizing: border-box;
+         padding: auto 15px;
+         text-align: center;
+         color: #132c14;
+         }
+
+         .label {
+         font-size: 0.6rem;
+         position: absolute;
+         top: 40%;
+         }
+
+         .label.lbl-hrs {
+         left: 39%;
+         }
+
+         .label.lbl-min {
+         left: 55%;
+         }
+
+         .label.lbl-sec {
+         left: 13px;
+         }
+
+         input::-webkit-outer-spin-button,
+         input::-webkit-inner-spin-button {
+         -webkit-appearance: none;
+         margin: 0;
+         }
+
+         /* Firefox */
+         input[type="number"] {
+         -moz-appearance: textfield;
+         }
+
+         #time_input,
+         .time-input {
+         border-radius: 8px;
+         font-size: 1.5rem;
+         display: flex;
+         justify-content: center;
+         height: 10%;
+         margin-top: 10px;
+         }
+
+         .time-input:focus {
+         outline: 3px solid var(--active);
+         }
+
+         .time-input:focus + .label {
+         color: var(--active);
+         }
+
+         .time-input.invalid:focus {
+         outline: 3px solid red;
+         }
+
+         .time-input.invalid:focus + .label {
+         color: red;
+         }
+
+         #error {
+         width: 280px;
+         position: relative;
+         /* top: 170px; */
+         margin-left:  auto;
+         margin-right:  auto;
+         margin-bottom: 22px;
+         color: red;
+         visibility: hidden;
+         }
+
+         .container {
+         border: 1px solid #333333;
+         padding: 10px;
+         margin-top: 1%;
+         margin-bottom: 1%;
+         }
+          /* AG Grid Styles */
+        .ag-theme-alpine {
+            border-radius: 12px;
+            overflow: hidden;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 14px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .ag-header {
+            background-color: #3f51b5;  /* Change to match your theme */
+            color: white;
+            font-weight: 600;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .ag-header-cell {
+            background-color: #3f51b5;
+            color: white;
+            border-right: 1px solid #5c6bc0;
+            padding: 10px 8px;
+        }
+
+         .ag-header-cell:hover {
+            background-color: #ffffff;
+            color: rgb(0, 0, 0);
+            border-right: 1px solid #5c6bc0;
+            padding: 10px 8px;
+        }
+
+        .ag-header-cell:last-child {
+            border-right: none;
+        }
+
+        .ag-cell {
+            border-right: 1px solid #e0e0e0;
+            border-bottom: 1px solid #f0f0f0;
+            padding: 1px 5px;
+            background-color: rgb(255, 255, 255);
+        }
+
+        .ag-cell:last-child {
+            border-right: none;
+        }
+
+        .ag-row:hover {
+            background-color: #f5f7fa !important;
+        }
+
+        .ag-row-odd {
+            background-color: #fafbfc;
+        }
+
+        .ag-row-selected {
+            background-color: #d0eaff !important;
+        }
+
+        .ag-body-viewport::-webkit-scrollbar {
+            height: 8px;
+            width: 8px;
+        }
+
+        .ag-body-viewport::-webkit-scrollbar-thumb {
+            background: #bdbdbd;
+            border-radius: 4px;
+        }
+
+        /* Style filter inputs */
+        .ag-floating-filter-full-body input,
+        .ag-floating-filter input {
+            padding: 6px 8px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            background-color: #ffffff;
+            font-size: 13px;
+            color: #333;
+        }
+
+        /* Dropdown filter style (set filter) */
+        .ag-set-filter-list {
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            padding: 8px;
+        }
+
+        .ag-set-filter-item {
+            padding: 4px 6px;
+            border-radius: 4px;
+            margin-bottom: 4px;
+        }
+
+        .ag-set-filter-item:hover {
+            background-color: #e3f2fd;
+        }
+
+        /* Main filter dropdown container */
+        .ag-theme-alpine .ag-filter {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 16px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 14px;
+            min-width: 220px;
+        }
+
+        /* Each filter section inside */
+        .ag-theme-alpine .ag-filter-body {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        /* Search input inside set filter */
+        .ag-theme-alpine .ag-mini-filter {
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 12px;
+        }
+
+        /* Checkbox container */
+        .ag-theme-alpine .ag-set-filter-list {
+            max-height: 200px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        /* Individual checkbox item */
+        .ag-theme-alpine .ag-set-filter-item {
+            padding: 6px 10px;
+            border-radius: 6px;
+            transition: background 0.2s ease;
+        }
+
+        .ag-theme-alpine .ag-set-filter-item:hover {
+            background-color: #e3f2fd;
+        }
+
+        /* Input fields inside filter popup */
+        .ag-theme-alpine .ag-filter input[type="text"],
+        .ag-theme-alpine .ag-filter input[type="number"],
+        .ag-theme-alpine .ag-filter input[type="date"] {
+            padding: 8px 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* Filter condition dropdown */
+        .ag-theme-alpine .ag-filter-select {
+            padding: 6px 8px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .ag-theme-alpine .ag-filter-apply-panel {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 12px;
+            gap: 8px;
+        }
+
+        .ag-theme-alpine .ag-filter-apply-panel button {
+            background-color: #3f51b5;
+            color: #fff;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .ag-theme-alpine .ag-filter-apply-panel button:hover {
+            background-color: #303f9f;
+        }
+        /* Individual checkbox item */
+.ag-theme-alpine .ag-set-filter-item {
+    padding: 6px 10px;
+    border-radius: 6px;
+    transition: background 0.2s ease;
+}
+
+.ag-theme-alpine .ag-set-filter-item:hover {
+    background-color: #e3f2fd;
+}
+/* Input fields inside filter popup */
+.ag-theme-alpine .ag-filter input[type="text"],
+.ag-theme-alpine .ag-filter input[type="number"],
+.ag-theme-alpine .ag-filter input[type="date"] {
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Filter condition dropdown */
+.ag-theme-alpine .ag-filter-select {
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+.ag-theme-alpine .ag-filter-apply-panel {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 12px;
+    gap: 8px;
+}
+
+.ag-theme-alpine .ag-filter-apply-panel button {
+    background-color: #3f51b5;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.ag-theme-alpine .ag-filter-apply-panel button:hover {
+    background-color: #303f9f;
+}
+.ag-theme-alpine .ag-set-filter-list::-webkit-scrollbar {
+    width: 6px;
+}
+.ag-theme-alpine .ag-set-filter-list::-webkit-scrollbar-thumb {
+    background-color: #bdbdbd;
+    border-radius: 3px;
+}
+      </style>
+      
+   </head>
+   <body>
+
+      <div class="header">
+         <div class="header-left">
+            <div class="menu-icon dw dw-menu"></div>
+         </div>
+         <div class="header-right">
+            <div class="dashboard-setting user-notification">
+               <div class="dropdown">
+                  <a class="dropdown-toggle no-arrow" href="javascript:;" data-toggle="right-sidebar">
+                  </a>
+               </div>
+            </div>
+
+            <div class="user-info-dropdown">
+               <div class="dropdown">
+                  <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                     <span class="user-icon">
+                         
+                        {% if k.image %}
+                        <img src="{{ k.image.url }}" alt="" style="width: 100%; height:100% ">
+                        {% else %}
+                        <img src="/static/logo/userlogo.png" id="photo" style="width: 100%; height:100% ">
+                        {% endif %} 
+                     </span>
+                     <span class="user-name">{{request.user.username}}</span>
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                     <a class="dropdown-item" href="{% url 'createpersonalinfo' %}"><i class="dw dw-user1"></i> Profile</a>
+                     <a class="dropdown-item" href="{% url 'department' %}" data-toggle="right-sidebar"><i class="dw dw-settings2"></i> Settings</a>
+                     <a class="dropdown-item" href="{% url 'help_page' %}"><i class="dw dw-help"></i> Help</a>
+                     <a class="dropdown-item" href="{% url 'logout' %}"><i class="dw dw-logout"></i> Logout</a>
+                  </div>
+               </div>
+            </div>
+        </div>
+      </div> 
+
+      <div class="left-side-bar">
+        <div class="brand-logo mt-3">
+      <a href="{% url 'dashboard' %}">
+         {% if request.user.company_type %}
+				{% if request.user.company_type.inverse_logo %}
+				<img src="{{ request.user.company_type.inverse_logo.url }}" style="width: 100%; height: 100%;">
+				{% else %}
+				<img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+				{% endif %}
+				{% else %}
+				<img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+				{% endif %}
+      </a>
+        <div class="close-sidebar" data-toggle="left-sidebar-close">
+           <i class="ion-close-round"></i>
+        </div>
+     </div>
+      
+       <div class="menu-block customscroll">
+            <div class="sidebar-menu">
+               <ul id="accordion-menu">
+					
+					<br>
+					<li class="btn-primary active" style="background-color:black">
+						<a href="{% url 'dashboard' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-house-1"></span><span class="mtext"><b>Dashboard</b></span>
+						</a>
+					</li>
+					
+					<li>
+						<a href="{% url 'companyprofile' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-building"></span><span class="mtext"><b>Company Profile</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'personalinfonav' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-user1"></span><span class="mtext"><b>My Profile</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'leave' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-calendar-1"></span><span class="mtext"><b>Leave</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'directory' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-list"></span><span class="mtext"><b>Directory</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'dailylog' %}" class="dropdown-toggle no-arrow">
+							<span class="micon bi bi-check2-square"></span><span class="mtext"><b>Attendance</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'calender' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-calendar"></span><span class="mtext"><b>Holiday Calendar</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'runpayroll_overview' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-money-2"></span><span class="mtext"><b>Payroll</b></span>
+						</a>
+					</li>
+
+
+				</ul>
+            </div>
+         </div>
+      </div>
+
+      <div class="main-container">
+         <div class="card-box height-100-p overflow-hidden">
+            <ul class="nav nav-tabs customtab" role="tablist">
+               <li class="nav-item">
+                  <a class="nav-link" href="{% url 'dailylog' %}">Logs</a>
+               </li>
+               <li class="nav-item">
+                  <a class="nav-link" href="{% url 'attendance_logs' %}">Attendance Logs</a>
+              </li>
+              <li class="nav-item">
+               <a class="nav-link" href="{% url 'search_punch_logs' %}">Attendance Month Logs</a>
+           </li>
+               <li class="nav-item">
+                  <a class="nav-link " href="{% url 'automationlog' %}">Automation Logs</a>
+               </li>
+               <li class="nav-item">
+                  <a class="nav-link" href="{% url 'list-request-approvals' %}">Approvals</a>
+               </li>
+               <li class="nav-item">
+                  <a class="nav-link active" href="{% url 'attendanceRule' %}">Rules</a>
+               </li>
+               <li class="nav-item">
+                  <a class="nav-link " href="{% url 'view_assignattendancerule' %}">Assign Rule</a>
+               </li>
+               <li class="nav-item">
+                  <a class="nav-link" href="{% url 'attendance_workweek' %}">Work Week</a>
+              </li>
+              <li class="nav-item">
+               <a class="nav-link" href="{% url 'view_assignworkweek' %}">Assign Work Week</a>
+           </li>
+            </ul>
+           
+            <div class="pd-20 card-box">
+               <div  class="row">
+                   <div class="col-md-10">
+                       <h6 class="float-left">Rules</h6> 
+                   </div>
+                   <div class=" col-md-2">
+                       <i class="fa fa-plus-circle" id="add" data-toggle="modal" data-target="#rules_add" style="font-size:24px; color:grey;float: right;cursor: pointer; margin-left: 10px;"></i>
+                   </div>
+               </div> <hr>  
+               
+               <div class="modal fade bs-example-modal-lg" id="rules_add" >
+                   <div class="modal-dialog modal-lg modal-dialog-centered" >
+                       <div class="modal-content">
+                           <div class="modal-header">
+                               <h4 class="modal-title" >Rules</h4>
+                               <button type="button" class="close" data-dismiss="modal">&times;</button>
+                           </div>
+                           
+                               <div class="modal-body">
+                                   <form action="{% url 'add_attendanceRule' %} " method="post" enctype="multipart/form-data" class="form-container" role="form">
+                                       {% csrf_token %}
+                                               <div class="row">
+                                                   <div class="col-md-6" >
+                                                       <div class="form-group">
+                                                           <label>Rule Name <span style="color:red">&#42</span></label>
+                                                           <input pattern="[a-zA-Z\s]+" type="text" class="form-control" name="rulename" id="rulename" required >  
+                                                       </div>
+                                                   </div>
+
+                                                   <div class="col-md-6">
+                                                       <div class="form-group">
+                                                           <label>Description <span style="color:red">&#42</span></label>
+                                                           <input type="text" class="form-control" id="description" name="description" required >
+                                                           <span id="instituteError" style="color: red;font-size: small;"></span> 
+                                                       </div>
+                                                   </div>
+
+                                                   <div class="col-md-12">
+                                                       <div class="form-group">
+                                                         <h6 class="shift-timings">Shift Timings</h6>
+                                                       </div>
+                                                   </div>
+
+                                                   <div class="col-md-6">
+                                                      <div class="form-group">
+                                                          <label>In Time <span style="color:red">&#42</span></label>
+                                                          <input type="time" id="in-time" name="inTime" class="form-control" value="00" required>
+                                                      </div>
+                                                   </div>
+
+                                                   <div class="col-md-6">
+                                                      <div class="form-group">
+                                                         <label>Out Time <span style="color:red">&#42</span> </label>
+                                                         <input type="time" id="out-time" name="outTime" class="form-control" value="00" required>
+                                                      </div>
+                                                   </div>
+
+                                                   <div class="col-md-5">
+                                                      <div class="form-group">
+                                                         <style>
+                                                            .inputWithIcon input[type="text"] {  
+                                                            padding-left: 30px;  
+                                                            }  
+                                                            .inputWithIcon {  
+                                                            position: relative;  
+                                                            }  
+                                                            .inputWithIcon i {  
+                                                            position: absolute;  
+                                                            left: 10;  
+                                                            top: 6px;  
+                                                            padding: 9px 8px;  
+                                                            color: rgb(148, 145, 145);  
+                                                            transition: 0.3s;  
+                                                            }  
+                                                         </style>
+                                                         <label>Auto Deduction Date </label>
+                                                            <input class="form-control date-picker" placeholder="Select Date" type="text" id="autoDeductionDate" name="autoDeductionDate" readonly>
+                                                      </div>
+                                                   </div>
+
+                                                   <div class="col-md-3">
+                                                      <div class="form-group">
+                                                         <label class="switch-label">Enable Auto Deduction</label>
+                                                         <label class="switch">
+                                                         <input  type="checkbox" class="switch-btn"  name="enable_AD" id="enable_AD"   data-size="small">
+                                                         <span class="slider"></span>
+                                                         </label>
+                                                         <span class="on-off"></span>
+                                                      </div>
+                                                   </div>
+                                                   
+                                                   <div class="col-md-4">
+                                                      <div class="form-group">
+                                                         <label class="switch-label">Enable Anomaly Tracking</label>
+                                                         <label class="switch">
+                                                         <input  type="checkbox" name="enable_AT" id="enable_AT">
+                                                         <span class="slider"></span>
+                                                         </label>
+                                                         <span class="on-off"></span>
+                                                      </div>
+                                                   </div>
+
+                                                   <div class="col-md-12">
+                                                      <div class="form-group">
+                                                        <h6 class="shift-timings">Anomaly Settings</h6>
+                                                      </div>
+                                                  </div>
+
+                                                   <div class="col-md-6">
+                                                         <div class="form-group">
+                                                            <label>In Grace Period <span style="color:red">&#42</span></label>
+                                                            <div id="time_wrapper">
+                                                                  <div id="time_input">
+                                                                  <label for="hours">
+                                                                     <input required class="time-input" type="number" id="in-grace-hours" name="inGracePeriod-hours" placeholder="00">
+                                                                     <span class="label lbl-hrs">hours</span>
+                                                                  </label>
+                                                                  <span>:</span>
+                                                                  <label for="minutes">
+                                                                     <input required class="time-input" type="number" id="in-grace-minutes" name="inGracePeriod-minutes" placeholder="00">
+                                                                     <span class="label lbl-min">minutes</span>
+                                                                  </label>
+                                                                  </div>
+                                                            </div>
+                                                         </div>
+                                                   </div>
+
+                                                   <div class="col-md-6">
+                                                      <div class="form-group">
+                                                         <label>Out Grace Period <span style="color:red">&#42</span></label>
+                                                         <div id="time_wrapper">
+                                                               <div id="time_input">
+                                                               <label for="hours">
+                                                                  <input class="time-input" type="number" id="out-grace-hours" name="outGracePeriod-hours" placeholder="00" required>
+                                                                  <span class="label lbl-hrs">hours</span>
+                                                               </label>
+                                                               <span>:</span>
+                                                               <label for="minutes">
+                                                                  <input class="time-input" type="number" id="out-grace-minutes" name="outGracePeriod-minutes" placeholder="00" required>
+                                                                  <span class="label lbl-min">minutes</span>
+                                                               </label>
+                                                               </div>
+                                                         </div>
+                                                      </div>
+                                                   </div>
+
+                                                   <div id="error"></div>
+
+                                                   <div class="col-md-12">
+                                                      <div class="form-group">
+                                                        <h6 class="shift-timings">Work Duration</h6>
+                                                      </div>
+                                                  </div>
+
+                                                   <div class="col-md-6">
+                                                      <div class="form-group">
+                                                         <label>Full Day <span style="color:red">&#42</span></label>
+                                                         <div id="time_wrapper">
+                                                            <div id="time_input">
+                                                               <label for="hours">
+                                                                  <input class="time-input" type="number" id="work-in-hours" name="fullday-hours" placeholder="00" required>
+                                                                  <span class="label lbl-hrs">hours</span>
+                                                               </label>
+                                                               <span>:</span>
+                                                               <label for="minutes">
+                                                                  <input class="time-input" type="number" id="work-in-minutes" name="fullday-minutes" placeholder="00" required>
+                                                                  <span class="label lbl-min">minutes</span>
+                                                               </label>
+                                                            </div>
+                                                         </div>
+                                                      </div>
+                                                   </div>
+
+                                                   <div class="col-md-6">
+                                                      <div class="form-group">
+                                                         <label>Half Day <span style="color:red">&#42</span></label>
+                                                         <div id="time_wrapper">
+                                                            <div id="time_input">
+                                                               <label for="hours">
+                                                                  <input class="time-input" type="number" id="work-out-hours" name="halfday-hours" placeholder="00" required>
+                                                                  <span class="label lbl-hrs">hours</span>
+                                                               </label>
+                                                               <span>:</span>
+                                                               <label for="minutes">
+                                                                  <input class="time-input" type="number" id="work-out-minutes" name="halfday-minutes" placeholder="00" required>
+                                                                  <span class="label lbl-min">minutes</span>
+                                                               </label>
+                                                            </div>
+                                                         </div>
+                                                      </div>
+                                                   </div>
+
+                                                   <div id="error"></div>
+                                                </div>
+
+                                                <div class="row">
+
+                                                   <div class="col-md-5">
+                                                      <div class="form-group">
+                                                         <div class="custom-control custom-checkbox mb-3">  
+                                                            <input type="checkbox" class="custom-control-input" id="maximum_TBD" name="maximum_TBD">
+                                                            <label class="custom-control-label" for="maximum_TBD">Maximum Total Break Duration</label>
+                                                         </div>
+                                                      </div>
+                                                   </div>
+
+                                                   <div class="col-md-3">
+                                                      <div class="form-group">
+                                                         <div class="custom-control custom-checkbox mb-3">
+                                                            <input type="checkbox" class="custom-control-input" id="auto_CO" name="auto_CO">
+                                                            <label class="custom-control-label" for="auto_CO">Auto Clock-Out</label>
+                                                         </div>
+                                                      </div>
+                                                   </div>
+                                                
+                                                 </div>
+
+                                                <div class="row">
+
+                                                   <div class="col-md-4">
+                                                      <div class="form-group">
+                                                         <label class="switch-label">Enable Over Time</label>
+                                                         <label class="switch" style="font-size: medium; ">
+                                                         <input  type="checkbox" name="enable_OT" id="enable_OT">
+                                                         <span class="slider"></span>
+                                                         <span class="on-off"></span>
+                                                         </label>
+                                                      </div>
+                                                   </div>
+
+                                                   <div class="col-md-4">
+                                                      <div class="form-group">
+                                                         <label class="switch-label">Enable Comp Off</label>
+                                                         <label class="switch" style="font-size: medium; ">
+                                                         <input  type="checkbox" name="enable_CO" id="enable_CO">
+                                                         <span class="slider"></span>
+                                                         <span class="on-off"></span>
+                                                         </label>
+                                                      </div>
+                                                   </div>
+
+                                                   <div class="col-md-4">
+                                                      <div class="form-group">
+                                                         <label class="switch-label">Enable Penalty Rules</label>
+                                                         <label class="switch" style="font-size: large; ">
+                                                         <input  type="checkbox" name="enable_PR" id="ENABLE_PR">
+                                                         <span class="slider"></span>
+                                                         <span class="on-off"></span>
+                                                         </label>
+                                                      </div>
+                                                   </div>
+
+                                                   <!-- <div class="col-md-5">
+                                                      <div class="form-group">
+                                                         <label class="switch-label">Enable Attendance With Selfie</label>
+                                                         <label class="switch" style="font-size: medium; ">
+                                                         <input  type="checkbox" name="enable_AWS" id="enable_AWS" value="{{ attendance_rule.enable_AWS }}">
+                                                         <span class="slider"></span>
+                                                         <span class="on-off"></span>
+                                                         </label>
+                                                      </div>
+                                                   </div> -->
+
+                                                </div>
+                                                
+                                                <div class="container" id="DIV_INTIME" style="display: none;">
+                                                   <div class="row">
+                                                      <div class="col-md-12">
+                                                         <div class="form-group">
+                                                            <label>In Time <span style="color:red">&#42</span></label>
+                                                            <label class="switch">
+                                                               <input required type="checkbox" name="in_Time" id="IN_TIME" disabled>
+                                                               <span class="slider"></span>
+                                                               <span class="on-off"></span>
+                                                            </label>
+                                                         </div>
+                                                      </div>
+
+                                                      <div class="col-md-6">
+                                                         <div class="form-group">
+                                                            <label>Late Coming Allowed <span style="color:red">&#42</span></label>
+                                                            <input required type="number" class="form-control" name="lateComingAllowded" id="LCA" disabled required >
+                                                         </div>
+                                                      </div>
+
+                                                      <div class="col-md-6">
+                                                         <div class="form-group">
+                                                            <label>Penalty Interval <span style="color:red">&#42</span></label>
+                                                            <input required type="number" class="form-control" name="penaltyInterval" id="PI" disabled required>
+                                                         </div>
+                                                      </div>
+
+                                                      <div class="col-md-6">
+                                                         <div class="form-group">
+                                                            <label>Penalty <span style="color:red">&#42</span></label>
+                                                            <select class="select form-control" id="penalty" name="penalty" disabled required>
+                                                               <option value="" >Select Penalty</option>
+                                                               <option value="Half Day">Half Day</option>
+                                                               <option value="Full Day">Full Day</option>
+                                                            </select>
+                                                         </div>
+                                                      </div>
+
+                                                      <div class="col-md-6">
+                                                         <div class="form-group">
+                                                            <label>Leave Deduction <span style="color:red">&#42</span></label>
+                                                            <select class="select form-control" id="LD" name="leaveDeduction" disabled required>
+                                                               <option value="" >Select Leave</option>
+                                                               {% for leave in leave %}
+                                                               <option value="{{ leave.leavename }}">{{ leave.leavename }}</option>
+                                                               {% endfor %}
+                                                            </select>
+                                                         </div>
+                                                      </div>
+
+                                                   </div>
+                                                </div>
+
+                                                <div class="container" id="DIV_OUTTIME" style="display: none;">
+                                                   <div class="row">
+                                                      <div class="col-md-12">
+                                                         <div class="form-group">
+                                                            <label>Out Time <span style="color:red">&#42 </span></label>
+                                                            <label class="switch">
+                                                               <input required type="checkbox" name="out_Time" id="OUT_TIME" disabled>
+                                                               <span class="slider"></span>
+                                                               <span class="on-off"></span>
+                                                            </label>
+                                                         </div>
+                                                      </div>
+
+                                                      <div class="col-md-6">
+                                                         <div class="form-group">
+                                                            <label>Early Leaving Allowed <span style="color:red">&#42</span></label>
+                                                            <input  type="number" class="form-control" name="earlyLeavingAllowded" id="ELA" disabled required>
+                                                         </div>
+                                                      </div>
+
+                                                      <div class="col-md-6">
+                                                         <div class="form-group">
+                                                            <label>Penalty Interval <span style="color:red">&#42</span></label>
+                                                            <input required type="number" class="form-control" name="penaltyInterval1" id="PI1" disabled required>
+                                                         </div>
+                                                      </div>
+
+                                                      <div class="col-md-6">
+                                                         <div class="form-group">
+                                                            <label>Penalty <span style="color:red">&#42</span></label>
+                                                            <select class="select form-control" id="penalty1" name="penalty1"  disabled>
+                                                               <option value="" >Select Penalty</option>
+                                                               <option value="Half Day">Half Day</option>
+                                                               <option value="Full Day">Full Day</option>
+                                                            </select>
+                                                         </div>
+                                                      </div>
+
+                                                      <div class="col-md-6">
+                                                         <div class="form-group">
+                                                            <label>Leave Deduction <span style="color:red">&#42</span></label>
+                                                            <select class="select form-control" id="LD1" name="leaveDeduction1" disabled required>
+                                                               <option value="">Select Leave</option>
+                                                               {% for leave in leave %}
+                                                               <option value="{{ leave.leavename }}">{{ leave.leavename }}</option>
+                                                               {% endfor %}
+                                                            </select>
+                                                         </div>
+                                                      </div>
+
+                                                   </div>
+                                                </div>
+
+                                                <div class="container" id="DIV_WORKDURATION" style="display: none;">
+                                                   <div class="row">
+                                                      <div class="col-md-12">
+                                                         <label>Work Duration <span style="color:red">&#42</span></label>
+                                                         <label class="switch">
+                                                            <input required type="checkbox" name="work_duration" id="WORK_DURATION" disabled>
+                                                            <span class="slider"></span>
+                                                            <span class="on-off"></span>
+                                                         </label>
+                                                      </div>
+
+                                                      <div class="col-md-6">
+                                                         <div class="form-group">
+                                                            <label>Shortfall in WD Allowed <span style="color:red">&#42</span></label>
+                                                            <input required type="number" class="form-control" name="ShortfallInWDAllowed" id="SWDA" disabled required>
+                                                         </div>
+                                                      </div>
+
+                                                      <div class="col-md-6">
+                                                         <div class="form-group">
+                                                            <label>Penalty Interval <span style="color:red">&#42</span></label>
+                                                            <input required type="number" class="form-control" name="penaltyInterval2" id="PI2" required disabled>
+                                                         </div>
+                                                      </div>
+
+                                                      <div class="col-md-6">
+                                                         <div class="form-group">
+                                                            <label>Penalty <span style="color:red">&#42</span></label>
+                                                            <select class="select form-control" id="penalty2" name="penalty2" disabled>
+                                                               <option value="">Select Penalty</option>
+                                                               <option value="Half Day">Half Day</option>
+                                                               <option value="Full Day">Full Day</option>
+                                                            </select>
+                                                         </div>
+                                                      </div>
+
+                                                      <div class="col-md-6">
+                                                         <div class="form-group">
+                                                            <label>Leave Deduction <span style="color:red">&#42</span></label>
+                                                            <select class="select form-control" id="LD2" name="leaveDeduction2" disabled required>
+                                                               <option value="">Select Leave</option>
+                                                               {% for leave in leave %}
+                                                               <option value="{{ leave.leavename }}">{{ leave.leavename }}</option>
+                                                               {% endfor %}
+                                                            </select>
+                                                         </div>
+                                                      </div>
+
+                                                   </div>
+                                                </div>
+                                   
+                                                   <div class="modal-footer">
+                                                       <button type="submit" class="btn btn-primary" onsubmit="hideadd">Submit</button>
+                                                       <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>        
+                                                   </div>
+                               
+                               
+                                   </form>
+                               </div>
+
+                       </div>
+                   </div>
+               </div>
+                <div class="pd-20 card-box">
+                  <div id="attendanceRuleGrid" class="ag-theme-alpine" style="height: 500px; width: 100%; border-radius: 12px;"></div>
+               </div>
+
+                {% for i in attendance_rule %}
+                  <div class="modal fade bs-example-modal-lg" id="editrule{{ i.id }}" >
+                     <div class="modal-dialog modal-lg modal-dialog-centered" >
+                        <div class="modal-content">
+                           <div class="modal-header">
+                              <h4 class="modal-title" >Rules</h4>
+                              <button type="button" class="close" data-dismiss="modal">&times;</button>
+                           </div>
+                           
+                           <div class="modal-body">
+                              <form action="{% url 'edit_attendanceRule' %}" method="post" enctype="multipart/form-data" class="form-container" role="form" id="editworkweek" onsubmit="return validateForm()">
+                                 {% csrf_token %}
+
+                                 <input hidden type="text" name="attendanceruleid" id="attendanceruleid" value="{{i.id}}">
+                                 
+                                 <div class="row">
+                                    <div class="col-md-6" >
+                                        <div class="form-group">
+                                            <label>Rule Name <span style="color:red">&#42</span></label>
+                                            <input pattern="[a-zA-Z\s]+" type="text" class="form-control" name="rulename" id="rulename" value="{{ i.rulename }}" required >  
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Description <span style="color:red">&#42</span></label>
+                                            <input type="text" class="form-control" id="description" name="description" value="{{ i.description }}" required >
+                                            <span id="instituteError" style="color: red;font-size: small;"></span> 
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                          <h6 class="shift-timings">Shift Timings</h6>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                       <div class="form-group">
+                                           <label>In Time <span style="color:red">&#42</span></label>
+                                           <input type="time" value="{{ i.inTime|time:'H:i' }}" id="in-time" name="inTime" class="form-control" required>
+                                          </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                       <div class="form-group">
+                                          <label>Out Time <span style="color:red">&#42</span> </label>
+                                          <input type="time" value="{{ i.outTime|time:'H:i' }}" id="out-time" name="outTime" class="form-control" value="{{i.outTime}}" required>
+                                       </div>
+                                    </div>
+
+                                    <div class="col-md-5">
+                                       <div class="form-group">
+                                          <style>
+                                             .inputWithIcon input[type="text"] {  
+                                             padding-left: 30px;  
+                                             }  
+                                             .inputWithIcon {  
+                                             position: relative;  
+                                             }  
+                                             .inputWithIcon i {  
+                                             position: absolute;  
+                                             left: 10;  
+                                             top: 6px;  
+                                             padding: 9px 8px;  
+                                             color: rgb(148, 145, 145);  
+                                             transition: 0.3s;  
+                                             }  
+                                          </style>
+                                          <label>Auto Deduction Date </label>
+                                          <input class="form-control date-picker" placeholder="Select Date" type="text" id="autoDeductionDate" name="autoDeductionDate" value="{{ i.autoDeductionDate}}" readonly>
+                                       </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                       <div class="form-group">
+                                          <label class="switch-label">Enable Auto Deduction</label>
+                                          <label class="switch">
+                                          <input  type="checkbox" class="switch-btn" name="enable_AD" id="enable_AD"   data-size="small" {% if i.enable_AD %}checked{% endif %}>
+                                          <span class="slider"></span>
+                                          </label>
+                                          <span class="on-off"></span>
+                                       </div>
+                                    </div>
+                                    
+                                    <div class="col-md-4">
+                                       <div class="form-group">
+                                          <label class="switch-label">Enable Anomaly Tracking</label>
+                                          <label class="switch">
+                                          <input  type="checkbox" name="enable_AT" id="enable_AT" {% if i.enable_AT %}checked{% endif %}>
+                                          <span class="slider"></span>
+                                          </label>
+                                          <span class="on-off"></span>
+                                       </div>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                       <div class="form-group">
+                                         <h6 class="shift-timings">Anomaly Settings</h6>
+                                       </div>
+                                   </div>
+
+                                    <div class="col-md-6">
+                                          <div class="form-group">
+                                             <label>In Grace Period <span style="color:red">&#42</span></label>
+                                             <div id="time_wrapper">
+                                                   <div id="time_input">
+                                                   <label for="hours">
+                                                      <input required class="time-input" type="number" id="in-grace-hours" name="inGracePeriod-hours" value="{{ i.inGracePeriod|date:'H' }}" >
+                                                    <span class="label lbl-hrs">hours</span>
+                                                   </label>
+                                                   <span>:</span>
+                                                   <label for="minutes">
+                                                      <input required class="time-input" type="number" id="in-grace-minutes" name="inGracePeriod-minutes" value="{{ i.inGracePeriod|date:'i' }}">
+                                                      <span class="label lbl-min">minutes</span>
+                                                   </label>
+                                                   </div>
+                                             </div>
+                                          </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                       <div class="form-group">
+                                          <label>Out Grace Period <span style="color:red">&#42</span></label>
+                                          <div id="time_wrapper">
+                                                <div id="time_input">
+                                                <label for="hours">
+                                                   <input class="time-input" type="number" id="out-grace-hours" name="outGracePeriod-hours" value="{{ i.outGracePeriod|date:'H' }}" required>
+                                                   <span class="label lbl-hrs">hours</span>
+                                                </label>
+                                                <span>:</span>
+                                                <label for="minutes">
+                                                   <input class="time-input" type="number" id="out-grace-minutes" name="outGracePeriod-minutes" value="{{ i.outGracePeriod|date:'i' }}" required>
+                                                   <span class="label lbl-min">minutes</span>
+                                                </label>
+                                                </div>
+                                          </div>
+                                       </div>
+                                    </div>
+
+                                    <div id="error"></div>
+
+                                    <div class="col-md-12">
+                                       <div class="form-group">
+                                         <h6 class="shift-timings">Work Duration</h6>
+                                       </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                       <div class="form-group">
+                                          <label>Full Day <span style="color:red">&#42</span></label>
+                                          <div id="time_wrapper">
+                                             <div id="time_input">
+                                                <label for="hours">
+                                                   <input class="time-input" type="number" id="work-in-hours" name="fullday-hours" value="{{ i.fullhours }}"  required>
+                                                   <span class="label lbl-hrs">hours</span>
+                                                </label>
+                                                <span>:</span>
+                                                <label for="minutes">
+                                                   <input class="time-input" type="number" id="work-in-minutes" name="fullday-minutes" value="{{ i.fullminutes }}"  required>
+                                                   <span class="label lbl-min">minutes</span>
+                                                </label>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                       <div class="form-group">
+                                          <label>Half Day <span style="color:red">&#42</span></label>
+                                          <div id="time_wrapper">
+                                             <div id="time_input">
+                                                <label for="hours">
+                                                   <input class="time-input" type="number" id="work-out-hours" name="halfday-hours" value="{{ i.halfhours }}"  required>
+                                                   <span class="label lbl-hrs">hours</span>
+                                                </label>
+                                                <span>:</span>
+                                                <label for="minutes">
+                                                   <input class="time-input" type="number" id="work-out-minutes" name="halfday-minutes" value="{{ i.halfminutes }}"  required>
+                                                   <span class="label lbl-min">minutes</span>
+                                                </label>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+
+                                 </div>
+
+                                 <div class="row">
+
+                                    <div class="col-md-5">
+                                       <div class="form-group">
+                                          <div class="custom-control custom-checkbox mb-3">
+                                             <input type="checkbox" class="custom-control-input" id="maximumTBD{{ i.id }}" name="maximum_TBD" {% if i.maximum_TBD %}checked{% endif %}>
+                                             <label class="custom-control-label" for="maximumTBD{{ i.id }}">Maximum Total Break Duration</label>
+                                          </div>
+                                       </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                       <div class="form-group">
+                                          <div class="custom-control custom-checkbox mb-3">
+                                             <input type="checkbox" class="custom-control-input" id="autoCO{{ i.id }}" name="auto_CO" {% if i.auto_CO %}checked{% endif %}>
+                                             <label class="custom-control-label" for="autoCO{{ i.id }}">Auto Clock-Out</label>
+                                          </div>
+                                       </div>
+                                    </div>
+
+                                 </div>
+
+                                 <div class="row">
+
+                                    <div class="col-md-4">
+                                       <div class="form-group">
+                                          <label class="switch-label">Enable Over Time</label>
+                                          <label class="switch" style="font-size: medium; ">
+                                          <input  type="checkbox" name="enable_OT" id="enable_OT" {% if i.enable_OT %}checked{% endif %}>
+                                          <span class="slider"></span>
+                                          <span class="on-off"></span>
+                                          </label>
+                                       </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                       <div class="form-group">
+                                          <label class="switch-label">Enable Comp Off</label>
+                                          <label class="switch" style="font-size: medium; ">
+                                          <input  type="checkbox" name="enable_CO" id="enable_CO" {% if i.enable_CO %}checked{% endif %}>
+                                          <span class="slider"></span>
+                                          <span class="on-off"></span>
+                                          </label>
+                                       </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                       <div class="form-group">
+                                          <label class="switch-label">Enable Penalty Rules</label>
+                                          <label class="switch" style="font-size: large; ">
+                                          <input  type="checkbox" name="enable_PR" id="ENABLEPR{{i.id}}">
+                                          <span class="slider"></span>
+                                          <span class="on-off"></span>
+                                          </label>
+                                       </div>
+                                    </div>
+
+                                 </div>
+                                 
+                                 <div class="container" id="DIVINTIME{{i.id}}">
+                                    <div class="row">
+                                       <div class="col-md-12">
+                                          <div class="form-group">
+                                             <label>In Time <span style="color:red">&#42</span></label>
+                                             <label class="switch">
+                                                <input required type="checkbox" name="in_Time" id="EDIT_INTIME{{ i.id }}" {% if i.in_Time %}checked{% endif %} disabled>
+                                                <span class="slider"></span>
+                                                <span class="on-off"></span>
+                                             </label>
+                                          </div>
+                                       </div>
+
+                                       <div class="col-md-6">
+                                          <div class="form-group">
+                                             <label>Late Coming Allowed <span style="color:red">&#42</span></label>
+                                             <input required type="number" class="form-control" name="lateComingAllowded" id="EDIT_LCA{{ i.id }}" value="{{i.lateComingAllowded}}" disabled required >
+                                          </div>
+                                       </div>
+
+                                       <div class="col-md-6">
+                                          <div class="form-group">
+                                             <label>Penalty Interval <span style="color:red">&#42</span></label>
+                                             <input required type="number" class="form-control" name="penaltyInterval" id="EDIT_PI{{ i.id }}" value="{{i.penaltyInterval}}" disabled required>
+                                          </div>
+                                       </div>
+
+                                       <div class="col-md-6">
+                                          <div class="form-group">
+                                             <label>Penalty <span style="color:red">&#42</span></label>
+                                             <select class="select form-control" id="EDIT_PENALTY{{ i.id }}" name="penalty" disabled required>
+                                                <option value="" >Select Penalty</option>
+                                                <option value="Half Day" {% if i.penalty == 'Half Day' %}selected{% endif %}>Half Day</option>
+                                                <option value="Full Day" {% if i.penalty == 'Full Day' %}selected{% endif %}>Full Day</option>
+                                             </select>
+                                          </div>
+                                       </div>
+
+                                       <div class="col-md-6">
+                                          <div class="form-group">
+                                             <label>Leave Deduction <span style="color:red">&#42</span></label>
+                                             <select class="select form-control" id="EDIT_LD{{ i.id }}" name="leaveDeduction" disabled required>
+                                                <option value="" >Select Leave</option>
+                                                {% for leave_option in leave %}
+                                                   <option value="{{ leave_option.leavename }}" {% if leave_option.leavename == i.leaveDeduction %}selected{% endif %}>{{ leave_option.leavename }}</option>
+                                                {% endfor %}
+                                             </select>
+                                          </div>
+                                       </div>
+
+                                    </div>
+                                 </div>
+
+                                 <div class="container" id="DIVOUTTIME{{i.id}}">
+                                    <div class="row">
+                                       <div class="col-md-12">
+                                          <div class="form-group">
+                                             <label>Out Time <span style="color:red">&#42 </span></label>
+                                             <label class="switch">
+                                                <input required type="checkbox" name="out_Time" id="EDIT_OUTTIME{{ i.id }}" {% if i.out_Time %}checked{% endif %} disabled>
+                                                <span class="slider"></span>
+                                                <span class="on-off"></span>
+                                             </label>
+                                          </div>
+                                       </div>
+
+                                       <div class="col-md-6">
+                                          <div class="form-group">
+                                             <label>Early Leaving Allowed <span style="color:red">&#42</span></label>
+                                             <input  type="number" class="form-control" name="earlyLeavingAllowded" id="EDIT_ELA{{ i.id }}" value="{{i.earlyLeavingAllowded}}" disabled required>
+                                          </div>
+                                       </div>
+
+                                       <div class="col-md-6">
+                                          <div class="form-group">
+                                             <label>Penalty Interval <span style="color:red">&#42</span></label>
+                                             <input required type="number" class="form-control" name="penaltyInterval1" id="EDIT_PIl{{ i.id }}" value="{{i.penaltyInterval1}}" disabled required>
+                                          </div>
+                                       </div>
+
+                                       <div class="col-md-6">
+                                          <div class="form-group">
+                                             <label>Penalty <span style="color:red">&#42</span></label>
+                                             <select class="select form-control" id="EDIT_PENALTYl{{ i.id }}" name="penalty1" disabled required>
+                                                <option value="" >Select Penalty</option>
+                                                <option value="Half Day" {% if i.penalty1 == 'Half Day' %}selected{% endif %}>Half Day</option>
+                                                <option value="Full Day" {% if i.penalty1 == 'Full Day' %}selected{% endif %}>Full Day</option>
+                                             </select>
+                                          </div>
+                                       </div>
+
+                                       <div class="col-md-6">
+                                          <div class="form-group">
+                                             <label>Leave Deduction <span style="color:red">&#42</span></label>
+                                             <select class="select form-control" id="EDIT_LDl{{ i.id }}" name="leaveDeduction1" disabled required>
+                                                <option value="">Select Leave</option>
+                                                {% for leave_option in leave %}
+                                                   <option value="{{ leave_option.leavename }}" {% if leave_option.leavename == i.leaveDeduction1 %}selected{% endif %}>{{ leave_option.leavename }}</option>
+                                                {% endfor %}
+                                             </select>
+                                          </div>
+                                       </div>
+
+                                    </div>
+                                 </div>
+
+                                 <div class="container" id="DIVWORKDURATION{{i.id}}">
+                                    <div class="row">
+                                       <div class="col-md-12">
+                                          <label>Work Duration <span style="color:red">&#42</span></label>
+                                          <label class="switch">
+                                             <input required type="checkbox" name="work_duration" id="EDIT_WORKDURATION{{ i.id }}" {% if i.work_duration %}checked{% endif %} disabled>
+                                             <span class="slider"></span>
+                                             <span class="on-off"></span>
+                                          </label>
+                                       </div>
+
+                                       <div class="col-md-6">
+                                          <div class="form-group">
+                                             <label>Shortfall in WD Allowed <span style="color:red">&#42</span></label>
+                                             <input required type="number" class="form-control" name="ShortfallInWDAllowed" id="EDIT_SWDA{{ i.id }}" value="{{i.ShortfallInWDAllowed}}" disabled required>
+                                          </div>
+                                       </div>
+
+                                       <div class="col-md-6">
+                                          <div class="form-group">
+                                             <label>Penalty Interval <span style="color:red">&#42</span></label>
+                                             <input required type="number" class="form-control" name="penaltyInterval2" id="EDIT_PIll{{ i.id }}" value="{{i.penaltyInterval2}}" disabled required>
+                                          </div>
+                                       </div>
+
+                                       <div class="col-md-6">
+                                          <div class="form-group">
+                                             <label>Penalty <span style="color:red">&#42</span></label>
+                                             <select class="select form-control" id="EDIT_PENALTYll{{ i.id }}" name="penalty2" disabled required>
+                                                <option value="">Select Penalty</option>
+                                                <option value="Half Day" {% if i.penalty2 == 'Half Day' %}selected{% endif %}>Half Day</option>
+                                                <option value="Full Day" {% if i.penalty2 == 'Full Day' %}selected{% endif %}>Full Day</option>
+                                             </select>
+                                          </div>
+                                       </div>
+
+                                       <div class="col-md-6">
+                                          <div class="form-group">
+                                             <label>Leave Deduction <span style="color:red">&#42</span></label>
+                                             <select class="select form-control" id="EDIT_LDll{{ i.id }}" name="leaveDeduction2" disabled required>
+                                                <option value="">Select Leave</option>
+                                                {% for leave_option in leave %}
+                                                   <option value="{{ leave_option.leavename }}" {% if leave_option.leavename == i.leaveDeduction2 %}selected{% endif %}>{{ leave_option.leavename }}</option>
+                                                {% endfor %}
+                                             </select>
+                                          </div>
+                                       </div>
+
+                                    </div>
+                                 </div>
+                    
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary" onsubmit="hideadd">Submit</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>        
+                                    </div>
+
+                              </form>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               {% endfor %}
+
+           </div>
+            
+         </div>
+      </div>
+      
+      
+      <script src="static/index/vendors/scripts/core.js"></script>
+      <script src="static/index/vendors/scripts/script.min.js"></script>
+      <script src="static/index/vendors/scripts/process.js"></script>
+      <script src="static/index/vendors/scripts/layout-settings.js"></script>
+      <script src="static/index/src/plugins/jquery-steps/jquery.steps.js"></script>
+      <script src="static/index/vendors/scripts/steps-setting.js"></script>
+      <script src="static/index/src/plugins/datatables/js/jquery.dataTables.min.js"></script>
+      <script src="static/index/src/plugins/datatables/js/dataTables.bootstrap4.min.js"></script>
+      <script src="static/index/src/plugins/datatables/js/dataTables.responsive.min.js"></script>
+      <script src="static/index/src/plugins/datatables/js/responsive.bootstrap4.min.js"></script>
+      <script src="static/index/vendors/scripts/datatable-setting.js"></script>
+      <script src="static/index/src/plugins/datatables/js/dataTables.buttons.min.js"></script>
+      <script src="static/index/src/plugins/datatables/js/buttons.bootstrap4.min.js"></script>
+      <script src="static/index/src/plugins/datatables/js/buttons.print.min.js"></script>
+      <script src="static/index/src/plugins/datatables/js/buttons.html5.min.js"></script>
+      <script src="static/index/src/plugins/datatables/js/buttons.flash.min.js"></script>
+      <script src="static/index/src/plugins/datatables/js/pdfmake.min.js"></script>
+      <script src="static/index/src/plugins/datatables/js/vfs_fonts.js"></script>  
+      
+      <script>
+         var ENABLE_PR = document.getElementById("ENABLE_PR");
+         var DIV_INTIME = document.getElementById("DIV_INTIME")
+         var DIV_OUTTIME = document.getElementById("DIV_OUTTIME")
+         var DIV_WORKDURATION = document.getElementById("DIV_WORKDURATION")
+   
+         var IN_TIME = document.getElementById("IN_TIME")
+         var LCA = document.getElementById('LCA')
+         var PI = document.getElementById('PI');
+         var penalty = document.getElementById('penalty');
+         var LD = document.getElementById('LD');
+   
+         var OUT_TIME = document.getElementById('OUT_TIME');
+         var ELA = document.getElementById('ELA');
+         var PI1 = document.getElementById('PI1');
+         var penalty1 = document.getElementById('penalty1');
+         var LD1 = document.getElementById('LD1');
+   
+         var WORK_DURATION = document.getElementById('WORK_DURATION');
+         var SWDA = document.getElementById('SWDA');
+         var PI2 = document.getElementById('PI2');
+         var penalty2 = document.getElementById('penalty2');
+         var LD2 = document.getElementById('LD2');
+   
+         ENABLE_PR.addEventListener("change", function() {
+            if(ENABLE_PR.checked){
+               DIV_INTIME.style.display = "block";
+               DIV_OUTTIME.style.display = "block";
+               DIV_WORKDURATION.style.display = "block";
+               IN_TIME.disabled = false;
+               OUT_TIME.disabled = false;
+               WORK_DURATION.disabled = false;
+            }else {
+               DIV_INTIME.style.display = "none";
+               DIV_OUTTIME.style.display = "none";
+               DIV_WORKDURATION.style.display = "none";
+               IN_TIME.checked = false;
+               OUT_TIME.checked = false;
+               WORK_DURATION.checked = false;
+               LCA.disabled = true;
+               LCA.value = "";
+               PI.disabled = true;
+               PI.value = "";
+               penalty.disabled = true;
+               penalty.value = "";
+               LD.disabled = true;
+               LD.value = "";
+               ELA.disabled = true;
+               ELA.value = "";
+               PI1.disabled = true;
+               PI1.value = "";
+               penalty1.disabled = true;
+               penalty1.value = "";
+               LD1.disabled = true;
+               LD1.value = "";
+               SWDA.disabled = true;
+               SWDA.value = "";
+               PI2.disabled = true;
+               PI2.value = "";
+               penalty2.disabled = true;
+               penalty2.value = "";
+               LD2.disabled = true;
+               LD2.value = "";
+           }
+         });
+   
+         IN_TIME.addEventListener("change", function() {
+            if (IN_TIME.checked) {
+               LCA.disabled = false;
+               PI.disabled = false;
+               penalty.disabled = false;
+               LD.disabled = false;
+            }else{
+               LCA.disabled = true;
+               LCA.value = "";
+               PI.disabled = true;
+               PI.value = "";
+               penalty.disabled = true;
+               penalty.value = "";
+               LD.disabled = true;
+               LD.value = "";
+            }
+         });
+   
+         OUT_TIME.addEventListener("change", function() {
+            if (OUT_TIME.checked) {
+               ELA.disabled = false;
+               PI1.disabled = false;
+               penalty1.disabled = false;
+                  LD1.disabled = false;
+            }else{
+               ELA.disabled = true;
+               ELA.value = "";
+               PI1.disabled = true;
+               PI1.value = "";
+               penalty1.disabled = true;
+               penalty1.value = "";
+               LD1.disabled = true;
+               LD1.value = "";
+            }
+         });
+            
+         WORK_DURATION.addEventListener("change", function() {
+            if (WORK_DURATION.checked) {
+               SWDA.disabled = false;
+               PI2.disabled = false;
+               penalty2.disabled = false;
+               LD2.disabled = false;
+            }else{
+               SWDA.disabled = true;
+               SWDA.value = "";
+               PI2.disabled = true;
+               PI2.value = "";
+               penalty2.disabled = true;
+               penalty2.value = "";
+               LD2.disabled = true;
+               LD2.value = "";
+            }
+         });
+      </script>
+
+<script>
+   {% for i in attendance_rule %}
+      var ENABLEPR{{ i.id }} = document.getElementById("ENABLEPR{{ i.id }}");
+      var DIVINTIME{{ i.id }} = document.getElementById("DIVINTIME{{ i.id }}");
+      var DIVOUTTIME{{ i.id }} = document.getElementById("DIVOUTTIME{{ i.id }}")
+
+      var EDIT_INTIME{{ i.id }} = document.getElementById("EDIT_INTIME{{ i.id }}")
+      var EDIT_LCA{{ i.id }}= document.getElementById('EDIT_LCA{{ i.id }}')
+      var EDIT_PI{{ i.id }} = document.getElementById('EDIT_PI{{ i.id }}');
+      var EDIT_PENALTY{{ i.id }} = document.getElementById('EDIT_PENALTY{{ i.id }}');
+      var EDIT_LD{{ i.id }} = document.getElementById('EDIT_LD{{ i.id }}');
+
+      var EDIT_OUTTIME{{ i.id }} = document.getElementById('EDIT_OUTTIME{{ i.id }}');
+      var EDIT_ELA{{ i.id }} = document.getElementById('EDIT_ELA{{ i.id }}');
+      var EDIT_PIl{{ i.id }} = document.getElementById('EDIT_PIl{{ i.id }}');
+      var EDIT_PENALTYl{{ i.id }} = document.getElementById('EDIT_PENALTYl{{ i.id }}');
+      var EDIT_LDl{{ i.id }} = document.getElementById('EDIT_LDl{{ i.id }}');
+
+      var EDIT_WORKDURATION{{ i.id }} = document.getElementById('EDIT_WORKDURATION{{ i.id }}');
+      var EDIT_SWDA{{ i.id }} = document.getElementById('EDIT_SWDA{{ i.id }}');
+      var EDIT_PIll{{ i.id }} = document.getElementById('EDIT_PIll{{ i.id }}');
+      var EDIT_PENALTYll{{ i.id }} = document.getElementById('EDIT_PENALTYll{{ i.id }}');
+      var EDIT_LDll{{ i.id }} = document.getElementById('EDIT_LDll{{ i.id }}');
+
+      var epr = '{{ i.enable_PR }}';
+      if (epr === 'True' || epr === 'true') {
+         ENABLEPR{{ i.id }}.checked = true;
+         DIVINTIME{{ i.id }}.style.display = "block";
+         DIVOUTTIME{{ i.id }}.style.display = "block";
+         DIVWORKDURATION{{ i.id }}.style.display = "block";
+         EDIT_INTIME{{ i.id }}.disabled = false;
+         EDIT_OUTTIME{{ i.id }}.disabled = false;
+         EDIT_WORKDURATION{{ i.id }}.disabled = false;
+      } else if (epr === 'False' || epr === 'false') {
+         ENABLEPR{{ i.id }}.checked = false;
+         DIVINTIME{{ i.id }}.style.display = "none";
+         DIVOUTTIME{{ i.id }}.style.display = "none";
+         DIVWORKDURATION{{ i.id }}.style.display = "none";
+      }
+
+      ENABLEPR{{ i.id }}.addEventListener("change", function() {
+         if (ENABLEPR{{ i.id }}.checked) {
+               DIVINTIME{{ i.id }}.style.display = "block";
+               DIVOUTTIME{{ i.id }}.style.display = "block";
+               DIVWORKDURATION{{ i.id }}.style.display = "block";
+               EDIT_INTIME{{ i.id }}.disabled = false;
+               EDIT_OUTTIME{{ i.id }}.disabled = false;
+               EDIT_WORKDURATION{{ i.id }}.disabled = false;
+         } else {
+               DIVINTIME{{ i.id }}.style.display = "none";
+               DIVOUTTIME{{ i.id }}.style.display = "none";
+               DIVWORKDURATION{{ i.id }}.style.display = "none";
+               EDIT_INTIME{{ i.id }}.checked = false;
+               EDIT_OUTTIME{{ i.id }}.checked = false;
+               EDIT_WORKDURATION{{ i.id }}.checked = false;
+               EDIT_LCA{{ i.id }}.disabled = true;
+               EDIT_LCA{{ i.id }}.value = "";
+               EDIT_PI{{ i.id }}.disabled = true;
+               EDIT_PI{{ i.id }}.value = "";
+               EDIT_PENALTY{{ i.id }}.disabled = true;
+               EDIT_PENALTY{{ i.id }}.value = "";
+               EDIT_LD{{ i.id }}.disabled = true;
+               EDIT_LD{{ i.id }}.value = "";
+               EDIT_ELA{{ i.id }}.disabled = true;
+               EDIT_ELA{{ i.id }}.value = "";
+               EDIT_PIl{{ i.id }}.disabled = true;
+               EDIT_PIl{{ i.id }}.value = "";
+               EDIT_PENALTYl{{ i.id }}.disabled = true;
+               EDIT_PENALTYl{{ i.id }}.value = "";
+               EDIT_LDl{{ i.id }}.disabled = true;
+               EDIT_LDl{{ i.id }}.value = "";
+               EDIT_SWDA{{ i.id }}.disabled = true;
+               EDIT_SWDA{{ i.id }}.value = "";
+               EDIT_PIll{{ i.id }}.disabled = true;
+               EDIT_PIll{{ i.id }}.value = "";
+               EDIT_PENALTYll{{ i.id }}.disabled = true;
+               EDIT_PENALTYll{{ i.id }}.value = "";
+               EDIT_LDll{{ i.id }}.disabled = true;
+               EDIT_LDll{{ i.id }}.value = "";
+         }
+      });
+
+      EDIT_INTIME{{ i.id }}.addEventListener("change", function() {
+         if (EDIT_INTIME{{ i.id }}.checked) {
+               EDIT_LCA{{ i.id }}.disabled = false;
+               EDIT_PI{{ i.id }}.disabled = false;
+               EDIT_PENALTY{{ i.id }}.disabled = false;
+               EDIT_LD{{ i.id }}.disabled = false;
+            }else{
+               EDIT_LCA{{ i.id }}.disabled = true;
+               EDIT_LCA{{ i.id }}.value = "";
+               EDIT_PI{{ i.id }}.disabled = true;
+               EDIT_PI{{ i.id }}.value = "";
+               EDIT_PENALTY{{ i.id }}.disabled = true;
+               EDIT_PENALTY{{ i.id }}.value = "";
+               EDIT_LD{{ i.id }}.disabled = true;
+               EDIT_LD{{ i.id }}.value = "";
+            }
+         });
+   
+      EDIT_OUTTIME{{ i.id }}.addEventListener("change", function() {
+            if (EDIT_OUTTIME{{ i.id }}.checked) {
+               EDIT_ELA{{ i.id }}.disabled = false;
+               EDIT_PIl{{ i.id }}.disabled = false;
+               EDIT_PENALTYl{{ i.id }}.disabled = false;
+               EDIT_LDl{{ i.id }}.disabled = false;
+            }else{
+               EDIT_ELA{{ i.id }}.disabled = true;
+               EDIT_ELA{{ i.id }}.value = "";
+               EDIT_PIl{{ i.id }}.disabled = true;
+               EDIT_PIl{{ i.id }}.value = "";
+               EDIT_PENALTYl{{ i.id }}.disabled = true;
+               EDIT_PENALTYl{{ i.id }}.value = "";
+               EDIT_LDl{{ i.id }}.disabled = true;
+               EDIT_LDl{{ i.id }}.value = "";
+            }
+      });
+            
+      EDIT_WORKDURATION{{ i.id }}.addEventListener("change", function() {
+            if (EDIT_WORKDURATION{{ i.id }}.checked) {
+               EDIT_SWDA{{ i.id }}.disabled = false;
+               EDIT_PIll{{ i.id }}.disabled = false;
+               EDIT_PENALTYll{{ i.id }}.disabled = false;
+               EDIT_LDll{{ i.id }}.disabled = false;
+            }else{
+               EDIT_SWDA{{ i.id }}.disabled = true;
+               EDIT_SWDA{{ i.id }}.value = "";
+               EDIT_PIll{{ i.id }}.disabled = true;
+               EDIT_PIll{{ i.id }}.value = "";
+               EDIT_PENALTYll{{ i.id }}.disabled = true;
+               EDIT_PENALTYll{{ i.id }}.value = "";
+               EDIT_LDll{{ i.id }}.disabled = true;
+               EDIT_LDll{{ i.id }}.value = "";
+            }
+      });
+   {% endfor %}
+</script>
+
+
+     <script>
+      $( function() {
+        $( "#autoDeductionDate" ).datepicker({
+            language:'en',
+            changeMonth:true,
+            changeYear: true,
+        });
+      } );
+      </script>
+     
+     
+      <script>
+         // variables
+         const inputs = document.querySelectorAll("#time_wrapper input"),
+         error = document.querySelector("#error");
+
+         // functions
+         const validInput = (val) => {
+         // prevent user from inserting non-digits
+         return val.replace(/[^0-9]+/g, "");
+         };
+         const setMax = (input) => {
+         let id = input.getAttribute("id"),
+            max = 0;
+         switch (id) {
+            case "hours":
+               max = 23;
+               break;
+            default:
+               max = 60;
+         }
+
+         return max;
+         };
+         const throwErr = (mssg, input, invalid = false) => {
+         // control display of error
+         if (invalid === true) {
+            input.classList.add("invalid");
+            error.style.visibility = "visible";
+            error.innerHTML = `<small>${mssg}</small>`;
+         } else {
+            input.classList.remove("invalid");
+            error.style.visibility = "hidden";
+            // error.innerHTML = "";
+         }
+         };
+
+         // actions
+         inputs.forEach((input) => {
+         let max = setMax(input),
+            isInvalid = false,
+            mssg;
+
+         input.addEventListener("focus", (e) => {
+            // Blank input on default values
+            if (e.target.value === "0" || e.target.value === "00") {
+               e.target.value = "";
+            }
+
+            // Show error mssg for invalid inputs when not corrected
+            if (e.target.classList.contains("invalid")) {
+               isInvalid = true;
+               throwErr(mssg, input, isInvalid);
+            } else {
+               isInvalid = false;
+               throwErr(mssg, input);
+            }
+         });
+
+         input.addEventListener("keyup", (e) => {
+            let val = e.target.value;
+
+            // only allow digits
+            input.value = validInput(val);
+
+            // restrict input characters
+            if (e.target.value.length > 2) {
+               input.value = e.target.value.substring(0, 2);
+            }
+
+            // set max value allowed
+            if (+input.value > max) {
+               // handle error
+               isInvalid = true;
+               // e.target.classList.add('invalid');
+               mssg = `It can't be more than ${max} ${input.getAttribute(
+               "id"
+               )}! Try again.`;
+
+               throwErr(mssg, input, isInvalid);
+            } else {
+               isInvalid = false;
+               throwErr(mssg, input);
+            }
+         });
+         });
+      </script>
+      <script>
+         // switch variable
+         var penaltyRule = document.getElementById("enable_PR");
+         var div_intime = document.getElementById("div_intime")
+         var div_outtime = document.getElementById("div_outtime")
+         var div_work = document.getElementById("div_work")
+         var inTime = document.getElementById('in');
+         var outTime = document.getElementById('out');
+         var work = document.getElementById('work');
+         // inTime input variable
+         var lateComingAllowed = document.getElementById('Fname')
+         var penaltyInterval = document.getElementById('Number');
+         var leaveDeduction = document.getElementById('leaveDeduction');
+         var penalty = document.getElementById('penalty');
+         // outTime input variable
+
+         var earlyLeavingAllowded = document.getElementById('earlyLeavingAllowded');
+         var penaltyInterval1 = document.getElementById('penaltyInterval1');
+         var penalty1 = document.getElementById('penalty1');
+         var leaveDeduction1 = document.getElementById('leaveDeduction1');
+
+         // work duration input variables
+         var ShortfallInWDAllowed = document.getElementById('ShortfallInWDAllowed');
+         var penaltyInterval2 = document.getElementById('penaltyInterval2');
+         var penalty3 = document.getElementById('penalty3');
+         var leavededuction2 = document.getElementById('leavededuction2');
+
+         //functionality to get checked or not in Enabel Penalty Rules 
+         var dbPenaltyRules = '{{attendance_rule.enable_PR}}';
+         if(dbPenaltyRules === 'True' || dbPenaltyRules === 'true') {
+            penaltyRule.checked = true;
+         }
+     
+         penaltyRule.addEventListener("change" , function(){
+            if(penaltyRule.checked){
+               div_intime.style.display = "block";
+               div_outtime.style.display = "block";
+               div_work.style.display = "block";
+               inTime.disabled = false;
+               outTime.disabled = false;
+               work.disabled = false;
+            }
+            else{
+               div_intime.style.display = "none";
+               div_outtime.style.display = "none";
+               div_work.style.display = "none";
+               inTime.disabled = true;
+               outTime.disabled = true;
+               work.disabled = true;
+            }
+         });
+         
+         inTime.addEventListener("change",function(){
+            if(inTime.checked){
+               lateComingAllowed.disabled = false;
+               penaltyInterval.disabled = false;
+               penalty.disabled = false;
+               leaveDeduction.disabled = false;
+            }
+            else{
+              
+               lateComingAllowed.disabled = true;
+               penaltyInterval.disabled = true;
+               penalty.disabled = true;
+               leaveDeduction.disabled = true;
+            }
+         });
+         
+         outTime.addEventListener('change', function(){
+            
+            if(outTime.checked){
+               earlyLeavingAllowded.disabled = false;
+               penaltyInterval1.disabled  = false;
+               penalty1.disabled = false;
+               leaveDeduction1.disabled = false;
+            }
+            else{
+               earlyLeavingAllowded.disabled = true;
+               penaltyInterval1.disabled  = true;
+               penalty1.disabled = true;
+               leaveDeduction1.disabled = true;
+            }
+         });
+         work.addEventListener('change', function(){
+            if(work.checked){
+               ShortfallInWDAllowed.disabled = false;
+               penaltyInterval2.disabled = false;
+               penalty3.disabled = false;
+               leavededuction2.disabled = false;
+            }
+            else{
+               ShortfallInWDAllowed.disabled = true;
+               penaltyInterval2.disabled = true;
+               penalty3.disabled = true;
+               leavededuction2.disabled = true;
+            
+            }
+         });
+      </script>
+      
+      <script>
+         
+         // Function to format time in 24-hour format
+         function formatTime(timeString) {
+           const [time, period] = timeString.split(" ");
+           const [hour, minute] = time.split(":");
+     
+           let formattedHour = parseInt(hour);
+
+           if (period === "PM" || period === 'p.m.' && formattedHour < 12) {
+             formattedHour += 12;
+           } else if (period === "AM" || period === 'a.m.' && formattedHour === 12) {
+             formattedHour = 0;
+           }
+       
+           return `${String(formattedHour).padStart(2, '0')}:${minute}`;
+         }
+       
+         // Get input elements
+         const shiftInTime = document.getElementById('in-time');
+         const shiftOutTime = document.getElementById('out-time');
+       
+         // Get time data from the server and format it
+         const inTimeData = '{{attendance_rule.inTime}}';
+         const outTimeData = '{{attendance_rule.outTime}}';
+       
+         const formattedInTime = formatTime(inTimeData);
+         const formattedOutTime = formatTime(outTimeData);
+       
+         // Set values in the input elements
+         shiftInTime.value = formattedInTime;
+         shiftOutTime.value = formattedOutTime;
+      </script>
+       
+
+      <script>
+        function convert12to24(time12) {
+
+            const [timePart, period] = time12.split(':');
+         
+            let hours = parseInt(timePart); 
+            let [minutes, periodInTime] = period.split(' ')  //.map(Number);
+
+            console.log('periodInTime: ', periodInTime , 'hours: ', hours);
+            if (periodInTime.toLowerCase() === 'am' || periodInTime.toLowerCase() === 'a.m.' && hours === 12) {
+               console.log('if condition');
+               hours = 0;
+            } else if (periodInTime.toLowerCase() === 'pm' || periodInTime.toLowerCase() === 'p.m.' && hours !== 12) {
+               console.log('else condition');
+               hours += 12;
+            }
+
+            const time24 = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+            return time24;
+         }
+
+         function setTime(elementId, time) {
+            const [hours, minutes] = time.split(':');
+            document.getElementById(elementId + "-hours").value = hours;
+            document.getElementById(elementId + "-minutes").value = minutes;
+         }
+
+         // Assuming that these values are strings like "09:45 AM" or "06:45 PM"
+         var shiftInTimeDb = '{{attendance_rule.inGracePeriod}}';
+         var shiftOutTimeDb = '{{attendance_rule.outGracePeriod}}';
+         var workFullDayHoursDb = '{{attendance_rule.fullhours}}';
+         var workFullDayMinutesDb = '{{attendance_rule.fullminutes}}';
+         var workHalfDayHoursDb = '{{attendance_rule.halfhours}}';
+         var workHalfDayMinutesDb = '{{attendance_rule.halfminutes}}';
+
+         // Splitting the time variables correctly
+         const intime24 = convert12to24(shiftInTimeDb);
+         const outtime24 = convert12to24(shiftOutTimeDb);
+
+         console.log('In-grace time:', intime24, shiftInTimeDb);
+         console.log('Out-grace time:', outtime24, shiftOutTimeDb);
+
+         setTime("in-grace", intime24);
+         setTime("out-grace", outtime24);
+         setTime("work-in", `${workFullDayHoursDb}:${workFullDayMinutesDb}`);
+         setTime("work-out", `${workHalfDayHoursDb}:${workHalfDayMinutesDb}`);
+
+      </script>
+      <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const columnDefs = [
+      { headerName: "Rule Name", field: "rulename", flex: 2 },
+      { headerName: "Description", field: "description", flex: 3 },
+      {
+        headerName: "Edit", field: "edit", flex: 1,
+        cellRenderer: params => {
+          const div = document.createElement("div");
+          div.innerHTML = params.value;
+          return div;
+        }
+      },
+      {
+        headerName: "Delete", field: "delete", flex: 1,
+        cellRenderer: params => {
+          const div = document.createElement("div");
+          div.innerHTML = params.value;
+          return div;
+        }
+      }
+    ];
+
+    const rowData = JSON.parse(`{{ json_data|escapejs }}`);
+
+    const gridOptions = {
+      columnDefs,
+      rowData,
+      defaultColDef: {
+        sortable: true,
+        filter: true,
+        resizable: true,
+        wrapText: true,
+        autoHeight: true,
+      },
+      pagination: true,
+      paginationPageSize: 10,
+    };
+
+    new agGrid.Grid(document.getElementById('attendanceRuleGrid'), gridOptions);
+  });
+</script>
+<link href="https://cdn.jsdelivr.net/npm/ag-grid-community@31.2.1/styles/ag-grid.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/ag-grid-community@31.2.1/styles/ag-theme-alpine.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/ag-grid-community@31.2.1/dist/ag-grid-community.min.js"></script>
+
+      <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const columnDefs = [
+      { headerName: "Rule Name", field: "rulename", flex: 2 },
+      { headerName: "Description", field: "description", flex: 3 },
+      {
+        headerName: "Edit", field: "edit", flex: 1,
+        cellRenderer: params => {
+          const div = document.createElement("div");
+          div.innerHTML = params.value;
+          return div;
+        }
+      },
+      {
+        headerName: "Delete", field: "delete", flex: 1,
+        cellRenderer: params => {
+          const div = document.createElement("div");
+          div.innerHTML = params.value;
+          return div;
+        }
+      }
+    ];
+
+    const rowData = JSON.parse(`{{ json_data|escapejs }}`);
+
+    const gridOptions = {
+      columnDefs,
+      rowData,
+      defaultColDef: {
+        sortable: true,
+        filter: true,
+        resizable: true,
+        wrapText: true,
+        autoHeight: true,
+      },
+      pagination: true,
+      paginationPageSize: 10,
+    };
+
+    new agGrid.Grid(document.getElementById('attendanceRuleGrid'), gridOptions);
+  });
+</script>
+<link href="https://cdn.jsdelivr.net/npm/ag-grid-community@31.2.1/styles/ag-grid.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/ag-grid-community@31.2.1/styles/ag-theme-alpine.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/ag-grid-community@31.2.1/dist/ag-grid-community.min.js"></script>
+
+    </body>
+</html>

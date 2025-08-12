@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Employee Home Geofence Radius</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      margin: 0;
+      background: #f4f6f9;
+      color: #333;
+      padding: 40px;
+    }
+
+    .toast-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 10000;
+    }
+
+    .toast {
+      min-width: 280px;
+      max-width: 340px;
+      margin-bottom: 12px;
+      padding: 15px 20px;
+      border-radius: 8px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+      /* Stronger shadow */
+      font-size: 15px;
+      font-family: "Segoe UI", sans-serif;
+      color: black;
+      opacity: 0.97;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      animation: fadeOut 3s forwards;
+    }
+
+    /* Success: green box with white text */
+    .toast-success {
+      background-color: #198754;
+      /* darker green */
+      border-left: 6px solid #145c2c;
+    }
+
+    /* Error: red box with white text */
+    .toast-error {
+      background-color: #c82333;
+      /* darker red */
+      border-left: 6px solid #7d1b25;
+    }
+
+    /* Warning: yellow with dark text */
+    .toast-warning {
+      background-color: #ffc107;
+      color: #333;
+      border-left: 6px solid #d39e00;
+    }
+
+    /* Optional: fade out animation */
+    @keyframes fadeOut {
+      0% {
+        opacity: 1;
+      }
+
+      80% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 0;
+        transform: translateY(-20px);
+        pointer-events: none;
+      }
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #444;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    th,
+    td {
+      padding: 14px 18px;
+      text-align: left;
+    }
+
+    thead {
+      background-color: #007bff;
+      color: white;
+    }
+
+    tbody tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    tbody tr:hover {
+      background-color: #f1f1f1;
+    }
+
+    input[type="number"] {
+      width: 80px;
+      padding: 6px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+
+    button[type="submit"] {
+      padding: 6px 12px;
+      border: none;
+      color: white;
+      font-size: 14px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button[name="update"] {
+      background-color: #28a745;
+    }
+
+    button[name="update"]:hover {
+      background-color: #218838;
+    }
+
+    @media screen and (max-width: 768px) {
+
+      table,
+      thead,
+      tbody,
+      th,
+      td,
+      tr {
+        display: block;
+      }
+
+      th {
+        display: none;
+      }
+
+      td {
+        position: relative;
+        padding-left: 50%;
+        margin-bottom: 10px;
+      }
+
+      td::before {
+        position: absolute;
+        top: 12px;
+        left: 16px;
+        width: 45%;
+        white-space: nowrap;
+        font-weight: bold;
+        color: #555;
+      }
+
+      td:nth-of-type(1)::before {
+        content: "Name";
+      }
+
+      td:nth-of-type(2)::before {
+        content: "Latitude";
+      }
+
+      td:nth-of-type(3)::before {
+        content: "Longitude";
+      }
+
+      td:nth-of-type(4)::before {
+        content: "Radius (m)";
+      }
+
+      td:nth-of-type(5)::before {
+        content: "Update";
+      }
+    }
+
+
+    /* Modal background */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      backdrop-filter: blur(2px);
+    }
+
+    /* Modal box */
+    .modal-content {
+      background-color: #fff;
+      padding: 25px 20px;
+      border-radius: 8px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    .modal-content h3 {
+      margin-top: 0;
+      font-size: 1.2rem;
+      color: #333;
+    }
+
+    .modal-content p {
+      font-size: 0.95rem;
+      color: #555;
+      margin-bottom: 20px;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 15px;
+    }
+
+    /* Button styles */
+    .btn {
+      padding: 8px 15px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    /* Red Delete */
+    .btn-danger {
+      background-color: #e53935;
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background-color: #c62828;
+    }
+
+    /* Gray Cancel */
+    .btn-cancel {
+      background-color: #e0e0e0;
+      color: #333;
+    }
+
+    .btn-cancel:hover {
+      background-color: #ccc;
+    }
+
+    td a {
+      color: black;
+      text-decoration: none;
+    }
+
+    td a:hover {
+      color: #007bff;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h2>🏠 Home Location Radius Management</h2>
+  <a href="{% url 'dashboard' %}" class="btn btn-outline-primary shadow-sm fw-semibold">← Dashboard</a><br><br>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Latitude</th>
+        <th>Longitude</th>
+        <th>Location</th>
+        <th>Radius (m)</th>
+        <th></th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for fence in fences %}
+      <tr>
+
+        <td><a href="{% url 'view_personalinfo' fence.user.id %}">{{ fence.user.username }}</a></td>
+        <td>{{ fence.home_lat }}</td>
+        <td>{{ fence.home_lon }}</td>
+        <td><a href="https://www.google.com/maps/search/?api=1&query={{ fence.home_lat }},{{ fence.home_lon }}"
+            target="_blank" title="View on Google Maps">
+            {{ fence.location_name }}
+          </a></td>
+        <td colspan="2">
+          <form method="post" id="delete-form-{{ fence.user.id }}">
+            {% csrf_token %}
+            <input type="hidden" name="user_id" value="{{ fence.user.id }}">
+            <input type="number" name="radius" value="{{ fence.home_radius }}" step="1" min="100">
+        </td>
+
+        <td>
+          <div style="display: flex; justify-content: space-between;">
+              <button type="submit" name="update" class="btn btn-primary" style="margin-right: 5px;">Save</button>
+
+              <button type="button" class="btn btn-danger delete-btn" data-form-id="delete-form-{{ fence.user.id }}">
+                Delete
+              </button>
+           </div>
+        </td>
+           
+          </form>
+
+        
+
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <div id="confirmModal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <h3>Confirm Deletion</h3>
+      <p>Are you sure you want to delete this location? This action cannot be undone.</p>
+      <div class="modal-actions">
+        <button id="confirmDelete" class="btn btn-danger">Yes, Delete</button>
+        <button id="cancelDelete" class="btn btn-cancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+
+  <div id="toast-container" class="toast-container">
+    {% if messages %}
+    {% for message in messages %}
+    <div class="toast toast-{{ message.tags }}">
+      {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const toasts = document.querySelectorAll(".toast");
+      setTimeout(() => {
+        toasts.forEach(toast => toast.remove());
+      }, 3000);  // 3 seconds
+    });
+
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+      let targetFormId = null;
+
+      // Delete button → open modal
+      document.querySelectorAll(".delete-btn").forEach(button => {
+        button.addEventListener("click", function () {
+          targetFormId = this.dataset.formId;
+          document.getElementById("confirmModal").style.display = "flex";
+        });
+      });
+
+      // Cancel button → close modal and reset form ID
+      document.getElementById("cancelDelete").addEventListener("click", function () {
+        document.getElementById("confirmModal").style.display = "none";
+        targetFormId = null;
+      });
+
+      // Confirm Delete
+      document.getElementById("confirmDelete").addEventListener("click", function () {
+        if (targetFormId) {
+          const form = document.getElementById(targetFormId);
+          if (!form) {
+            alert("Form not found.");
+            return;
+          }
+
+          // Prevent double "delete" inputs
+          if (!form.querySelector('input[name="delete"]')) {
+            const deleteInput = document.createElement("input");
+            deleteInput.type = "hidden";
+            deleteInput.name = "delete";
+            deleteInput.value = "1";
+            form.appendChild(deleteInput);
+          }
+
+          // Reset & close modal
+          document.getElementById("confirmModal").style.display = "none";
+          targetFormId = null;
+
+          form.submit();
+        }
+      });
+    });
+  </script>
+
+
+
+</body>
+
+</html>

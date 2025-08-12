@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Leave Rejection Notification</title>
+</head>
+<body>
+    <p style="font-family:Nunito;font-size:25px;color: #c20006">
+        <b>Dear {{ data.user.username }} ,</b>
+    </p>
+    <p style="font-family:Nunito;font-size:25px;">        
+        Your resignation has been rejected with the following reason :
+        <br>
+     
+        {{ rejection_reason }} <br><br>
+
+        Regards, <br>
+        &nbsp;&nbsp;&nbsp;HRMS
+    </p>    
+    
+</body>
+</html>

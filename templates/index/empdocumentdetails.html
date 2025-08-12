@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Basic Page Info -->
+    <meta charset="utf-8">
+    <title>HRMS</title>
+    <link rel="icon" href="/static/logo/apple-touch-icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Mobile Specific Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/core.css">
+    <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/icon-font.min.css">
+    <link rel="stylesheet" type="text/css" href="static/index/src/plugins/jquery-steps/jquery.steps.css">
+    <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/style.css">
+    <!-- AG Grid CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ag-grid-community@31.0.2/styles/ag-grid.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ag-grid-community@31.0.2/styles/ag-theme-alpine.css">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-119386393-1');
+    </script>
+    <style>
+        .ic {
+            cursor: pointer;
+        }
+        .img {
+            border: 1px solid #6f6e6e;
+            display: none;
+            margin-left: 150px;
+            height: 600px;
+            position: fixed;
+            top: 10%;
+            z-index: 100px;
+            left: 5;
+            bottom: 0;
+            border-bottom: 1px;
+            border-bottom: #6f6e6e;
+            align-items: center; 
+            justify-content: center;
+            background-color: rgb(72, 73, 74);
+            width: 600px;
+        }
+        .im {
+            margin-top: 10px;
+            height: 100%;
+            width: 100%;
+        }
+        .im1 {
+            margin-top: 10px;
+            height: 100%;
+            width: 100%;
+        }
+        .im2 {
+            margin-top: 10px;
+            height: 100%;
+            width: 100%;
+        }
+        .img1 {
+            border: 1px solid #6f6e6e;
+            display: none;
+            margin-left: 150px;
+            height: 600px;
+            position: fixed;
+            top: 10%;
+            left: 5;
+            bottom: 0;
+            border-bottom: 1px;
+            border-bottom: #6f6e6e;
+            align-items: center; 
+            justify-content: center;
+            background-color: rgb(72, 73, 74);
+            width: 600px;
+        }
+        .img2 {
+            border: 1px solid #6f6e6e;
+            display: none;
+            margin-left: 150px;
+            height: 600px;
+            position: fixed;
+            top: 10%;
+            z-index: 100px;
+            left: 5;
+            bottom: 0;
+            border-bottom: 1px;
+            border-bottom: #6f6e6e;
+            align-items: center; 
+            justify-content: center;
+            background-color: rgb(72, 73, 74);
+            width: 600px;
+        }
+        .ag-theme-alpine {
+            height: 400px;
+            width: 100%;
+        }
+        .ag-header {
+            background-color: #3f51b5;
+            /* Change to match your theme */
+            color: white;
+            font-weight: 600;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .ag-header-cell {
+            background-color: #3f51b5;
+            color: white;
+            border-right: 1px solid #5c6bc0;
+            padding: 10px 8px;
+        }
+
+        .ag-header-cell:hover {
+            background-color: #ffffff;
+            color: rgb(13, 13, 13);
+            border-right: 1px solid #5c6bc0;
+            padding: 10px 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-left">
+            <div class="menu-icon dw dw-menu"></div>
+            <h6 class="text-primary" style="padding-left: 20px;">Impersonate Employee: {{data.username}}</h6>
+        </div>
+        <div class="header-right">
+            <div class="dashboard-setting user-notification">
+                <div class="dropdown">
+                    <a class="dropdown-toggle no-arrow" href="javascript:;" data-toggle="right-sidebar"></a>
+                </div>
+            </div>
+            <div class="user-info-dropdown">
+                <div class="dropdown">
+                    <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                        <span class="user-icon">
+                            {% if k.image %}
+                                <img src="{{ k.image.url }}" alt="" style="width: 100%; height:100% ">
+                            {% else %}
+                                <img src="/static/logo/userlogo.png" id="photo" style="width: 100%; height:100% ">
+                            {% endif %}
+                        </span>
+                        <span class="user-name">{{request.user.username}}</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                        <a class="dropdown-item" href="{% url 'createpersonalinfo' %}"><i class="dw dw-user1"></i> Profile</a>
+                        <a class="dropdown-item" href="{% url 'department' %}" data-toggle="right-sidebar"><i class="dw dw-settings2"></i> Settings</a>
+                        <a class="dropdown-item" href="{% url 'help_page' %}"><i class="dw dw-help"></i> Help</a>
+                        <a class="dropdown-item" href="{% url 'logout' %}"><i class="dw dw-logout"></i> Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="left-side-bar">
+        <div class="brand-logo mt-3">
+            <a href="{% url 'dashboard' %}">
+                {% if request.user.company_type %}
+                    {% if request.user.company_type.inverse_logo %}
+                        <img src="{{ request.user.company_type.inverse_logo.url }}" style="width: 100%; height: 100%;">
+                    {% else %}
+                        <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+                    {% endif %}
+                {% else %}
+                    <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+                {% endif %}
+            </a>
+            <div class="close-sidebar" data-toggle="left-sidebar-close">
+                <i class="ion-close-round"></i>
+            </div>
+        </div>
+        <div class="menu-block customscroll">
+            <div class="sidebar-menu">
+                <ul id="accordion-menu">
+                    <br>
+                    <li class="btn-primary active" style="background-color:black">
+                        <a href="{% url 'dashboard' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-house-1"></span><span class="mtext"><b>Dashboard</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'companyprofile' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-building"></span><span class="mtext"><b>Company Profile</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'personalinfonav' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-user1"></span><span class="mtext"><b>My Profile</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'leave' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-calendar-1"></span><span class="mtext"><b>Leave</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'directory' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-list"></span><span class="mtext"><b>Directory</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'dailylog' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon bi bi-check2-square"></span><span class="mtext"><b>Attendance</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'calender' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-calendar"></span><span class="mtext"><b>Holiday Calendar</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'runpayroll_overview' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-money-2"></span><span class="mtext"><b>Payroll</b></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="main-container">
+        <div class="card-box height-100-p overflow-hidden">
+            <ul class="nav nav-tabs customtab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'view_personalinfo' id=data.id %}">Personal</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'view_work' id=data.id %}">Work</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'view_team' id=data.id %}">Team</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'view_education' id=data.id %}">Education</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'view_family' id=data.id %}">Family</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'view_document' id=data.id %}">Document</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'view_workweek' id=data.id %}">Work Week</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'view_daily_log' id=data.id %}">Attendance</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'view_payroll' id=data.id %}">Payroll</a>
+                </li>
+            </ul>
+            <div class="min-height-100px">
+                <ul class="nav nav-tabs customtab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'view_document' id=data.id %}">Document</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'view_certification' id=data.id %}">Certification</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'view_docwork' id=data.id %}">Work</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="pd-20 card-box mb-30" style="margin-bottom: 0;">
+                <h6>ID's</h6><hr>
+                <table class="table table-hover">
+                    <tr style="background-color:rgb(233, 227, 227)">
+                        <th scope="col">Proofs</th>
+                        <th></th>
+                    </tr>
+                    <tbody>
+                        <tr>
+                            <td scope="col">Photo ID</td>
+                            {% if proofs.1 %}
+                                <td id="result"><i class="icon-copy fa fa-check" aria-hidden="true" style="color: rgb(54, 199, 54);padding-right: 100px;"></i></td>
+                            {% else %}
+                                <td id="pf2"><i class="icon-copy fa fa-close" aria-hidden="true" style="color: rgb(241, 26, 26);padding-right: 100px;"></i></td>
+                            {% endif %}
+                        </tr>
+                        <tr>
+                            <td scope="col">Date of Birth</td>
+                            {% if proofs.2 %}
+                                <td id="pf2"><i class="icon-copy fa fa-check" aria-hidden="true" style="color: rgb(54, 199, 54);padding-right: 100px;"></i></td>
+                            {% else %}
+                                <td id="pf2"><i class="icon-copy fa fa-close" aria-hidden="true" style="color: rgb(241, 26, 26);padding-right: 100px;"></i></td>
+                            {% endif %}
+                        </tr>
+                        <tr>
+                            <td scope="col">Current Address</td>
+                            {% if proofs.3 %}
+                                <td id="pf2"><i class="icon-copy fa fa-check" aria-hidden="true" style="color: rgb(54, 199, 54);padding-right: 100px;"></i></td>
+                            {% else %}
+                                <td id="pf2"><i class="icon-copy fa fa-close" aria-hidden="true" style="color: rgb(241, 26, 26);padding-right: 100px;"></i></td>
+                            {% endif %}
+                        </tr>
+                        <tr>
+                            <td scope="col">Permanent Address</td>
+                            {% if proofs.4 %}
+                                <td id="pf2"><i class="icon-copy fa fa-check" aria-hidden="true" style="color: rgb(54, 199, 54);padding-right: 100px;"></i></td>
+                            {% else %}
+                                <td id="pf2"><i class="icon-copy fa fa-close" aria-hidden="true" style="color: rgb(241, 26, 26);padding-right: 100px;"></i></td>
+                            {% endif %}
+                        </tr>
+                    </tbody>
+                </table>
+                <hr>
+                <div class="row">
+                    <div class="col-md-10">
+                        <h6>Uploaded Documents</h6>
+                    </div>
+                    <div class="modal fade bs-example-modal-md" id="uploadedDocuments">
+                        <div class="modal-dialog modal-md modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Uploaded Documents</h4>
+                                    <button type="button" class="close" data-dismiss="modal">×</button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action=" " method="post" enctype="multipart/form-data" class="form-container" role="form">
+                                        {% csrf_token %}
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Type <span style="color:red">*</span></label>
+                                                <select class="select form-control" name="Type1" id="idSelect" required>
+                                                    <option>Select ID Type</option>
+                                                    <option>PAN Card</option>
+                                                    <option>Aadhaar Card</option>
+                                                    <option>Passport</option>
+                                                    <option>Driving Licence</option>
+                                                    <option>Voter ID</option>
+                                                    <option>Electricity Bill</option>
+                                                    <option>Phone Bill</option>
+                                                    <option>Bank passbook</option>
+                                                    <option>Rental Agreement</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>ID <span style="color:red">*</span></label>
+                                                <input class="form-control" type="text" name="Idno" required pattern="[0-9\@#$'<>%^&*?/!]+">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Use it as proof for <span style="color:red">*</span></label>
+                                                <div class="custom-control custom-checkbox mb-5">
+                                                    <input type="checkbox" class="custom-control-input" value="1" name="proof" id="customCheck1">
+                                                    <label class="custom-control-label" for="customCheck1">Photo ID</label>
+                                                </div>
+                                                <div class="custom-control custom-checkbox mb-5">
+                                                    <input type="checkbox" class="custom-control-input" value="2" name="proof" id="customCheck2">
+                                                    <label class="custom-control-label" for="customCheck2">Date of Birth</label>
+                                                </div>
+                                                <div class="custom-control custom-checkbox mb-5">
+                                                    <input type="checkbox" class="custom-control-input" value="3" name="proof" id="customCheck3">
+                                                    <label class="custom-control-label" for="customCheck3">Current Address</label>
+                                                </div>
+                                                <div class="custom-control custom-checkbox mb-5">
+                                                    <input type="checkbox" class="custom-control-input" value="4" name="proof" id="customCheck4">
+                                                    <label class="custom-control-label" for="customCheck4">Permanent Address</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Image <span style="color:red">*</span></label>
+                                            <input class="form-control" type="file" name="img" id="img" onchange="readUrl()" value="{{ l.image }}" required>
+                                            <img src="{{ l.image.url }}" id="photo">
+                                        </div>
+                                        <script>
+                                            var a = document.getElementById("photo");
+                                            function readUrl(input) {
+                                                if (input.files) {
+                                                    var reader = new FileReader();
+                                                    reader.readAsDataURL(input.files[0]);
+                                                    reader.onload = (e) => {
+                                                        a.src = e.target.result;
+                                                    }
+                                                }
+                                            }
+                                        </script>
+                                        <input hidden id="uid" name="uploadid">
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                            <button type="button" onclick="displayproof()" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div id="photo1" class="img">
+                    <span class="fa fa-close" onclick="closeimage()" style="margin-top: 10px; font-size: 20px; float: right;"></span>
+                    <img src="" class="im" id="imd1" style="border-width: 2px;">
+                </div>
+                <!-- AG Grid Table -->
+                <div id="myGrid" class="ag-theme-alpine"></div>
+                <div class="col-12">
+                    {% if not uploads %}
+                        <p style="text-align: center;">No Data Found</p>
+                        <hr>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- js -->
+    <script src="static/index/vendors/scripts/core.js"></script>
+    <script src="static/index/vendors/scripts/script.min.js"></script>
+    <script src="static/index/vendors/scripts/process.js"></script>
+    <script src="static/index/vendors/scripts/layout-settings.js"></script>
+    <script src="static/index/src/plugins/jquery-steps/jquery.steps.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ag-grid-community@31.0.2/dist/ag-grid-community.min.js"></script>
+    <script>
+        flatpickr("[data-behavior='flatpickr']", {
+            allowInput: true,
+            dateFormat: "Y-m-d"
+        });
+
+        // AG Grid configuration
+        const columnDefs = [
+            { headerName: "Type", field: "type1", sortable: true, filter: true },
+            { headerName: "ID", field: "id_no", sortable: true, filter: true },
+            { headerName: "Uploaded By", field: "myuser", sortable: true, filter: true },
+            {
+                headerName: "Verification",
+                field: "verificationstatus",
+                sortable: true,
+                filter: true,
+                cellRenderer: params => {
+                    if (params.value === 'Verified') {
+                        return `<span style="color: #6EC954; font-size: medium;"><i class="fa fa-check" aria-hidden="true"></i> Verified</span>`;
+                    } else {
+                        return `
+                            <form action="{% url 'doc_verification' id=data.id %}" method="post">
+                                {% csrf_token %}
+                                <input hidden type="text" name="docid" value="${params.data.id || ''}">
+                                <button type="submit" class="btn btn-sm btn-warning">Under Verification</button>
+                            </form>`;
+                    }
+                }
+            },
+            {
+                headerName: "Actions",
+                field: "actions",
+                cellRenderer: params => {
+                    // Check if id is a valid number
+                    const docId = params.data.id && !isNaN(params.data.id) && parseInt(params.data.id) > 0 ? params.data.id : null;
+                    const deleteUrl = docId ? `/view_deletedocument${docId}` : '#';
+                    const deleteLink = docId 
+                        ? `<a href="${deleteUrl}" onclick="return confirm('Are you sure you want to delete this document?');">
+                            <i class="fa fa-trash" title="Delete" style="font-size: 20px; color:grey"></i>
+                          </a>`
+                        : '<span style="color: grey;">Delete N/A</span>';
+
+                    return `
+                        <a class="fa fa-eye" href="${params.data.image1}" target="_blank" style="font-size: 20px; margin-right: 10px;"></a>
+                        <a href="${params.data.image1}" download="${params.data.image1}" class="fa fa-cloud-download" style="font-size: 20px; margin-right: 10px;"></a>
+                        ${deleteLink}`;
+                }
+            }
+        ];
+
+        const rowData = [
+            {% for i in uploads %}
+            {
+                type1: "{{ i.type1|default_if_none:'' }}",
+                id_no: "{{ i.id_no|default_if_none:'' }}",
+                myuser: "{{ i.myuser.username }}",
+                verificationstatus: "{{ i.verificationstatus }}",
+                image1: "{{ i.image1.url }}",
+                id: "{{ i.id|default_if_none:'' }}"
+            },
+            {% endfor %}
+        ];
+
+        const gridOptions = {
+            columnDefs: columnDefs,
+            rowData: rowData,
+            defaultColDef: {
+                flex: 1,
+                minWidth: 100,
+                resizable: true,
+            },
+            pagination: true,
+            paginationPageSize: 10,
+            animateRows: true,
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const gridDiv = document.querySelector('#myGrid');
+            new agGrid.Grid(gridDiv, gridOptions);
+        });
+
+        function openimage(image3) {
+            document.getElementById('imd1').src = image3;
+            document.getElementById('photo1').style.display = 'block';
+        }
+
+        function closeimage() {
+            document.getElementById('photo1').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

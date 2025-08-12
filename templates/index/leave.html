@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html>
+{% load static %}
+{% load global_filters %}
+
+<head>
+    <!-- Basic Page Info -->
+    <meta charset="utf-8">
+   
+    <title>HRMS</title>
+    <link rel="icon" href="/static/logo/apple-touch-icon.png" type="image/x-icon"> 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Site favicon -->
+    <!-- <link rel="apple-touch-icon" sizes="180x180" href="static/index/vendors/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="static/index/vendors/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="static/index/vendors/images/favicon-16x16.png"> -->
+
+    <!-- Mobile Specific Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/core.css">
+    <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/icon-font.min.css">
+    <link rel="stylesheet" type="text/css" href="static/index/src/plugins/jquery-steps/jquery.steps.css">
+    <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/style.css">
+
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>
+    
+        <style>
+            i{
+                cursor: pointer;
+            }
+            .alert{
+                background-color: white;
+                border: none;
+            }
+
+            #no-notification-message {
+			display: none;
+			text-align: center;
+			font-size: 18px;
+			margin-top: 20px; /* Adjust this value for desired spacing from the notifications */
+		}
+
+		#notification-container {
+			display: flex;
+			/* flex-direction: column;
+			align-items: center; */
+			justify-content: center;
+			
+		}
+		
+		#no-notification-message {
+			text-align: center;
+			/* font-size: 18px; */
+		}
+
+        </style>
+    
+</head>
+<body>
+
+    <div class="header">
+        <div class="header-left">
+            <div class="menu-icon dw dw-menu"></div>
+            <!-- <div class="search-toggle-icon dw dw-search2" data-toggle="header_search"></div> -->
+            <!-- <div class="header-search">
+                <form>
+                    <div class="form-group mb-0">
+                        <i class="dw dw-search2 search-icon"></i>
+                        <input type="text" class="form-control search-input" placeholder="Search Here">
+                    </div>
+                </form>
+            </div> -->
+        </div>
+        <div class="header-right">
+            <div class="dashboard-setting user-notification">
+                <div >
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#applyLeaveModal">Apply For Leave</button>
+                </div>    
+            </div>
+
+            <!-- <div class="user-notification">
+                <div class="dropdown">
+                    <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
+                        <i class="icon-copy dw dw-notification"></i>
+                        <span class="badge notification-active"></span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <div class="notification-list mx-h-350 customscroll">
+                            <ul class="notification-list mx-h-350 customscroll">
+                                
+                                {% for notification in notifications reversed %}
+                                <li class="notification" data-notification-id="{{ notification.notification_id }}">
+                                    <a href="#" onclick="handleNotificationClick('{{ notification.notification_id }}')">
+                                        <img src="{{ notification.image_url }}" alt="">
+                                        <span style="font-size: small;color: black;">{{ notification.message }}</span>
+                                    </a>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            <div id="notification-container">
+                                <p id="no-notification-message" style="display: none;">No new notifications</p>
+                            </div>
+    
+                            <div id="notification-container">
+                                <a href="{% url 'notification' %}" type="button" class="btn btn-primary btn-sm " style="width: 60%;">See All Notifications</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+
+
+            <div class="user-info-dropdown">
+                <div class="dropdown">
+                    <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                        <span class="user-icon">
+                             
+                        {% if k.image %}
+                            <img src="{{ k.image.url }}" alt="" style="width: 100%; height:100% ">
+                        {% else %}
+                        <img src="/static/logo/userlogo.png" id="photo" style="width: 100%; height:100% ">
+                        {% endif %}   
+                        </span>
+                        <span class="user-name">{{request.user.username}}</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                        <a class="dropdown-item" href="{% url 'createpersonalinfo' %}"><i class="dw dw-user1"></i> Profile</a>
+                        <a class="dropdown-item" href="{% url 'department' %}" data-toggle="right-sidebar"><i class="dw dw-settings2"></i> Settings</a>
+                        <a class="dropdown-item" href="{% url 'help_page' %}"><i class="dw dw-help"></i> Help</a>
+                        <a class="dropdown-item" href="{% url 'logout' %}"><i class="dw dw-logout"></i> Logout</a>
+                    </div>
+                </div>
+            </div>
+            <!--<div class="github-link">
+                <a href="https://github.com/dropways/deskapp" target="_blank"><img src="static/index/vendors/images/github.svg" alt=""></a>
+            </div>-->
+        </div>
+    </div>
+
+    <div class="modal fade bs-example-modal-md" id="applyLeaveModal">
+        <div class="modal-dialog modal-md modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myLargeModalLabel">Apply Leaves</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+
+                <div class="modal-body">
+                   <form id="leaveForm" action="{% url 'apply' %}"  class="form-container"   method="post" enctype="multipart/form-data" onsubmit="openForm()">
+                     {% csrf_token %}
+                     {% include 'messages.html' %}
+
+                     <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label >Leave Type <span style="color:red">&#42</span></label>
+                                <select class="form-control" name="Ltype" required>
+                                    <option value="">Select Leave Type</option>
+                                    {% for rule in assigned_rules %}
+                                    {% for applied_rule in rule.rules_applied.all %}
+                                    <option value="{{ applied_rule.id }}" {% if applied_rule.id == selected_leave %}selected{% endif %}>{{ applied_rule.leavename }}</option>
+                                      {% endfor %}
+                                      {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label >StartDate <span style="color:red">&#42</span></label>
+                                <input type="text" class="form-control date-picker" placeholder="Select Start Date" id="strtdate" name="strtdate" required>
+                                
+                                <!-- <script type="text/javascript">
+                                    $(function(){
+                                        var dtToday = new Date();
+                                        var month = dtToday.getMonth() + 1;
+                                        var day = dtToday.getDate();
+                                        var year = dtToday.getFullYear();
+                                        if(month < 10)
+                                            month = '0' + month.toString();
+                                        if(day < 10)
+                                         day = '0' + day.toString();
+                                        var maxDate = day + '-' + month + '-' + year;
+                                        $('#inputdate').attr('min', maxDate);
+                                    });
+                                </script> -->
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label >Select First Half <span style="color:red">&#42</span></label>
+                                <select class="form-control" id="browsers"  name="sh1" required>
+                                    <option disabled value="">Select First Half </option>
+                                    <option selected value="first half">First half</option>
+                                  <option value="second half">Second half</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label >End Date <span style="color:red">&#42</span></label>
+                                <input class="form-control date-picker" placeholder="Select End Date" id="enddate" name="enddate" required>
+                                <span id="date-error" style="color: red;font-size: 12px;"></span>
+                                
+                                <!-- <script type="text/javascript">
+                                    $(function(){
+                                        var dtToday = new Date();
+                                     
+                                        var month = dtToday.getMonth() + 1;
+                                        var day = dtToday.getDate();
+                                        var year = dtToday.getFullYear();
+                                        if(month < 10)
+                                            month = '0' + month.toString();
+                                        if(day < 10)
+                                         day = '0' + day.toString();
+                                        var maxDate = day + '-' + month + '-' + year;
+                                        $('#enddate').attr('min', maxDate);
+                                    });
+                                </script> -->
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label >Select Second Half <span style="color:red">&#42</span></label>
+                                <select class="form-control" id="browsers"  name="sh2" required>
+                                    <option disabled value="">Select Second Half </option>
+                                    <option value="first half">First half</option>
+                                  <option selected value="second half">Second half</option>
+                                </select>                                
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label >Reason <span style="color:red">&#42</span></label>
+                                <textarea style="height:auto ;" type="text"  class ="form-control" id="reasn" name="reasn" required></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" onclick="changeButtonText(this)">Apply</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    </div>     
+                  
+                    </form>
+                </div>    
+            </div>
+    <!-- </div> -->
+        </div>
+    </div>   
+
+    <div class="left-side-bar">
+        <div class="brand-logo mt-3">
+        <a href="{% url 'dashboard' %}">
+            {% if request.user.company_type %}
+				{% if request.user.company_type.inverse_logo %}
+				<img src="{{ request.user.company_type.inverse_logo.url }}" style="width: 100%; height: 100%;">
+				{% else %}
+				<img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+				{% endif %}
+				{% else %}
+				<img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+				{% endif %}
+        </a>
+        <div class="close-sidebar" data-toggle="left-sidebar-close">
+           <i class="ion-close-round"></i>
+        </div>
+     </div>
+      
+       <div class="menu-block customscroll">
+
+            <div class="sidebar-menu">
+                <ul id="accordion-menu">
+					
+					<br>
+					<li class="btn-primary active" style="background-color:black">
+						<a href="{% url 'dashboard' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-house-1"></span><span class="mtext"><b>Dashboard</b></span>
+						</a>
+					</li>
+					
+					<li>
+						<a href="{% url 'companyprofile' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-building"></span><span class="mtext"><b>Company Profile</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'personalinfonav' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-user1"></span><span class="mtext"><b>My Profile</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'leave' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-calendar-1"></span><span class="mtext"><b>Leave</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'directory' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-list"></span><span class="mtext"><b>Directory</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'dailylog' %}" class="dropdown-toggle no-arrow">
+							<span class="micon bi bi-check2-square"></span><span class="mtext"><b>Attendance</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'calender' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-calendar"></span><span class="mtext"><b>Holiday Calendar</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'runpayroll_overview' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-money-2"></span><span class="mtext"><b>Payroll</b></span>
+						</a>
+					</li>
+
+
+				</ul>
+            </div>
+        </div>
+    </div>
+  
+
+    <!-- <div class="mobile-menu-overlay"></div> -->
+
+    <div class="main-container">
+    
+        <div class="card-box height-100-px overflow-hidden">
+                       
+            <ul class="nav nav-tabs customtab" role="tablist">
+                <li class="nav-item">
+                <a class="nav-link active"  href="{% url 'leave' %}">Apply Leave</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"  href="{% url 'admin_log' %}" role="tab">My Logs</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"  href="{% url 'log' %}" role="tab">Team Logs</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"  href="{% url 'balance' %}" >Balance</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link"  href="{% url 'Rules' %}" >Rules</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"  href="{% url 'assignrule' %}" >Assign Rules</a>
+                </li>
+               
+            </ul>
+
+            <div class="pd-20 card-box">
+
+                <div class="min-height-200px">
+                    <div class="row " >
+                        <div class="col-lg-4 col-md-4 col-sm-12 mb-30" >
+                            {% for rule in assigned_rules %}
+                                {% for applied_rule in rule.rules_applied.all %}
+                            <div class="pd-10 card-box " style="margin-top: 1%;">
+    
+                                <div class="row">
+                                    <div class="col-md-10">
+                                        <h6 class="h6">{{ applied_rule.leavename }}</h6> 
+                                    </div>
+                                    <div class="col-md-2">
+                                        <!-- <span class="edit-icon" id="editIcon{{ rule.id }}" onclick="toggleEditForm('{{ rule.id }}')">
+                                            <i class="icon-copy ion-edit"></i>
+                                        </span> -->
+                                        <span class="tick-icon" id="tickIcon{{ rule.id }}" style="display: none;">
+                                            <i class="icon-copy ion-checkmark" onclick="submitForm('{{ rule.id }}')"></i>
+                                        </span>&nbsp;
+                                        <span class="cross-icon" id="crossIcon{{ rule.id }}" style="display: none;">
+                                            <i class="icon-copy ion-close" onclick="cancelEdit('{{ rule.id }}')"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                
+                                <form action="{% url 'update_leaves' %}" class="form-container" method="post" id="editForm{{ rule.id }}" style="display: none;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="rule_id" value="{{ rule.id }}">
+                                    <ul class="list-group">
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            Credited Leaves
+                                            <div class="col-md-4">
+                                            <input type="text" class="form-control" name="creditedleaves" value="{{ rule.creditedleaves }}">
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            Applied Leaves
+                                            <div class="col-md-4">
+                                            <input type="text" class="form-control" name="appliedleaves" value="{{ rule.appliedleaves }}">
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </form>
+                                
+                                <div id="viewForm{{ rule.id }}">
+                                    <form action="" class="form-container" method="post">
+                                        {% csrf_token %}
+                                        <ul class="list-group">
+                                            {% if applied_rule.days|to_int > 0 %}
+                                              
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    Credited Leaves
+                                                    <span class="badge badge-primary badge-pill" name="creditedleaves">{{ rule.creditedleaves }}</span>
+                                                </li>
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    Total Leaves
+                                                    <span class="badge badge-primary badge-pill">{{ applied_rule.days }}</span>
+                                                </li>
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    Applied Leaves
+                                                    <span class="badge badge-primary badge-pill">{{ rule.appliedleaves }}</span>
+                                                </li>
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    Penalty Deduction
+                                                    <span class="badge badge-primary badge-pill">{{ rule.penaltydeduction }}</span>
+                                                </li>
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    Leave Balance
+                                                    <span class="badge badge-primary badge-pill">{{ rule.leavebalance }}</span>
+                                                </li>
+
+                                                {% elif applied_rule.days|to_int >= 0 and applied_rule.leavename == 'Comp Off' %}
+                                              
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    Credited Leaves
+                                                    <span class="badge badge-primary badge-pill" name="creditedleaves">{{ rule.creditedleaves }}</span>
+                                                </li>
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    Total Leaves
+                                                    <span class="badge badge-primary badge-pill">{{ rule.creditedleaves }}</span>
+                                                </li>
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    Applied Leaves
+                                                    <span class="badge badge-primary badge-pill">{{ rule.appliedleaves }}</span>
+                                                </li>
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    Penalty Deduction
+                                                    <span class="badge badge-primary badge-pill">{{ rule.penaltydeduction }}</span>
+                                                </li>
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    Leave Balance
+                                                    <span class="badge badge-primary badge-pill">{{ rule.leavebalance }}</span>
+                                                </li>
+
+                                            {%else%}
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    Applied Leaves
+                                                    <span class="badge badge-primary badge-pill">{{ rule.appliedleaves }}</span>
+                                                </li>
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    Penalty Deduction
+                                                    <span class="badge badge-primary badge-pill">{{ rule.penaltydeduction }}</span>
+                                                </li>
+                                            {% endif %}
+                                        </ul>
+                                    </form>
+                                </div>
+    
+                            </div>
+                            {% endfor %}    
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="col-lg-8 col-md-8 col-sm-12 mb-30">
+                            
+                            <!-- <div class="pd-10 card-box " style="margin-top: 1%;"> -->
+                                
+                                {% if assigned_rules %}
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <form action="{% url 'leave' %}" method="get" id="search-form">
+                                                <select class="form-control" name="Leavetype" id="search" required>
+                                                    {% for rule in assigned_rules %}
+                                                        {% for applied_rule in rule.rules_applied.all %}
+                                                            {% if query|to_int == applied_rule.id %}
+                                                                <p>{{query|is_int}} | {{applied_rule.id|is_int}}</p>
+                                                                <option value="{{ query }}"selected>{{ applied_rule.leavename }}</option>
+                                                            {% else %}
+                                                                <option value="{{ applied_rule.id }}" {% if applied_rule.id == selected_leave %}selected{% endif %}>
+                                                                    {{ applied_rule.leavename }}
+                                                                </option>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    {% endfor %}    
+                                                </select>
+                                            </form>
+
+                                        </div>
+                                    </div>
+                                {% endif %}    
+                                <div class="row">
+                                    <div class="col-md-12">
+                                         <div class="table-container d-md-block">
+                                            <table class="table table-bordered table-responsive" id="leaves-table">
+                                                <thead>
+                                                    <!-- <th>Data Details</th> -->
+                                                    <!-- {% for month in months %}
+                                                        <th>{{month}}</th>
+                                                    {% endfor %} -->
+                                                    <tr>
+                                                    {% for column in monthly_metrics.column_name %}
+                                                        <th>{{column}}</th>
+                                                    {%endfor%}
+                                                    </tr>
+                                                </thead>
+                                                
+                                                <tbody>
+                                                    {% for row in monthly_metrics.data %}
+                                                        <tr>
+                                                            {% for cell in row %}
+                                                                <td>{{ cell }}</td>
+                                                            {% endfor %}
+                                                        </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>   
+                                    </div>
+                                </div>
+                            </div>
+                        
+                    </div>
+                </div>
+                    
+                
+            </div>
+        </div>
+        <!-- </div> -->
+    </div>
+
+    <!-- js -->
+    <script src="static/index/vendors/scripts/core.js"></script>
+    <script src="static/index/vendors/scripts/script.min.js"></script>
+    <script src="static/index/vendors/scripts/process.js"></script>
+    <script src="static/index/vendors/scripts/layout-settings.js"></script>
+    <script src="static/index/src/plugins/jquery-steps/jquery.steps.js"></script>
+    <script src="static/index/vendors/scripts/steps-setting.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var currentDate = new Date();
+    
+            $(".date-picker").datepicker({
+                // minDate: currentDate, 
+            });
+        });
+    </script>
+
+    <script>
+        document.getElementById('leaveForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+    
+            var startDate = document.getElementById('strtdate').value;
+            var endDate = document.getElementById('enddate').value;
+    
+            var formattedStartDate = formatDate(startDate);
+            var formattedEndDate = formatDate(endDate);
+    
+            if (compareDates(formattedStartDate, formattedEndDate) > 0) {
+                document.getElementById('date-error').textContent = 'Start date must be less than end date';
+            } else {
+                document.getElementById('leaveForm').submit();
+            }
+        });
+    
+        function formatDate(dateString) {
+            var parts = dateString.split("-");
+            return parts[2] + " " + parts[1] + " " + parts[0];
+        }
+    
+        function compareDates(date1, date2) {
+            var d1 = new Date(date1);
+            var d2 = new Date(date2);
+            return d1 - d2;
+        }
+    </script>
+
+<script>
+    function toggleEditForm(id) {
+        document.getElementById('viewForm' + id).style.display = 'none';
+        document.getElementById('editForm' + id).style.display = 'block';
+        document.getElementById('editIcon' + id).style.display = 'none';
+        document.getElementById('tickIcon' + id).style.display = 'inline-block';
+        document.getElementById('crossIcon' + id).style.display = 'inline-block';
+    }
+
+    function cancelEdit(id) {
+        document.getElementById('viewForm' + id).style.display = 'block';
+        document.getElementById('editForm' + id).style.display = 'none';
+        document.getElementById('editIcon' + id).style.display = 'inline-block';
+        document.getElementById('tickIcon' + id).style.display = 'none';
+        document.getElementById('crossIcon' + id).style.display = 'none';
+    }
+
+    function submitForm(id) {
+        document.getElementById('editForm' + id).submit();
+    }
+</script>
+
+    <!-- <script>
+        document.getElementById('enddate').addEventListener('change', function() {
+            var startDate = document.getElementById('strtdate').value;
+            var endDate = this.value;
+            var startDateObj = new Date(startDate);
+            var endDateObj = new Date(endDate);
+    
+            if (startDate && endDate && endDateObj < startDateObj) {
+                document.getElementById('date-error').textContent = 'End date greater than start date.';
+                this.value = '';
+            } else {
+                document.getElementById('date-error').textContent = '';
+            }
+        });
+    </script> -->
+
+    <script>
+        function closeForm() {
+          document.getElementById("applyLeaveModal").style.display = "none";
+        }
+    </script>
+
+
+    <script>
+        // Get references to the input fields
+        var creditedLeavesInput = document.getElementById("creditedleaves");
+        var appliedLeavesInput = document.getElementById("appliedleaves");
+    
+        // Define a function to validate the input
+        function validateInput(input) {
+            var pattern = /^\d+(\.\d+)?$/;
+            if (!pattern.test(input.value)) {
+                alert("Please enter a valid decimal number.");
+                input.value = ""; // Clear the input
+            }
+        }
+    
+        // Add event listeners to trigger the validation
+        creditedLeavesInput.addEventListener("blur", function () {
+            validateInput(creditedLeavesInput);
+        });
+    
+        appliedLeavesInput.addEventListener("blur", function () {
+            validateInput(appliedLeavesInput);
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+        $("#search").change(function () {
+            $("#search-form").submit();
+        });
+    });
+    </script>
+
+<script>
+    function handleNotificationClick(notificationId) {
+        // Remove the notification element with the matching notificationId
+        const notificationElement = document.querySelector(`.notification[data-notification-id='${notificationId}']`);
+        if (notificationElement) {
+            notificationElement.remove();
+
+            // Store the notification ID in localStorage to remember it's been clicked
+            const clickedNotifications = JSON.parse(localStorage.getItem('clickedNotifications')) || [];
+            clickedNotifications.push(notificationId);
+            localStorage.setItem('clickedNotifications', JSON.stringify(clickedNotifications));
+
+            // Check if there are any notifications left
+            const notificationContainer = document.querySelector('.notification-list');
+            if (!notificationContainer.querySelector('.notification')) {
+                // If no notifications, display the message
+                const noNotificationMessage = document.getElementById('no-notification-message');
+                if (noNotificationMessage) {
+                    noNotificationMessage.style.display = 'block';
+                }
+            }
+        }
+
+        // Redirect to the 'notification' URL
+        window.location.href = "{% url 'notification' %}";
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const clickedNotifications = JSON.parse(localStorage.getItem('clickedNotifications')) || [];
+        clickedNotifications.forEach(notificationId => {
+            const notificationElement = document.querySelector(`.notification[data-notification-id='${notificationId}']`);
+            if (notificationElement) {
+                notificationElement.remove();
+            }
+        });
+
+        // Check if there are any notifications left and display the 'No new notifications' message
+        const notificationContainer = document.querySelector('.notification-list');
+        const red_color_dot = document.querySelector('.notification-active');
+        if (!notificationContainer.querySelector('.notification')) {
+            const noNotificationMessage = document.getElementById('no-notification-message');
+            if (noNotificationMessage) {
+                noNotificationMessage.style.display = 'block';
+                red_color_dot.remove();
+            }
+        }
+    });
+</script>
+<script>
+    function changeButtonText(button) {
+        button.innerText = "Applying..."; 
+    }
+</script>
+</body>
+</html>

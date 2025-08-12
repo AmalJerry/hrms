@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Set Home Location | HRMS</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f0f2f5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 400px;
+      background: #ffffff;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    h2 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .btn {
+      padding: 12px;
+      font-size: 15px;
+      font-weight: 500;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+    }
+
+    .btn-location {
+      background-color: #17a2b8;
+      color: white;
+    }
+
+    .btn-location:hover {
+      background-color: #138496;
+    }
+
+    .btn-submit {
+      background-color: #28a745;
+      color: white;
+    }
+
+    .btn-submit:disabled {
+      background-color: #a5d6aa;
+      cursor: not-allowed;
+    }
+
+    .footer-msg {
+      font-size: 0.85rem;
+      color: #888;
+      text-align: center;
+      margin-top: 1.5rem;
+    }
+
+    .toast-msg {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #28a745;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      display: none;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 1.5rem;
+        margin: 0 1rem;
+      }
+
+      h2 {
+        font-size: 1.1rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h2>📍 Set Your Home Location</h2>
+
+    <form method="post" action="{% url 'set_home_location' %}" id="location_form">
+      {% csrf_token %}
+      <input type="hidden" id="home_lat" name="home_lat">
+      <input type="hidden" id="home_lon" name="home_lon">
+
+      <button type="button" class="btn btn-location" onclick="getLiveLocation()">📍 Get My Current Location</button>
+      <button type="submit" class="btn btn-submit" id="submitBtn" disabled>💾 Save to Server</button>
+    </form>
+
+    <div class="footer-msg">
+      Your location will be used to verify WFH attendance.
+    </div>
+  </div>
+
+  <div class="toast-msg" id="toastMsg"></div>
+
+  <script>
+    function showToast(msg) {
+      const toast = document.getElementById("toastMsg");
+      toast.innerText = msg;
+      toast.style.display = "block";
+      setTimeout(() => {
+        toast.style.display = "none";
+      }, 4000);
+    }
+
+    function getLiveLocation() {
+      if (!navigator.geolocation) {
+        showToast("❌ Geolocation not supported.");
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        function (position) {
+          const lat = position.coords.latitude.toFixed(8);
+          const lon = position.coords.longitude.toFixed(8);
+
+          document.getElementById("home_lat").value = lat;
+          document.getElementById("home_lon").value = lon;
+          document.getElementById("submitBtn").disabled = false;
+
+          console.log("✅ Accurate Coordinates:", lat, lon);
+          showToast(`✅ Location Captured: ${lat}, ${lon}`);
+        },
+        function (error) {
+          showToast("❌ Failed to get location: " + error.message);
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 20000,
+          maximumAge: 0
+        }
+      );
+    }
+  </script>
+</body>
+
+</html>

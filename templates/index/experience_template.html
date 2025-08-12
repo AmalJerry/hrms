@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Experience Certificate</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 40px;
+            color: #222;
+            line-height: 1.6;
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 3px solid #00aeef;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .header img {
+            max-height: 100px;
+        }
+
+        .title {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 20px;
+            text-decoration: underline;
+        }
+
+        .content {
+            margin-top: 30px;
+            font-size: 16px;
+        }
+
+        .footer {
+            margin-top: 60px;
+        }
+
+        .signature {
+            margin-right:10px;
+            text-align: left;
+        }
+
+        .signature img {
+            max-height: 60px;   
+            margin-left:-40px;
+            margin-bottom: -10px;
+        }
+
+        .seal {
+            position: absolute;
+            bottom: 400px;
+            right: 280px;
+        }
+
+        .seal img {
+            height: 150px;
+            opacity: 1;
+        }
+
+        .date {
+            text-align: left;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        .contact-footer {
+            display: flex;
+            position: relative;
+            width: 100%;
+            margin-top: 220px;
+            padding-top: 5px;
+            border-top: 10px solid #00aeef;
+            font-size: 13px;
+            color: #333;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .footer-bar {
+            height: 35px;
+            width: 100%;
+            background: linear-gradient(to right, #00aeef 60%, white 40%);
+            clip-path: polygon(0 0, 90% 0, 100% 100%, 0% 100%);
+            margin-bottom: 0px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            font-size: 14px;
+        }
+
+        .footer-item {
+            display: flex;
+            align-items: center;
+            margin: 5px 10px;
+            gap: 6px;
+        }
+
+        
+
+
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <img src="https://hrms.cydeztechnologies.com/static/login/images/cydezlogo.png" alt="Cydez Logo">
+    </div>
+
+    <div class="content">
+        <p><strong>Dated: {{ issue_date }}</strong><br><br><strong>{{ name }}</strong><br>ID: {{ employee_id }}</p>
+
+        <div class="title">Relieving and Experience Letter</div>
+
+        <p>Dear <strong>{{ name }}</strong>,</p>
+
+        <p>This is in reference to your letter of resignation dated <strong>{{ resignation_date }}</strong>, where in you had requested to be <br>
+            relieved from the services of the company at the earliest, and an experience certificate.</p>
+
+        <p>We wish to inform you that your resignation has been accepted and you are being relieved from the <br>
+            services as <strong>{{ department }}</strong> of the company with effect from the close of office hours on <br> <strong>{{ last_working_day }}</strong>.</p>
+
+        <p>During the tenure from <strong>{{ datejoin }}</strong> to <strong>{{ last_working_day }}</strong>, your contributions to the organization were highly appreciated.</p>
+        <p>We wish you the best of luck in your future endeavors.</p>
+    </div>
+
+    <div class="footer">
+        <div class="signature">
+            Your sincerely,<br>
+            <img src="https://hrms.cydeztechnologies.com/static/login/images/signature.png" alt="Signature">
+            <p>Nimisha Mohan <br>
+            HR Manager<br>
+            Cydez Technologies</p>
+        </div>
+        <div class="seal">
+            <img src="https://hrms.cydeztechnologies.com/static/login/images/seal.png" alt="Company Seal">
+        </div>
+    </div><br><br>
+
+    <div class="contact-footer">
+    <div class="footer-content" style="width:100%; display:flex; justify-content:space-around; align-items:flex-start; flex-wrap:nowrap;">
+        <div class="footer-item" style="display: flex;">
+            <span style="display: flex; margin-right: 10px;">
+                <i class="fa-solid fa-phone"></i>&nbsp;+91 9946144333
+            </span>
+            
+            <span style="display: flex; margin-right: 10px;">
+                <i class="fa-solid fa-envelope"></i>hr@cydeztechnologies.com
+            </span>
+
+            <span style="display: flex;">
+                <i class="fa-solid fa-location-dot"></i>BB Arcade, Near Carnival Infopark, Kakkanad, Kochi, 682030
+            </span>
+        </div>
+    </div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</body>
+</html>

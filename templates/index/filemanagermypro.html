@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Basic Page Info -->
+    <meta charset="utf-8">
+    <title>HRMS</title>
+    <link rel="icon" href="/static/logo/apple-touch-icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <!-- Mobile Specific Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/core.css">
+    <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/icon-font.min.css">
+    <link rel="stylesheet" type="text/css" href="static/index/src/plugins/jquery-steps/jquery.steps.css">
+    <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/style.css">
+    
+    <!-- AG Grid CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/ag-grid-community@30.2.0/dist/styles/ag-grid.css">
+    <link rel="stylesheet" href="https://unpkg.com/ag-grid-community@30.2.0/dist/styles/ag-theme-alpine.css">
+
+    <!-- Custom CSS to fix overlap -->
+    <style>
+        .ag-theme-alpine {
+            margin-bottom: 50px; /* Add space below the grid to prevent overlap with pagination */
+        }
+        .dataTables_paginate {
+            margin-top: 20px; /* Ensure pagination controls are separated from the table */
+        }
+        .pd-20 {
+            padding-bottom: 40px; /* Increase padding to accommodate table and pagination */
+        }
+        .pagination {
+            margin-bottom: 20px; /* Add space below pagination */
+        }
+        .ag-header {
+            background-color: #3f51b5;
+            /* Change to match your theme */
+            color: white;
+            font-weight: 600;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .ag-header-cell {
+            background-color: #3f51b5;
+            color: white;
+            border-right: 1px solid #5c6bc0;
+            padding: 10px 8px;
+        }
+
+        .ag-header-cell:hover {
+            background-color: #ffffff;
+            color: rgb(13, 13, 13);
+            border-right: 1px solid #5c6bc0;
+            padding: 10px 8px;
+        }
+    </style>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-119386393-1');
+    </script>
+    
+    <!-- Flatpickr and AG Grid JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://unpkg.com/ag-grid-community@30.2.0/dist/ag-grid-community.min.js"></script>
+    
+    <script>
+        flatpickr("[data-behavior='flatpickr']", {
+            allowInput: true,
+            dateFormat: "Y-m-d"
+        });
+    </script>
+</head>
+<body>
+    <div class="header">
+        <div class="header-left">
+            <div class="menu-icon dw dw-menu"></div>
+        </div>
+        <div class="header-right">
+            <div class="dashboard-setting user-notification">
+                <div class="dropdown">
+                    <a class="dropdown-toggle no-arrow" href="javascript:;" data-toggle="right-sidebar"></a>
+                </div>
+            </div>
+            <div class="user-info-dropdown">
+                <div class="dropdown">
+                    <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                        <span class="user-icon">
+                            {% if k.image %}
+                                <img src="{{ k.image.url }}" alt="" style="width: 100%; height:100% ">
+                            {% else %}
+                                <img src="/static/logo/userlogo.png" id="photo" style="width: 100%; height:100% ">
+                            {% endif %}
+                        </span>
+                        <span class="user-name">{{request.user.username}}</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                        <a class="dropdown-item" href="{% url 'createpersonalinfo' %}"><i class="dw dw-user1"></i> Profile</a>
+                        <a class="dropdown-item" href="{% url 'department' %}" data-toggle="right-sidebar"><i class="dw dw-settings2"></i> Settings</a>
+                        <a class="dropdown-item" href="{% url 'help_page' %}"><i class="dw dw-help"></i> Help</a>
+                        <a class="dropdown-item" href="{% url 'logout' %}"><i class="dw dw-logout"></i> Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="left-side-bar">
+        <div class="brand-logo mt-3">
+            <a href="{% url 'dashboard' %}">
+                {% if request.user.company_type %}
+                    {% if request.user.company_type.inverse_logo %}
+                        <img src="{{ request.user.company_type.inverse_logo.url }}" style="width: 100%; height: 100%;">
+                    {% else %}
+                        <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+                    {% endif %}
+                {% else %}
+                    <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+                {% endif %}
+            </a>
+            <div class="close-sidebar" data-toggle="left-sidebar-close">
+                <i class="ion-close-round"></i>
+            </div>
+        </div>
+        <div class="menu-block customscroll">
+            <div class="sidebar-menu">
+                <ul id="accordion-menu">
+                    <br>
+                    <li class="btn-primary active" style="background-color:black">
+                        <a href="{% url 'dashboard' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-house-1"></span><span class="mtext"><b>Dashboard</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'companyprofile' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-building"></span><span class="mtext"><b>Company Profile</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'personalinfonav' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-user1"></span><span class="mtext"><b>My Profile</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'leave' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-calendar-1"></span><span class="mtext"><b>Leave</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'directory' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-list"></span><span class="mtext"><b>Directory</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'dailylog' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon bi bi-check2-square"></span><span class="mtext"><b>Attendance</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'calender' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-calendar"></span><span class="mtext"><b>Holiday Calendar</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'runpayroll_overview' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-money-2"></span><span class="mtext"><b>Payroll</b></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="card-box height-100-px overflow-hidden">
+            <ul class="nav nav-tabs customtab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'personalinfonav' %}">Personal</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'worknav' %}">Work</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'view_team' request.user.id %}">Team</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'educationnav' %}">Education</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'familynav' %}">Family</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'documentsnav' %}">Document</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'workweeknav' %}">Work Week</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'pay_slip' %}">Payroll</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'e_exit' %}">E-Exit</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'filemanagernav' %}">Filemanager</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'list_generated_certificates' %}">Experience Certificates</a>
+                </li>
+            </ul>
+
+            <div class="pd-20 card-box">
+                <h6 style="padding-left: 0px;">FILE MANAGER</h6>
+                <hr>
+                <div id="myGrid" style="height: 400px; width:100%;" class="ag-theme-alpine"></div>
+                <div class="clearfix">
+                    <div class="pull-left">
+                        <div id="paginationInfo" role="status" aria-live="polite">{{ datas.start_index }} - {{ datas.end_index }} of {{ datas.paginator.count }} entries</div>
+                    </div>
+                    <div class="pull-right">
+                        <div class="dataTables_paginate paging_simple_numbers">
+                            <ul class="pagination">
+                                {% if datas.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ datas.previous_page_number }}">< Previous</a>
+                                </li>
+                                {% else %}
+                                <li class="page-item disabled">
+                                    <a class="page-link"><</a>
+                                </li>
+                                {% endif %}
+                                {% for i in datas.paginator.page_range %}
+                                {% if i <= datas.number|add:5 and i >= datas.number|add:-5 %}
+                                {% if datas.number == i %}
+                                <li class="page-item active">
+                                    <a class="page-link" href="?page={{forloop.counter}}">{{forloop.counter}}</a>
+                                </li>
+                                {% else %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{forloop.counter}}">{{forloop.counter}}</a>
+                                </li>
+                                {% endif %}
+                                {% endif %}
+                                {% endfor %}
+                                {% if datas.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ datas.next_page_number }}">» ></a>
+                                </li>
+                                {% else %}
+                                <li class="page-item disabled">
+                                    <a class="page-link">></a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- js -->
+    <script src="static/index/vendors/scripts/core.js"></script>
+    <script src="static/index/vendors/scripts/script.min.js"></script>
+    <script src="static/index/vendors/scripts/process.js"></script>
+    <script src="static/index/vendors/scripts/layout-settings.js"></script>
+    <script src="static/index/src/plugins/jquery-steps/jquery.steps.js"></script>
+    <script src="static/index/vendors/scripts/steps-setting.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const columnDefs = [
+                { headerName: "Request Type", field: "requesttype", sortable: true, filter: true },
+                { headerName: "Format", field: "frmt", sortable: true, filter: true },
+                { headerName: "Schedule On", field: "scheduleon", sortable: true, filter: true },
+                { headerName: "Status", field: "status", sortable: true, filter: true },
+                {
+                    headerName: "",
+                    field: "saveexcel",
+                    cellRenderer: params => {
+                        if (params.value && params.value !== '') {
+                            return `<a href="${params.value}" download>
+                                        <i class="icon-copy fa fa-cloud-download" aria-hidden="true" style="font-size: 30px;"></i>
+                                    </a>`;
+                        }
+                        return '';
+                    }
+                }
+            ];
+
+            const rowData = [
+                {% for i in datas %}
+                {
+                    requesttype: "{{ i.requesttype|default_if_none:'' }}",
+                    frmt: "{{ i.frmt|default_if_none:'' }}",
+                    scheduleon: "{{ i.scheduleon|default_if_none:'' }}",
+                    status: "{{ i.status|default_if_none:'' }}",
+                    saveexcel: "{% if i.saveexcel %}{{ i.saveexcel.url }}{% else %}{{ '' }}{% endif %}"
+                },
+                {% endfor %}
+            ];
+
+            const gridOptions = {
+                columnDefs: columnDefs,
+                rowData: rowData,
+                pagination: true,
+                paginationPageSize: 10,
+                domLayout: 'normal', // Changed to 'normal' to ensure full table rendering
+                onGridReady: function(params) {
+                    params.api.sizeColumnsToFit();
+                    params.api.resetRowHeights(); // Ensure rows are fully rendered
+                }
+            };
+
+            const gridDiv = document.querySelector('#myGrid');
+            new agGrid.Grid(gridDiv, gridOptions);
+        });
+    </script>
+</body>
+</html>

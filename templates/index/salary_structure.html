@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html>
+{% load static %}
+<head>
+    <!-- Basic Page Info -->
+    <meta charset="utf-8">
+   
+    <title>HRMS</title>
+      <link rel="icon" href="/static/logo/apple-touch-icon.png" type="image/x-icon">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"> 
+
+    <!-- Site favicon -->
+    <!-- <link rel="apple-touch-icon" sizes="180x180" href="static/index/vendors/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="static/index/vendors/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="static/index/vendors/images/favicon-16x16.png"> -->
+
+    <!-- Mobile Specific Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/core.css">
+    <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/icon-font.min.css">
+    <link rel="stylesheet" type="text/css" href="static/index/src/plugins/jquery-steps/jquery.steps.css">
+    <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/style.css">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.2.0/css/datepicker.min.css" rel="stylesheet">
+
+
+    <script data-search-pseudo-elements defer
+    src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
+<script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-119386393-1');
+        
+    </script>
+    <script>
+       
+        flatpickr("[data-behavior='flatpickr']", {
+            allowInput: true,
+            dateFormat: "Y-m-d"
+        });
+    </script>
+        <style>
+            i{
+                cursor: pointer;
+            }
+            .alert{
+                background-color: white;
+                border: none;
+            }
+            
+.button {
+  background-color: #d6dee1;
+  border: none;
+  /* color: white; */
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+        </style>
+
+    
+</head>
+<body>
+
+    <div class="header">
+        <div class="header-left">
+            <div class="menu-icon dw dw-menu"></div>
+            <!-- <div class="search-toggle-icon dw dw-search2" data-toggle="header_search"></div> -->
+            <!-- <div class="header-search">
+                <form>
+                    <div class="form-group mb-0">
+                        <i class="dw dw-search2 search-icon"></i>
+                        <input type="text" class="form-control search-input" placeholder="Search Here">
+                    </div>
+                </form>
+            </div> -->
+        </div>
+        <div class="header-right">
+            <div class="dashboard-setting user-notification">
+                <div class="dropdown">
+                    <a class="dropdown-toggle no-arrow" href="javascript:;" data-toggle="right-sidebar">
+                       
+                    </a>
+                </div>
+            </div>
+            <!-- <div class="user-notification">
+                <div class="dropdown">
+                    <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
+                        <i class="icon-copy dw dw-notification"></i>
+                        <span class="badge notification-active"></span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <div class="notification-list mx-h-350 customscroll">
+                            <ul>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/img.jpg" alt="">
+                                        <h3>John Doe</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/photo1.jpg" alt="">
+                                        <h3>Lea R. Frith</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/photo2.jpg" alt="">
+                                        <h3>Erik L. Richards</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/photo3.jpg" alt="">
+                                        <h3>John Doe</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/photo4.jpg" alt="">
+                                        <h3>Renee data. Hansen</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/img.jpg" alt="">
+                                        <h3>Vicki M. Coleman</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+            <div class="user-info-dropdown">
+                <div class="dropdown">
+                    <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                        <span class="user-icon">
+                            {% if k.image %}
+                            <img src="{{ k.image.url }}" alt="" style="width: 100%; height:100% ">
+                            {% else %}
+                            <img src="/static/logo/userlogo.png" id="photo" style="width: 100%; height:100% ">
+                            {% endif %}                         </span>
+                        <span class="user-name">{{request.user.username}}</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                        <a class="dropdown-item" href="{% url 'createpersonalinfo' %}"><i class="dw dw-user1"></i> Profile</a>
+                        <a class="dropdown-item" href="{% url 'department' %}" data-toggle="right-sidebar"><i class="dw dw-settings2"></i> Settings</a>
+                        <a class="dropdown-item" href="{% url 'help_page' %}"><i class="dw dw-help"></i> Help</a>
+                        <a class="dropdown-item" href="{% url 'logout' %}"><i class="dw dw-logout"></i> Logout</a>
+                    </div>
+                </div>
+            </div>
+            <!--<div class="github-link">
+                <a href="https://github.com/dropways/deskapp" target="_blank"><img src="static/index/vendors/images/github.svg" alt=""></a>
+            </div>-->
+        </div>
+    </div>
+
+    <!-- <div class="right-sidebar"> -->
+        <!-- <div class="sidebar-title"> -->
+            <!-- <h3 class="weight-600 font-16 text-blue"> -->
+                 <!-- Settings -->
+                <!--<span class="btn-block font-weight-400 font-12">User Interface Settings</span>-->
+            <!-- </h3> -->
+            <!-- <div class="close-sidebar" data-toggle="right-sidebar-close">
+                <i class="icon-copy ion-close-round"></i>
+            </div> -->
+        <!-- </div> -->
+
+        <!-- <div class="right-sidebar-body customscroll">
+            <div class="right-sidebar-body-content">
+                				<h4 class="weight-600 font-18 pb-10" ><a href="{% url 'department' %}">Department</a> </h4>
+				<h4 class="weight-600 font-18 pb-10" ><a href="{% url 'subdepartment' %}">Sub Department</a> </h4>
+				<h4 class="weight-600 font-18 pb-10"><a href="{% url 'designation' %}">Designation</a></h4>
+				<h4 class="weight-600 font-18 pb-10"><a href="{% url 'job' %}">Job Title</a></h4>
+				<h4 class="weight-600 font-18 pb-10"><a href="{% url 'wrk' %}">Work location</a></h4>
+            </div>
+        </div> -->
+    <!-- </div> -->
+   
+    <div class="left-side-bar">
+        <div class="brand-logo mt-3">
+        <a href="{% url 'dashboard' %}">
+            {% if c.inverse_logo %}
+            <img src="{{ c.inverse_logo.url }}" style="width: 100% ;height: 100%;">
+            {% else %}
+            <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+            {% endif %}
+        </a>
+        <div class="close-sidebar" data-toggle="left-sidebar-close">
+           <i class="ion-close-round"></i>
+        </div>
+     </div>
+      
+       <div class="menu-block customscroll">
+
+            <div class="sidebar-menu">
+                <ul id="accordion-menu">
+					
+					<br>
+					<li class="btn-primary active" style="background-color:black">
+						<a href="{% url 'dashboard' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-house-1"></span><span class="mtext"><b>Dashboard</b></span>
+						</a>
+					</li>
+					
+					<li>
+						<a href="{% url 'companyprofile' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-building"></span><span class="mtext"><b>Company Profile</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'personalinfonav' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-user1"></span><span class="mtext"><b>My Profile</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'leave' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-calendar-1"></span><span class="mtext"><b>Leave</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'directory' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-list"></span><span class="mtext"><b>Directory</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'dailylog' %}" class="dropdown-toggle no-arrow">
+							<span class="micon bi bi-check2-square"></span><span class="mtext"><b>Attendance</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'calender' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-calendar"></span><span class="mtext"><b>Holiday Calendar</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'runpayroll_overview' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-money-2"></span><span class="mtext"><b>Payroll</b></span>
+						</a>
+					</li>
+
+
+				</ul>
+            </div>
+        </div>
+    </div>
+  
+
+    <div class="mobile-menu-overlay"></div>
+
+    <div class="main-container">
+        <div class="card-box height-100-px overflow-hidden">
+            <ul class="nav nav-tabs customtab" role="tablist" >
+                {% if is_view_salarystructure %}
+
+                <li class="nav-item">
+                    <a class="nav-link " href="{% url 'view_personalinfo' id=user_id.id %}">Personal</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'view_work' id=user_id.id %}">Work</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'view_team' id=user_id.id %}">Team</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"  href="{% url 'view_education' id=user_id.id %}" >Education</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"  href="{% url 'view_family' id=user_id.id %}" >Family</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'view_document' id=user_id.id %}">Document</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'view_workweek' id=user_id.id %}">Work Week</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'view_daily_log' id=user_id.id %}" >Attendance</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'view_payroll' id=user_id.id %}" >Payroll</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'list_generated_certificates' %}">Experience Certificates</a>
+                </li>
+
+                {% else %}
+
+                            <li class="nav-item">
+                                <a class="nav-link " href="{% url 'personalinfonav' %}">Personal</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'worknav' %}">Work</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link " href="{% url 'view_team' request.user.id %}">Team</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'educationnav' %}">Education</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link " href="{% url 'familynav' %}">Family</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'documentsnav' %}">Document</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link " href="{% url 'workweeknav' %}">Work Week</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" href="{% url 'pay_slip' %}">Payroll</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'e_exit' %}">E-Exit</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link " href="{% url 'filemanagernav' %}">Filemanager</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'list_generated_certificates' %}">Experience Certificates</a>
+                            </li>
+                            {% endif %}
+            </ul>
+                                <ul class="nav nav-tabs customtab" role="tablist">
+                                    {% if is_view_salarystructure %}
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{% url 'view_payroll' id=user_id.id %}">Pay Slip</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link active" href="{% url 'view_salarystructure' id=user_id.id %}" >Salary Structure</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{% url 'view_declaration' id=user_id.id %}" >Declaration</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{% url 'view_bankaccount' id=user_id.id %}" >Bank Account</a>
+                                    </li>
+            
+                                    {% else %}
+
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{% url 'pay_slip' %}">Pay Slip</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link active" href="{% url 'salary_structure' %}">Salary Structure</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{% url 'create_salary' %}">Create Salary</a>
+                                    </li>
+                                   
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{% url 'declaration' %}">Declaration</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{% url 'bank_account' %}">Bank Account</a>
+                                    </li>
+                                    {% endif %}
+                                </ul>
+                                
+                                    
+                                        <!-- Overview Tab start -->
+                                        <div class="pd-20 card-box">
+                                                    <section>
+
+                                                       
+                                                        
+                                                        {% if datas %}
+                                                        {% for i in datas %}
+                                                        <i class="fa fa-edit" data-toggle="modal" onclick="editform(
+                                                           
+                                                            basic = '{{i.basic}}',
+                                                            hra = '{{i.hra}}',
+                                                            pf_employer= '{{i.pf_employer}}',
+                                                            esi_employer = '{{i.esi_employer}}',
+                                                            special_allowance = '{{i.special_allowance}}',
+                                                            date = '{{i.date}}',
+                                                            salary_id = '{{i.id}}'
+                                                        )" data-target="#myModal4" style="font-size:24px; float: right;color:grey;margin-right: 45px;" id="update"></i>
+                                                       <!-- <a href="{% url 'delete_salary_structure' myuser_12__id=i.id %}"> <i class="fa fa-trash" style="font-size:26px; margin-right: -55px; float: right;color:grey;"></i></a> -->
+                                                        {% endfor %}
+                                                        <div class="modal" id="myModal4">
+                                                            <div class style="width:70%;margin-left:20%;margin-right:20%;margin-top:1%;margin-bottom:1%">
+                                                            <div class="modal-content">
+                                                                        <table-align="right"></table-align>
+                                                                    </body>
+                    
+                                                                    <div class="modal-header">
+                                                                        <h4 class="modal-title" style="margin-left: 30px;">Update Salary Structure</h4>
+                                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                
+                                                                <form action="{% url 'update_salary_structure' %}" method="post" enctype="multipart/form-data" class="form-container" role="form">
+                                                                    {% csrf_token %}
+                                                                <!-- <section> -->
+                                                                        <div class="pd-20 card-box mb-30">
+                                                                            <br>
+                                                                        
+                                                                            <div class="row">
+                                                                                <!-- <div class="col-md-6">
+                                                                                    <div class="form-group">
+                                                                                        <label>CTC<span style="color:red">&#42</span></label>
+                                                                                        <input type="text" class="form-control" pattern="[0-9]+" name="ctc" id="ctc" value="" >
+                                                                                    </div>
+                                                                                </div> -->
+                                                                                <div class="col-md-6">
+                                                                                    <div class="form-group">
+                                                                                        <label >Basic<span style="color:red">&#42</span></label>
+                                                                                        <input type="text" class="form-control" pattern="[0-9]+" id="basic" name="basic" value="" required>
+                                                                                    </div>
+                                                                                </div>
+                                                                           
+                                                                        
+                                                                            
+                                                                                <div class="col-md-6">
+                                                                                    <div class="form-group">
+                                                                                        <label>HRA<span style="color:red">&#42</span></label>
+                                                                                        <input type="text" class="form-control" pattern="[0-9]+" id="hra" name="hra" value="" >
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="row">
+                                                                                <div class="col-md-6">
+                                                                                    <div class="form-group">
+                                                                                        <label>PF Employer<span style="color:red">&#42</span></label>
+                                                                                        <input type="text" class="form-control" pattern="[0-9]+" name="pf" id="pf" value="">
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="col-md-6">
+                                                                                    <div class="form-group">
+                                                                                        <label>ESI Employer<span style="color:red">&#42</span></label>
+                                                                                        <input type="text" class="form-control" name="esi" pattern="[0-9]+" id="esi" value="" >
+                                                                                    </div>
+                                                                                </div>
+                                                                        </div>
+                                                                        <div class="row">
+
+                                                                                <div class="col-md-6">
+                                                                                    <div class="form-group">
+                                                                                        <label>Special Allowance<span style="color:red">&#42</span></label>
+                                                                                        <input type="text" class="form-control" pattern="[0-9]+" name="spa" id="special" value="">
+                                                                                    </div> 
+                                                                                </div>
+                                                                                <div class="col-md-6">
+                                                                                    <div class="form-group">
+                                                                                <label>Effective Date <span style="color:red">&#42</span></label>
+                                                                                        <div>
+
+                                                                                        <input type="date" class="form-control date-picker" name="date" id="date" required>
+                                                                                    </div>
+                                                                                </div></div>
+
+                                                                                <input id="sid" name="salaryid" hidden>
+
+                                                                                <div class="modal-footer"  data-toggle="modal" data-target="#success-modal" style="margin-right: 25px;" >
+                                                                                    <button type="submit" class="btn btn-primary btn-blue" role="menuitem" style="margin-left: 790px;">Submit</button>
+                                                                                    
+                                                                                </div>
+
+                                                                            </div>
+
+                                                                    </div>
+                                                                </form></div></div></div></div>
+                                                           <script>
+                                                             function editform(basic,hra,pf_employer,esi_employer,special_allowance,date,salaryid){
+                                                                    
+                                                                    document.getElementById('basic').value=basic;
+                                                                    document.getElementById('hra').value=hra;
+                                                                    document.getElementById('pf').value=pf_employer;
+                                                                    document.getElementById('esi').value=esi_employer;
+                                                                    document.getElementById('special').value=special_allowance;
+                                                                    document.getElementById('date').value=date;
+                                                                    document.getElementById('sid').value=salaryid;
+                                                                }
+                                                           </script>
+
+                                                                {% else %}
+
+                                                                <div  class="row">
+                                                                    <div class="col-md-10">
+                                                                        <h6 class="float-left">Current Salary</h6> 
+                                                                    </div>
+                                                                </div>  
+                                                                <hr>
+        
+                                                                <label for="date" style="margin-left: 70%; margin-top: -1.5%;"> Effective Date:<span style="color:red">&#42</span></label>
+                                                                    <input type="date" id="effective-date" name="effectiveDate" value="{{ i.date }}" class="form-control-sm"></h6><br>
+                                                                       
+                                                                <!-- <i class="fa fa-plus-circle" style="font-size: 25px;float: right;margin-right: 25px;"  data-toggle="modal" data-target="#myModal" id="add"></i><br> -->
+
+
+
+                                                                <!-- <div class="pd-20 card-box mb-30" > -->
+                                                                    
+                                                                    <table class="table table-bordered" style="margin-top: 5px;">
+                                                                        <thead style="background-color: rgb(248, 248, 248); ">
+                                                                            <tr>
+                                                                                <th width="40%" style="text-align: center;">Components</th>
+                                                                                <th  style="text-align: center;">Monthly</th>
+                                                                                <th width="30%" style="text-align: center;">Annual</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        
+        
+                                                                        <tbody>
+                                                                        
+                                                                            <tr>
+                                                                                <td>CTC</td>
+                                                                
+
+                                                                                <td class="text-center">_</td>
+                                                                                <td class="text-center">_</td>
+                                                                            </tr>
+                                                                        {% for i in s %}
+                                                                            <tr>
+                                                                                <td>{{ i.componentname }}</td>
+                                                                                
+                                                                                
+                                                                                <td><input type="text" name="ctc_a" value="{{ i.ctc_a }}" class="form-control"></td>
+                                                                                <td class="text-center">_</td>
+                                                                            </tr>
+                                                                        {% endfor %}
+
+                                                                        
+                                                                            <!-- <tr>
+                                                                                <td>HRA</td>
+                                                                                
+                                                                                <td class="text-center">__</td>
+                                                                                <td class="text-center th-bg" style="background-color: rgb(248, 248, 248);">__</td>
+                                                                            </tr>
+        
+                                                                            <tr>
+                                                                                <td>PF Employer</td>
+                                                                                
+                                                                                <td class="text-center">__</td>
+                                                                                <td class="text-center th-bg" style="background-color: rgb(248, 248, 248);">__</td>
+                                                                            </tr>
+        
+                                                                            <tr>
+                                                                                <td>ESI Employer</td>
+                                                                                
+                                                                                <td class="text-center">__</td>
+                                                                                <td class="text-center th-bg" style="background-color: rgb(248, 248, 248);">__</td>
+                                                                            </tr>
+        
+                                                                            <tr>
+                                                                                <td>Special Allowance</td>
+                                                                                
+                                                                                <td class="text-center">__</td>
+                                                                                <td class="text-center th-bg" style="background-color: rgb(248, 248, 248);">__</td>
+                                                                            </tr> -->
+                                                                        
+                                                                        </tbody>
+                                                                        
+                                                                       
+                                                                    </table>
+                                                        <!-- <div class="modal" id="myModal">
+                                                            <div class style="width:70%;margin-left:25%;margin-right:20%;margin-top:10%;margin-bottom:1%">
+                                                                <div class="modal-content">
+                                                                    <body>
+                                                                        <table-align="right"></table-align>
+                                                                    </body>
+                    
+                                                                    <div class="modal-header">
+                                                                        <h4 class="modal-title" style="margin-left: 30px;">Add Salary Structure</h4>
+                                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                
+                                                                <form action="{% url 'add_salary_structure' uid_12=request.user.id %}" method="post" enctype="multipart/form-data" class="form-container" role="form">
+                                                                    {% csrf_token %} -->
+                                                                <!-- <section> -->
+                                                                        <!-- <div class="pd-20 card-box mb-30">
+                                                                            <br>
+                                                                        
+                                                                            <div class="row"> -->
+                                                                                <!-- <div class="col-md-6">
+                                                                                    <div class="form-group">
+                                                                                        <label>CTC<span style="color:red">&#42</span></label>
+                                                                                        <input type="text" class="form-control" pattern="[0-9]+" name="ctc" value="" >
+                                                                                    </div>
+                                                                                </div> -->
+                                                                                <!-- <div class="col-md-6"> -->
+                                                                                    <!-- <div class="form-group">
+                                                                                        <label >Basic<span style="color:red">&#42</span></label>
+                                                                                        <input type="text" class="form-control" pattern="[0-9]+" name="basic" value="" required>
+                                                                                    </div>
+                                                                                </div> -->
+                                                                            
+                                                                        
+                                                                           
+                                                                                <!-- <div class="col-md-6">
+                                                                                    <div class="form-group">
+                                                                                        <label>HRA<span style="color:red">&#42</span></label>
+                                                                                        <input type="text" class="form-control" pattern="[0-9]+" name="hra" value="">
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="row">
+                                                                                <div class="col-md-6">
+                                                                                    <div class="form-group">
+                                                                                        <label>PF Employer<span style="color:red">&#42</span></label>
+                                                                                        <input type="text" class="form-control" pattern="[0-9]+" name="pf" value="" >
+                                                                                    </div>
+                                                                                </div> -->
+
+                                                                                <!-- <div class="col-md-6">
+                                                                                    <div class="form-group">
+                                                                                        <label>ESI Employer<span style="color:red">&#42</span></label>
+                                                                                        <input type="text" class="form-control" name="esi" pattern="[0-9]+" value="">
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="row"> -->
+
+                                                                                <!-- <div class="col-md-6">
+                                                                                    <div class="form-group">
+                                                                                        <label>Special Allowance<span style="color:red">&#42</span></label>
+                                                                                        <input type="text" class="form-control" pattern="[0-9]+" name="spa" value="">
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-md-6">
+                                                                                    <div class="form-group"> -->
+                                                                                        <!-- <style>
+                                                                                            .inputWithIcon input[type="text"] {  
+                                                                                            padding-left: 30px;  
+                                                                                            }  
+                                                                                            
+                                                                                            .inputWithIcon {  
+                                                                                            position: relative;  
+                                                                                            }  
+                                                                                            
+                                                                                            .inputWithIcon i {  
+                                                                                            position: absolute;  
+                                                                                            left: 10;  
+                                                                                            top: 6px;  
+                                                                                            padding: 9px 8px;  
+                                                                                            color: rgb(148, 145, 145);  
+                                                                                            transition: 0.3s;  
+                                                                                            
+                                                                                            }  
+                                                                                        </style>
+                                                                                        <label>Date of Birth <span style="color:red">&#42</span></label>
+                                                                                        <div class="inputWithIcon">
+                                                                                            <i class="icon-copy fa fa-calendar" aria-hidden=""></i>
+                                                                                            <input class="form-control date-picker" id="dob1" readonly placeholder="Select Date" type="text" name="DOB2">
+                                                                                        </div> -->
+                                                                                        <!-- <label>Effective Date <span style="color:red">&#42</span></label>
+                                                                                        <div>
+
+                                                                                        <input type="date" class="form-control date-picker" name="date" required>
+                                                                                    </div>
+                                                                                </div></div>
+
+                                                                                <div class="modal-footer"  data-toggle="modal" data-target="#success-modal" style="margin-right: 25px;" >
+                                                                                    <button type="submit" class="btn btn-primary btn-blue" role="menuitem" style="margin-left: 790px;">Submit</button>
+                                                                                    
+                                                                                </div>
+
+                                                                            </div> -->
+
+                                                                <!-- </div> -->
+                                                                <!-- </form></div></div></div></div> -->
+                                                                {% endif %}
+                                                                
+                                                        
+                                                                <!-- {% for i in datas %}
+                                                                <h5 style="margin-left: 10px;">Salary Structure</h5> <br>
+
+                                                                <h6 style="margin-left: 15px;">Current Salary</h6>
+        
+                                                                <h6 style="margin-left: 70%; margin-top: -1.5%;">Effective Date:</h6><br>
+                                                        <div class="pd-20 card-box mb-30" >
+                                                            
+                                                            <table class="table table-bordered" style="margin-top: 5px;">
+                                                                <thead style="background-color: rgb(248, 248, 248); ">
+                                                                    <tr>
+                                                                        <th width="40%" style="text-align: center;">Components</th>
+                                                                        <th  style="text-align: center;">Monthly</th>
+                                                                        <th width="30%" style="text-align: center;">Annual</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                
+
+                                                                <tbody>
+                                                                
+                                                                    <tr>
+                                                                </tbody>
+                                                                {% endfor %}
+                                                            </table>
+                                                          
+                                                        </div> -->
+
+                                                        <div class="row">
+                                            
+                                                            <div class="col-md-12 float-right">
+                                                                <button type="submit" class="btn btn-primary float-right"  >Save</button>
+                                                            </div>
+                                                        </div>
+                                                        <h6>* The effective date is the effective date of the most recent change in the CTC/Gross or the structure breakup.</h6>
+                                                    
+                                                    
+                                                </section>
+                                            </div>
+                                           
+                            </div>
+                        </div>
+                    </div>
+            </div>
+            
+        </div>
+    </div>
+    <!-- js -->
+    <script src="static/index/vendors/scripts/core.js"></script>
+    <script src="static/index/vendors/scripts/script.min.js"></script>
+    <script src="static/index/vendors/scripts/process.js"></script>
+    <script src="static/index/vendors/scripts/layout-settings.js"></script>
+    <script src="static/index/src/plugins/jquery-steps/jquery.steps.js"></script>
+    <script src="static/index/vendors/scripts/steps-setting.js"></script>
+
+    <!-- For yearpicker -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" rel="stylesheet"/>
+    <!-- End -->
+   
+      
+</body>
+</html>

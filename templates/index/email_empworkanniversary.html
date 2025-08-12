@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        p{
+            font-family: Nunito;
+            font-size: 18px;
+            max-width: 85%;
+        }
+    </style>
+
+</head>
+<body>
+       
+<h2> Dear {{employee.username}}, </h2>
+
+<p>
+I hope this email finds you well. Today marks a significant milestone - your {{years_of_service}} year work anniversary with {{companydetail.registeredcompanyname}}. On behalf of the entire team, I want to extend our heartfelt congratulations and gratitude for your dedicated service.
+</p>
+
+<p>
+Your hard work, commitment, and exceptional contributions have played a vital role in the success and growth of our organization. As our valued admin, you consistently go above and beyond, ensuring the smooth operation of our day-to-day activities. Your attention to detail, organizational skills, and positive attitude make a lasting impact on everyone around you.
+</p>
+
+<!-- <p>
+To commemorate this special occasion, we would like to express our appreciation by [mention any planned celebration or gift, if applicable, or express intention to celebrate in a team meeting]. Additionally, please find a small token of our appreciation attached to this email as a gesture of our gratitude.
+</p> -->
+
+<p>
+We are truly fortunate to have you as a part of our team, and we look forward to many more years of collaboration and success together. Once again, congratulations on reaching this remarkable milestone, and thank you for your unwavering dedication to {{companydetail.registeredcompanyname}}.
+</p>
+
+<p>
+Best regards,<br>
+
+{{adminid.username}}<br>
+
+{{adminid.designation.name}}<br>
+
+{{companydetail.registeredcompanyname}}<br>
+</p>
+
+</body>
+</html>

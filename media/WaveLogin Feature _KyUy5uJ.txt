@@ -1,0 +1,148 @@
+WaveLogin Feature 
+-----------------
+Feature: Wave Login page testing activity.
+Scenario: Wave Login page testing activity with valid username and valid password.
+Given Open login page url 
+When Enter the valid username1
+And Enter the valid password1
+Then Sign in button click
+
+
+WaveLogin Gluecode
+------------------
+package seleniumgluecode;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import io.github.bonigarcia.wdm.WebDriverManager;
+
+public class Wavelogin {
+	public static WebDriver driver;
+	@Given("^Open login page url$")
+	public void urlOpen()
+	{
+		System.setProperty("webdriver.http.factory", "jdk-http-client");
+		WebDriverManager.chromedriver().setup();
+		ChromeOptions options=new ChromeOptions();
+		options.addArguments("--headless");
+		driver=new ChromeDriver(options);
+		//driver=new ChromeDriver();
+		driver.get("https://wave-app.netlify.app/");
+		driver.manage().window().maximize();
+		driver.findElement(By.xpath("//button[contains(.,'Sign in')]")).click();
+		
+	}
+	@When("^Enter the valid username1 (.+)$")
+	public void validUsername()
+	{
+		driver.findElement(By.name("email")).sendKeys("lintajohn.j@gmail.com");
+	}
+	@And("^Enter the valid password1 (.+)$")
+	public void validPassword()
+	{
+		driver.findElement(By.name("password")).sendKeys("linta@123");
+
+	}
+	@Then("^Sign in button click$")
+	public void buttonClick()
+	{
+	    driver.findElement(By.xpath("(//button[contains(.,'Sign in')])[2]")).click();
+		
+	}
+
+
+}
+
+
+HomePage.java
+-------------
+package pageobjectmodel;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.PageFactory;
+
+import basepackage.BaseClass;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import io.github.bonigarcia.wdm.WebDriverManager;
+public class HomePage extends BaseClass 
+	{
+	 WebDriver driver;
+	 public HomePage (WebDriver driver)
+	   {
+		   super(driver);
+		   this.driver=driver;
+		   PageFactory.initElements(driver, this);
+	   }
+	 By signinbutton=By.xpath("//button[contains(.,'Sign in')]");
+	   
+	  
+	   public void signinbuttonClick()
+		{
+		    driver.findElement(signinbutton).click();
+			
+		}
+
+	 	 
+	
+}
+
+
+Loginpage.java
+--------------
+package pageobjectmodel;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.PageFactory;
+
+import basepackage.BaseClass;
+
+public class LoginPage extends BaseClass {
+	
+	 WebDriver driver;
+	 public LoginPage (WebDriver driver)
+	   {
+		   super(driver);
+		   this.driver=driver;
+		   PageFactory.initElements(driver, this);
+	   }
+	  // <input name="user_name" type="text" value="">
+	   By username = By.name("email");
+	  // <input name="password" type="password" value="">
+	  By password = By.name("password");
+	  // <input name="sign_in" type="submit" value="SignIn">
+	   By signin = By.xpath("(//button[contains(.,'Sign in')])[2]");
+	   
+	  
+
+	 	 
+	 	public void validUsername(String email)
+		{
+			driver.findElement(username).sendKeys(email);
+		}
+		
+		public void validPassword(String pswd)
+		{
+			driver.findElement(password).sendKeys(pswd);
+
+		}
+		
+		public void buttonClick()
+		{
+		    driver.findElement(signin).click();
+		    System.out.println(driver.getCurrentUrl());
+			
+		}
+
+
+}

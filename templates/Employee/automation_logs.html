@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+{% load static %}
+{% load global_filters %}
+
+<html>
+<head>
+    <!-- Basic Page Info -->
+    <meta charset="utf-8">
+    <title>HRMS</title>
+    <link rel="icon" href="/static/logo/apple-touch-icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <!-- Mobile Specific Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/core.css">
+    <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/icon-font.min.css">
+    <link rel="stylesheet" type="text/css" href="static/index/src/plugins/jquery-steps/jquery.steps.css">
+    <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/style.css">
+    <link rel="stylesheet" type="text/css" href="static/index/src/plugins/datatables/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" type="text/css" href="static/index/src/plugins/datatables/css/responsive.bootstrap4.min.css">
+    <!-- AG Grid CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/ag-grid-community@32.1.0/dist/styles/ag-grid.css">
+    <link rel="stylesheet" href="https://unpkg.com/ag-grid-community@32.1.0/dist/styles/ag-theme-alpine.css">
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-119386393-1');
+    </script>
+
+    <style>
+        .ag-theme-alpine .ag-header-cell:nth-child(1),
+        .ag-theme-alpine .ag-cell:nth-child(1) {
+            position: sticky;
+            left: -1px;
+            width: 150px;
+            min-width: 150px;
+          
+             background-color: #3f51b5;
+        }
+        
+        .ag-theme-alpine .ag-header-cell:nth-child(2),
+        .ag-theme-alpine .ag-cell:nth-child(2) {
+            position: sticky;
+            left: 149px;
+            width: 150px;
+            min-width: 150px;
+         
+             background-color: #3f51b5;
+        }
+        .ag-theme-alpine .ag-header-cell:nth-child(3),
+        .ag-theme-alpine .ag-cell:nth-child(3) {
+            position: sticky;
+            left: 299px;
+            width: 200px;
+            min-width: 200px;
+        
+             background-color: #3f51b5;
+        }
+
+        .ag-theme-alpine .ag-row-even .ag-cell:nth-child(1),
+        .ag-theme-alpine .ag-row-even .ag-cell:nth-child(2),
+        .ag-theme-alpine .ag-row-even .ag-cell:nth-child(3) {
+            background: #fff;
+        }
+        .ag-theme-alpine .ag-row-odd .ag-cell:nth-child(1),
+        .ag-theme-alpine .ag-row-odd .ag-cell:nth-child(2),
+        .ag-theme-alpine .ag-row-odd .ag-cell:nth-child(3) {
+            background: #eaeef2;
+        }
+
+        .ag-theme-alpine .ag-header-cell:nth-child(1),
+        .ag-theme-alpine .ag-header-cell:nth-child(2),
+        .ag-theme-alpine .ag-header-cell:nth-child(3) {
+            z-index: 2;
+        }
+         .ag-header-cell {
+            white-space: nowrap;
+            text-align: left !important;
+            background-color: #3f51b5;
+        }
+       
+
+        .ag-header-cell:hover {
+            background-color: #ffffff;
+            color: rgb(13, 13, 13);
+            border-right: 1px solid #5c6bc0;
+            padding: 10px 8px;
+        }
+
+        .ag-theme-alpine {
+            --ag-grid-size: 8px;
+            --ag-header-height: 48px;
+            --ag-row-height: 48px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-left">
+            <div class="menu-icon dw dw-menu"></div>
+        </div>
+        <div class="header-right">
+            <div class="user-info-dropdown">
+                <div class="dropdown">
+                    <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                        <span class="user-icon">
+                            {% if k.image %}
+                            <img src="{{ k.image.url }}" alt="" style="width: 100%; height:100% ">
+                            {% else %}
+                            <img src="/static/logo/userlogo.png" id="photo" style="width: 100%; height:100% ">
+                            {% endif %} 
+                        </span>
+                        <span class="user-name">{{request.user.username}}</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                        <a class="dropdown-item" href="{% url 'empcreatepersonalinfo' %}"><i class="dw dw-user1"></i> Profile</a>
+                        <a class="dropdown-item" href="{% url 'logout' %}"><i class="dw dw-logout"></i> Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="right-sidebar">
+        <div class="sidebar-title">
+            <h3 class="weight-600 font-16 text-blue">
+                Settings
+            </h3>
+            <div class="close-sidebar" data-toggle="right-sidebar-close">
+                <i class="icon-copy ion-close-round"></i>
+            </div>
+        </div>
+        <div class="right-sidebar-body customscroll">
+            <div class="right-sidebar-body-content">
+                <h4 class="weight-600 font-18 pb-10"><a href="{% url 'department' %}">Department</a></h4>
+                <h4 class="weight-600 font-18 pb-10"><a href="{% url 'subdepartment' %}">Sub Department</a></h4>
+                <h4 class="weight-600 font-18 pb-10"><a href="{% url 'designation' %}">Designation</a></h4>
+                <h4 class="weight-600 font-18 pb-10"><a href="{% url 'job' %}">Job Title</a></h4>
+                <h4 class="weight-600 font-18 pb-10"><a href="{% url 'wrk' %}">Work location</a></h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="left-side-bar">
+        <div class="brand-logo mt-3">
+            <a href="{% url 'empautomationlog' %}">
+                {% if request.user.company_type %}
+                {% if request.user.company_type.inverse_logo %}
+                <img src="{{ request.user.company_type.inverse_logo.url }}" style="width: 100%; height: 100%;">
+                {% else %}
+                <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+                {% endif %}
+                {% else %}
+                <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+                {% endif %}
+            </a>
+            <div class="close-sidebar" data-toggle="left-sidebar-close"> 
+                <i class="ion-close-round"></i>
+            </div>
+        </div>
+        <br>
+        <div class="menu-block customscroll">
+            <div class="sidebar-menu">
+                <ul id="accordion-menu">
+                    <li class="btn-primary active" style="background-color: black">
+                        <a href="{% url 'empdash' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-house-1"></span><span class="mtext"><b>Dashboard</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'empoverview' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-building"></span><span class="mtext"><b>Company Profile</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'emppersonalinfonav' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-user1"></span><span class="mtext"><b>My Profile</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'empleave' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-calendar-1"></span><span class="mtext"><b>Leave</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'empdirectory' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-list"></span><span class="mtext"><b>Directory</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'empdailylog' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon bi bi-check2-square"></span><span class="mtext"><b>Attendance</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'emp_calender' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-calendar"></span><span class="mtext"><b>Holiday Calendar</b></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="mobile-menu-overlay"></div>
+
+    <div class="main-container">
+        <div class="card-box height-100-p overflow-hidden">
+            {% if is_view_automation_log %}
+            <ul class="nav nav-tabs customtab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'empdailylog' %}">Logs</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'empautomationlog' %}">Automation Logs</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'empattendanceRule' %}">Rules</a>
+                </li>
+            </ul>
+            {% else %}
+            <ul class="nav nav-tabs customtab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'empdailylog' %}">Logs</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'empautomationlog' %}">Automation Logs</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'empattendanceRule' %}">Rules</a>
+                </li>
+            </ul>
+            {% endif %}
+            <div class="min-height-100px">
+                <ul class="nav nav-tabs customtab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'empautomationlog' %}">Penalty Logs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'emp-list-comp-off' %}">Comp Off</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="pd-20 card-box">
+                <div id="myGrid" style="height: 600px; width: 100%;" class="ag-theme-alpine"></div>
+                <div class="paginator" style="width:100%;display: flex;justify-content: space-between;align-items: center;">
+                    <div style="float:left; margin-top: 20px;padding-left: 10px;">
+                        Showing {{ automation_data.start_index}} to {{ automation_data.end_index }} of {{ automation_data.paginator.count }} entries
+                    </div>
+                    {% if automation_data.paginator.count == 0 %}<p>No Records Found</p>{% endif %}
+                    <div style="float:right;"><br>
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination" style="padding-right: 5px; padding-bottom: 5px;">
+                                {% if automation_data.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?search={{query}}&star_val={{star_status}}&page={{ automation_data.previous_page_number }}">« Previous</a>
+                                </li>
+                                {% else %}
+                                <li class="page-item disabled">
+                                    <a class="page-link">«</a>
+                                </li>
+                                {% endif %}
+                                {% for i in automation_data.paginator.page_range %}
+                                {% if i <= automation_data.number|add:5 and i >= automation_data.number|add:-5 %}
+                                    {% if automation_data.number == i %}
+                                    <li class="page-item active">
+                                        <a class="page-link" href="?search={{query}}&star_val={{star_status}}&page={{forloop.counter}}">{{forloop.counter}}</a>
+                                    </li>
+                                    {% else %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?search={{query}}&star_val={{star_status}}&page={{forloop.counter}}">{{forloop.counter}}</a>
+                                    </li>
+                                    {% endif %}
+                                {% endif %}
+                                {% endfor %}
+                                {% if automation_data.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?search={{query}}&star_val={{star_status}}&page={{ automation_data.next_page_number }}">» Next</a>
+                                </li>
+                                {% else %}
+                                <li class="page-item disabled">
+                                    <a class="page-link">»</a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- js -->
+    <script src="static/index/vendors/scripts/core.js"></script>
+    <script src="static/index/vendors/scripts/script.min.js"></script>
+    <script src="static/index/vendors/scripts/process.js"></script>
+    <script src="static/index/vendors/scripts/layout-settings.js"></script>
+    <script src="static/index/src/plugins/jquery-steps/jquery.steps.js"></script>
+    <script src="static/index/vendors/scripts/steps-setting.js"></script>
+    <!-- AG Grid JavaScript -->
+    <script src="https://unpkg.com/ag-grid-community@32.1.0/dist/ag-grid-community.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const gridOptions = {
+                columnDefs: [
+                    { headerName: "Anomaly Type", field: "anomaly_type", width: 150, pinned: 'left' },
+                    { headerName: "Penalty Type", field: "penalty_type", width: 150, pinned: 'left' },
+                    { headerName: "Date", field: "month", width: 200, pinned: 'left', 
+                      valueFormatter: params => new Date(params.value).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) },
+                    { headerName: "Leave Type", field: "leave_type", width: 150 },
+                    { headerName: "Deduction", field: "deduction", width: 150 },
+                    { headerName: "Applied On", field: "updated_at", width: 200,
+                      valueGetter: params => params.data.punch_data.is_requested ? 
+                        new Date(params.data.updated_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' }) : '--' },
+                    { headerName: "Action", field: "action", width: 150,
+                      cellRenderer: params => {
+                          if (params.data.punch_data.is_penalty_reverted) {
+                              return '<div class="d-flex justify-content-center"><button class="d-flex justify-content-center btn btn-success btn-sm" disabled>Reverted</button></div>';
+                          } else {
+                              return '<span style="width: 10px;"></span>';
+                          }
+                      }
+                    }
+                ],
+                rowData: [
+                    {% for employee_data in automation_data %}
+                    {
+                        anomaly_type: "{{ employee_data.anomaly_type }}",
+                        penalty_type: "{{ employee_data.penalty_type }}",
+                        month: "{{ employee_data.month }}",
+                        leave_type: "{{ employee_data.leave_type }}",
+                        deduction: "{{ employee_data.deduction }}",
+                        updated_at: "{{ employee_data.updated_at }}",
+                        punch_data: {
+                            is_requested: {{ employee_data.punch_data.is_requested|lower }},
+                            is_penalty_reverted: {{ employee_data.punch_data.is_penalty_reverted|lower }}
+                        }
+                    }{% if not forloop.last %},{% endif %}
+                    {% endfor %}
+                ],
+                defaultColDef: {
+                    resizable: true,
+                    sortable: true,
+                    filter: true
+                },
+                domLayout: 'normal',
+                pagination: false,
+                rowClassRules: {
+                    'ag-row-even': params => params.node.rowIndex % 2 === 0,
+                    'ag-row-odd': params => params.node.rowIndex % 2 !== 0
+                }
+            };
+
+            const gridDiv = document.querySelector('#myGrid');
+            new agGrid.Grid(gridDiv, gridOptions);
+        });
+    </script>
+</body>
+</html>

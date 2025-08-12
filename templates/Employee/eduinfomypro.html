@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Basic Page Info -->
+    <meta charset="utf-8">
+    <title>HRMS</title>
+    <link rel="icon" href="/static/logo/apple-touch-icon.png"type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <!-- Site favicon -->
+    <!-- <link rel="apple-touch-icon" sizes="180x180" href="static/index/vendors/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="static/index/vendors/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="static/index/vendors/images/favicon-16x16.png"> -->
+
+    <!-- Mobile Specific Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/core.css">
+    <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/icon-font.min.css">
+    <link rel="stylesheet" type="text/css" href="static/index/src/plugins/jquery-steps/jquery.steps.css">
+    <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/style.css">
+
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-119386393-1');
+    </script>
+    <script>
+       
+        flatpickr("[data-behavior='flatpickr']", {
+            allowInput: true,
+            dateFormat: "Y-m-d"
+        });
+    </script>
+</head>
+<body>
+
+    <div class="header">
+        <div class="header-left">
+            <div class="menu-icon dw dw-menu"></div>
+            
+        </div>
+        <div class="header-right">
+            
+            <!-- <div class="user-notification">
+                <div class="dropdown">
+                    <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
+                        <i class="icon-copy dw dw-notification"></i>
+                        <span class="badge notification-active"></span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <div class="notification-list mx-h-350 customscroll">
+                            <ul>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/img.jpg" alt="">
+                                        <h3>John Doe</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/photo1.jpg" alt="">
+                                        <h3>Lea R. Frith</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/photo2.jpg" alt="">
+                                        <h3>Erik L. Richards</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/photo3.jpg" alt="">
+                                        <h3>John Doe</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/photo4.jpg" alt="">
+                                        <h3>Renee I. Hansen</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/img.jpg" alt="">
+                                        <h3>Vicki M. Coleman</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+            <div class="user-info-dropdown">
+                <div class="dropdown">
+                    <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                        <span class="user-icon">
+                            {% if k.image %}
+                            <img src="{{ k.image.url }}" alt="" style="width: 100%; height:100% ">
+                            {% else %}
+                            <img src="/static/logo/userlogo.png" id="photo" style="width: 100%; height:100% ">
+                            {% endif %} 
+                         </span>
+                        <span class="user-name">{{ request.user.username }}</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                        
+                        <a class="dropdown-item" href="{% url 'empcreatepersonalinfo' %}"><i class="dw dw-user1"></i> Profile</a>
+                        <!-- <a class="dropdown-item" href="javascript:;" data-toggle="right-sidebar"><i class="dw dw-settings2"></i> Setting</a> -->
+                        <!-- <a class="dropdown-item" href="{% url 'help_page' %}"><i class="dw dw-help"></i> Help</a> -->
+                        <a class="dropdown-item" href="{% url 'logout' %}"><i class="dw dw-logout"></i> Logout</a>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <div class="right-sidebar">
+        <div class="sidebar-title">
+            <h3 class="weight-600 font-16 text-blue">
+                 Settings
+                <!--<span class="btn-block font-weight-400 font-12">User Interface Settings</span>-->
+            </h3>
+            <div class="close-sidebar" data-toggle="right-sidebar-close">
+                <i class="icon-copy ion-close-round"></i>
+            </div>
+        </div>
+
+        <div class="right-sidebar-body customscroll">
+            <div class="right-sidebar-body-content">
+                <h4 class="weight-600 font-18 pb-10" ><a href="{% url 'depart1' %}">Department</a> </h4>
+                <h4 class="weight-600 font-18 pb-10"><a href="{% url 'desig1' %}">Designation</a></h4>
+                <h4 class="weight-600 font-18 pb-10"><a href="{% url 'subdepartment' %}">Sub Department</a></h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="left-side-bar">
+          
+        <div class="brand-logo mt-3">
+       <a href="{% url 'empeducationnav' %}">
+        {% if request.user.company_type %}
+        {% if request.user.company_type.inverse_logo %}
+            <img src="{{ request.user.company_type.inverse_logo.url }}" style="width: 100%; height: 100%;">
+        {% else %}
+            <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+        {% endif %}
+        {% else %}
+        <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+        {% endif %}
+         </a>
+			<!-- <a href="index.html">  -->
+
+				 <!-- <img src="{{ data.logo.url }}" style="width: 90% ;height: 90%; margin-left: 10px ;margin-top: -2cccccpx" > -->
+            <!-- {% if data.logo %}
+               <img src="{{ data.logo.url }}" style="width: 99.5% ;height: 100%; margin-left: 1px ;margin-top: -12px" >
+            {% else %}
+               <img src="media/default_image.png" id="photo" style="width: 90% ;height: 90%; margin-left: 10px ;margin-top: -2cccccpx" >
+		    {% endif %} -->
+			<!-- </a> -->
+			<div class="close-sidebar" data-toggle="left-sidebar-close"> 
+			   <i class="ion-close-round"></i>
+			</div>
+		</div><br>
+       
+       
+        <div class="menu-block customscroll">
+            <div class="sidebar-menu">
+                <ul id="accordion-menu">
+                    <li class="dropdown">
+                    </li>
+                    <li class="btn-primary active" style="background-color: black">
+                        <a href="{% url 'empdash' %}" class="dropdown-toggle no-arrow">
+                        <span class="micon dw dw-house-1"></span><span class="mtext"><b>Dashboard</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'empoverview' %}" class="dropdown-toggle no-arrow">
+                        <span class="micon dw dw-building"></span><span class="mtext"><b>Company Profile</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'emppersonalinfonav' %}" class="dropdown-toggle no-arrow">
+                        <span class="micon dw dw-user1"></span><span class="mtext"><b>My Profile</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'empleave' %}" class="dropdown-toggle no-arrow">
+                        <span class="micon dw dw-calendar-1"></span><span class="mtext"><b>Leave</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'empdirectory' %}" class="dropdown-toggle no-arrow">
+                        <span class="micon dw dw-list"></span><span class="mtext"><b>Directory</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'empdailylog' %}" class="dropdown-toggle no-arrow">
+                        <span class="micon bi bi-check2-square"></span><span class="mtext"><b>Attendance</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'emp_calender' %}" class="dropdown-toggle no-arrow">
+                        <span class="micon dw dw-calendar"></span><span class="mtext"><b>Holiday Calendar</b></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="main-container">
+        <div class="card-box height-100-px overflow-hidden">
+            <ul class="nav nav-tabs customtab" >
+                
+                <li class="nav-item">
+                    <a class="nav-link "  href="{% url 'emppersonalinfonav' %}" >Personal</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link "  href="{% url 'empworknav' %}" >Work</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"  href="{% url 'empteamnav' %}" >Team</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active"  href="{% url 'empeducationnav' %}" >Education</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"  href="{% url 'empfamilynav' %}" >Family</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'empdocumentsnav' %}" >Documents</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'empworkweeknav' %}" >Work Week</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'emppayrollnav' %}" >Payroll</a>
+                </li>
+            
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'empe_exit' %}" >E-Exit</a>
+                </li>
+            
+                <!-- <li class="nav-item">
+                    <a class="nav-link" href="{% url 'empfilemanagernav' %}" >File Manager</a>
+                </li> -->
+            </ul>
+           
+            <div class="pd-20 card-box">
+                <div  class="row">
+                    <div class="col-md-10">
+                        <h6 class="float-left">
+                            Educational Information</h6> 
+                    </div>
+                    <div class="col-md-2">
+                        <i class="fa fa-plus-circle float-right" id="add" data-toggle="modal" data-target="#educationalInfo" style="font-size:24px; color:grey;float: right;cursor: pointer;"></i>
+                    </div>
+                </div>               
+                <div class="modal fade bs-example-modal-md" id="educationalInfo" >
+                    <div class="modal-dialog modal-md modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" >Educational Information</h4>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{% url 'emptableeduinfo' uid_4=request.user.id %} " method="post" enctype="multipart/form-data" class="form-container" role="form" onsubmit="return validateForm()">
+                                    {% csrf_token %}
+                                
+                                    <div class="col-md" >
+                                        <div class="form-group">
+                                            <label>Qualification <span style="color:red">&#42</span></label>
+                                            <select class="custom-select form-control" name="eQualification" required>
+                                                <option value="" disabled selected>Select Qualification</option>
+                                                <option value="Post graduation">Post Graduation</option>
+                                                <option value="Graduation">Graduation</option>
+                                                <option value="Diploma">Diploma</option>
+                                                <option value="Higher secondary">Higher Secondary</option>
+                                                <option value="Secondary">Secondary</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md">
+                                        <div class="form-group">
+                                            <label>Course <span style="color:red">&#42</span></label>
+                                            <input class="form-control" type="text" name="eCourse" id="courseid" pattern="[a-zA-Z\s]+" required>
+                                            <span id="courseError" style="color: red;font-size: small;"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md">
+                                        <div class="form-group">
+                                            <label>Institute Name <span style="color:red">&#42</span> </label>
+                                            <input class="form-control" type="text" name="eInstitutename" id="instituteid" pattern="[a-zA-Z\s]+" required>
+                                            <span id="instituteError" style="color: red;font-size: small;"></span> 
+                                        </div>
+                                    </div>
+                                    <div class="col-md">
+                                        <div class="form-group">
+                                            <style>
+                                                .inputWithIcon input[type="text"] {  
+                                                padding-left: 30px;  
+                                                }  
+                                                
+                                                .inputWithIcon {  
+                                                position: relative;  
+                                                }  
+                                                
+                                                .inputWithIcon i {  
+                                                position: absolute;  
+                                                left: 10;  
+                                                top: 6px;  
+                                                padding: 9px 8px;  
+                                                color: rgb(136, 132, 132);  
+                                                transition: 0.3s;  
+                                                
+                                                }  
+                                            </style>
+                                            <label for="passout year">Passout Month & Year <span style="color:red">&#42</span></label>
+                                            <div class="inputWithIcon">
+                                                <i class="icon-copy fa fa-calendar" aria-hidden="true"></i>
+                                                <input class="form-control month-picker" readonly placeholder="Select Month" type="text" name="ePassout" id="passoutid" required>
+                                                <span id="passoutError" style="color: red;font-size: small;"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md">
+                                        <div class="form-group">
+                                            <label>Percentage <span style="color:red">&#42</span></label>
+                                            <input class="form-control" type="text" id="percentageInput" name="ePercentage" required pattern="(\d{1,2}(\.\d{1,2})?%?)|^100(\.0{1,2})?" >
+                                         </div>
+                                    </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary" onsubmit="hideadd" >Submit</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal" >Cancel</button>        
+                            </div>
+                                </form>
+                        </div>
+                    </div>
+                </div>
+                                         
+                             <!-- </div> -->
+                <hr>
+                             
+                {% for i in l %}
+
+                <div class="row">
+                    <div class="col-md-2">
+                        <img src="static\login\images\university-campus.svg" style="width: 50%; height: 50%; margin-left: 28%;" alt="">
+
+                    </div>
+
+                    <div class="col-md-9">
+                        <div class="row">
+                            <div class=" col-md-4 ">
+                                <ul>
+                                    <li><b>Qualification</b></li>
+                                    <li>{% if i.qualification %} {{ i.qualification }} {% endif %}</li>
+                                </ul>
+                            </div>
+                            <div class=" col-md-4 ">
+                                <ul>
+                                    <li><b>Course</b></li>
+                                    <li>{% if i.course %} {{ i.course }} {% endif %}</li>
+                                </ul>
+                            </div>
+
+                        
+                            <div class="col-md-1">
+                                <!-- <div class="col-md-1"> -->
+                                    <a href="#editedu " class="edit" title="Edit"
+                                    data-toggle="modal"  onclick="editeducation(
+                                    qualification = '{% if i.qualification %}{{i.qualification}}{% else %}select qualification{% endif %}',
+                                    course = '{{i.course}}',
+                                    institute = '{{ i.institute }}',
+                                    passout = '{% if i.passout %} {{ i.passout }} {% endif %}',
+                                    percent = '{{i.percent}}',
+                                    edu_id = '{{ i.id }}'
+                                    );">
+                
+                                <i class="fa fa-edit" data-toggle="modal" data-target="" style="font-size:24px;color:grey"></i>
+                                
+                                </a>
+                                </div>
+                                <div class="col-md-1">
+                                    <a href="{% url 'empdeleteeduinfo' myuser_4__id=i.id %}"><i class="fa fa-trash" style="font-size:24px; ;color:grey" ></i></a>
+                                <!-- </div> -->
+                            </div>
+                            
+                        </div>
+                        <hr>
+                        <div class="row">
+
+                            <div class=" col-md-4 ">
+                                <ul>
+                                    <li><b>Institute Name</b></li>
+                                    <li>{% if i.institute %} {{ i.institute }} {% endif %}</li>
+                                </ul>
+                            </div>
+                            
+                            <div class=" col-md-4 ">
+                                <ul>
+                                    <li><b>Passout Month & Year</b></li>
+                                    <li>{% if i.passout %} {{ i.passout }} {% endif %}</li>
+                                </ul>
+                            </div>
+
+                            
+                        </div>
+                        <hr>
+                        <div class="row">
+                        <div class=" col-md-4 ">
+                            <ul>
+                                <li><b>Percentage</b></li>
+                                <li>{% if i.percent %} {{ i.percent }} {% endif %}</li>
+                            </ul>
+                        </div>
+                        </div>
+                        
+            
+                    </div>
+                </div>
+
+                <hr>
+                
+                <!-- <div class="row">
+                <div class="col-md-3">
+                    <img src="static\login\images\university-campus.svg" class="float-right" style="width: 50%; height: 50%;" alt="">
+
+                </div>
+                <div class="col-md-7">
+                    <div class="row">
+                            <div class="col-md-12" >
+                                <div class="form-group">
+                                    <h6>{% if i.qualification %} {{ i.qualification }} {% endif %}</h6>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <h6>{% if i.course %} {{ i.course }} {% endif %}</h6>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                   <p>{% if i.institute %} {{ i.institute }} {% endif %}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <p>{% if i.passout %} {{ i.passout }} {% endif %}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <p>{% if i.percent %} {{ i.percent }} {% endif %}</p>
+                                </div>
+                            </div>
+                        </div> -->
+                
+           
+                
+                {% endfor %}
+                    
+                <div class="modal fade bs-example-modal-md" id="editedu" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="">
+                    <div class="modal-dialog modal-md modal-dialog-centered" >
+                        <div class="modal-content">
+
+                            <form action="{% url 'empupdateeduinfo' %} " method="post" enctype="multipart/form-data" class="form-container" role="form" onsubmit="return validateForm1()">
+                                {% csrf_token %}
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="myLargeModalLabel">Educational Info</h4>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+
+                                <input hidden id="edu_id" name="eduid">
+
+
+                                <div class="col-md" >
+                                    <div class="form-group">
+                                        <label>Qualification <span style="color:red">&#42</span></label>
+                                        <select class="custom-select form-control" id="qualification1" name="eQualification1" required>
+                                            <option value="">{% if l.qualification %}{{l.qualification}}{% else %}Select Qualification{% endif %}</option>
+                                            <option value="Post graduation">Post Graduation</option>
+                                            <option value="Graduation">Graduation</option>
+                                            <option value="Diploma">Diploma</option>
+                                            <option value="Higher secondary">Higher Secondary</option>
+                                            <option value="Secondary">Secondary</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            
+                                <div class="col-md">
+                                    <div class="form-group">
+                                        <label>Course <span style="color:red">&#42</span></label>
+                                        <input class="form-control" pattern="[a-zA-Z\s]+" type="text" id="course1" name="eCourse1" value=" {% for i in x %}{{i.course}} {% endfor %}" required>
+                                        <span id="course_Error" style="color: red;font-size: small;"></span>  
+                                    </div>
+                                </div>
+                                <div class="col-md">
+                                    <div class="form-group">
+                                        <label>Institute Name <span style="color:red">&#42</span></label>
+                                        <input class="form-control" type="text" pattern="[a-zA-Z\s]+" id="institute1" name="eInstitutename1" required>
+                                        <span id="institute_Error" style="color: red;font-size: small;"></span> 
+                                    </div>
+                                </div>
+                                <div class="col-md">
+                                    <div class="form-group">
+                                        <style>
+                                            .inputWithIcon input[type="text"] {  
+                                            padding-left: 30px;  
+                                            }  
+                                            
+                                            .inputWithIcon {  
+                                            position: relative;  
+                                            }  
+                                            
+                                            .inputWithIcon i {  
+                                            position: absolute;  
+                                            left: 10;  
+                                            top: 6px;  
+                                            padding: 9px 8px;  
+                                            color: rgb(148, 145, 145);  
+                                            transition: 0.3s;  
+                                            
+                                            }  
+                                        </style>
+                                        <label for="passout year">Passout Month & Year <span style="color:red">&#42</span></label>
+                                        <div class="inputWithIcon">
+                                            <i class="icon-copy fa fa-calendar" aria-hidden="true"></i>
+                                            <input class="form-control month-picker" readonly placeholder="Select Month" id="passout1" type="text" name="ePassout1">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md">
+                                    <div class="form-group">
+                                        <label>Percentage <span style="color:red">&#42</span></label>
+                                        <input class="form-control" type="text" id="editPercentageInput" name="ePercentage1" required pattern="(\d{1,2}(\.\d{1,2})?%?)|^100(\.0{1,2})?">
+                                    </div>
+                                </div>
+                            </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary" >Submit</button>
+                            <button type="button" class="btn btn-secondary" onclick="closeform()" data-dismiss="modal" >Cancel</button>        
+                        </div>
+                        
+                    </form>
+
+                        </div>
+                    </div>
+                </div>
+                    <!-- </div> -->
+
+            </div>
+            
+        </div>
+    </div>
+ 
+<!-- js -->
+<script src="static/index/vendors/scripts/core.js"></script>
+<script src="static/index/vendors/scripts/script.min.js"></script>
+<script src="static/index/vendors/scripts/process.js"></script>
+<script src="static/index/vendors/scripts/layout-settings.js"></script>
+<script src="static/index/src/plugins/jquery-steps/jquery.steps.js"></script>
+<script src="static/index/vendors/scripts/steps-setting.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<script>
+    function editeducation(qualification,course,institute,passout,percent,edu_id){
+        document.getElementById('edu_id').value=edu_id;
+        document.getElementById('qualification1').value=qualification;
+        document.getElementById('course1').value=course;
+        document.getElementById('institute1').value=institute;
+        document.getElementById('passout1').value=passout;
+        document.getElementById('editPercentageInput').value=percent;
+            }
+</script>
+
+<script>
+	function validateForm() {
+		var courseInput = document.getElementById("courseid");
+		var trimmedcourseInput = courseInput.value.trim();
+		var courseError = document.getElementById("courseError");
+	  
+		var instituteInput = document.getElementById("instituteid");
+		var trimmedinstituteInput = instituteInput.value.trim();
+		var instituteError = document.getElementById("instituteError");
+	  
+        var passoutInput = document.getElementById("passoutid");
+		var trimmedpassoutInput = passoutInput.value.trim();
+		var passoutError = document.getElementById("passoutError");
+
+		if (trimmedcourseInput === "") {
+            courseError.textContent = "Course Name Required";
+		  
+		  return false; 
+		}
+	  
+		if (trimmedinstituteInput === "") {
+            instituteError.textContent = "Institute Name Required";
+            // instituteInput.focus();
+		  return false; 
+		}
+        
+        if (trimmedpassoutInput === "") {
+            passoutError.textContent = "Passout Month and Year Required";
+            passoutInput.focus();
+		  return false; 
+		}
+	  
+		courseError.textContent = ""; 
+		instituteError.textContent = ""; 
+        passoutError.textContent = ""; 
+		return true; 
+	  }
+	  
+</script>
+
+<script>
+	function validateForm1() {
+		var courseInput = document.getElementById("course1");
+		var trimmedcourseInput = courseInput.value.trim();
+		var course_Error = document.getElementById("course_Error");
+	  
+		var instituteInput = document.getElementById("institute1");
+		var trimmedinstituteInput = instituteInput.value.trim();
+		var institute_Error = document.getElementById("institute_Error");
+	  
+        // var passoutInput = document.getElementById("passoutid");
+		// var trimmedpassoutInput = passoutInput.value.trim();
+		// var passoutError = document.getElementById("passoutError");
+
+		if (trimmedcourseInput === "") {
+            course_Error.textContent = "Course Name Required";
+		  
+		  return false; 
+		}
+	  
+		if (trimmedinstituteInput === "") {
+            institute_Error.textContent = "Institute Name Required";
+            instituteInput.focus();
+		  return false; 
+		}
+        
+        // if (trimmedpassoutInput === "") {
+        //     passoutError.textContent = "Passout Month and Year Required";
+        //     passoutInput.focus();
+		//   return false; 
+		// }
+	  
+		course_Error.textContent = ""; 
+		institute_Error.textContent = ""; 
+        // passoutError.textContent = ""; 
+		return true; 
+	  }
+	  
+</script>
+<script>
+    // Get the input element
+    const percentageInput = document.getElementById("percentageInput");
+
+    // Add an event listener to validate the input
+    percentageInput.addEventListener("input", function () {
+        if (this.validity.patternMismatch) {
+            this.setCustomValidity("Please enter a valid percentage ");
+        } else {
+            this.setCustomValidity(""); // Clear custom validation message
+        }
+    });
+</script>
+
+
+
+
+</body>
+</html>

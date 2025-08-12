@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html>
+{% load static %}
+<head>
+    <!-- Basic Page Info -->
+    <meta charset="utf-8">
+    <title>HRMS</title>
+    <link rel="icon" href="{% static 'logo/apple-touch-icon.png' %}" type="image/x-icon"> 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <!-- Mobile Specific Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'index/vendors/styles/core.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'index/vendors/styles/icon-font.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'index/vendors/styles/style.css' %}">
+    
+    <!-- AG Grid CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/ag-grid-community@31.0.2/styles/ag-grid.css">
+    <link rel="stylesheet" href="https://unpkg.com/ag-grid-community@31.0.2/styles/ag-theme-alpine.css">
+
+    <!-- jQuery and jQuery UI for Datepicker -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    
+    <!-- Select2 CSS and JS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+    <!-- AG Grid JS -->
+    <script src="https://unpkg.com/ag-grid-community@31.0.2/dist/ag-grid-community.min.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-119386393-1');
+    </script>
+    <style>
+        .select2-container--default .select2-selection--single {
+            height: 40px; 
+            line-height: 40px; 
+            display: flex;
+            align-items: center;
+            border: 1px solid #ccc;
+        }
+        .select2-container--default .select2-selection__placeholder {
+            color: #888;
+        }
+        .select2-container--default.select2-container--focus .select2-selection--single {
+            border-color: blue;
+        }
+        i {
+            cursor: pointer;
+        }
+        .alert {
+            background-color: white;
+            border: none;
+        }
+        .btn-link {
+            color: #007BFF;
+            cursor: pointer;
+            padding: 5px 10px;
+            text-decoration: none !important;
+        }
+        .btn-delete {
+            background-color: transparent;
+            border: none;
+            padding: 0;
+        }
+        .ag-theme-alpine {
+            --ag-header-background-color: #e9e3e3;
+            --ag-odd-row-background-color: #eaeef2;
+            --ag-row-background-color: #fff;
+            --ag-border-color: #e0e0e0;
+            height: 600px; /* Fixed height for scrolling */
+            width: 100%;
+        }
+        .ag-root-wrapper {
+            overflow-x: auto; /* Enable horizontal scrolling */
+        }
+        .ag-header-cell {
+            white-space: nowrap;
+            text-align: left !important;
+            background-color: #3f51b5;
+        }
+        .ag-header-cell:hover {
+            background-color: #ffffff;
+            color: rgb(13, 13, 13);
+            border-right: 1px solid #5c6bc0;
+            padding: 10px 8px;
+        }
+        .ag-cell {
+            border: 1px solid #e0e0e0;
+        }
+        .ag-cell[data-col-id="empid"],
+        .ag-cell[data-col-id="name"] {
+            position: sticky;
+            z-index: 25;
+        }
+        .ag-cell[data-col-id="empid"] {
+            left: -1px;
+            z-index: 30;
+        }
+        .ag-cell[data-col-id="name"] {
+            left: 67.5px;
+        }
+        .ag-cell:not([data-col-id="empid"]):not([data-col-id="name"]):not([data-col-id="action"]) {
+            cursor: pointer;
+        }
+        .component-set-wrapper {
+            width: 100%;
+            margin-left: 0;
+        }
+        .name {
+            color: black;
+            text-decoration: none;
+        }
+        .name:hover {
+            color: rgb(2, 170, 189);
+        }
+        .btn-danger {
+            display: inline-block;
+            padding: 5px 10px;
+            margin-right: 5px;
+            text-decoration: none !important;
+        }
+        /* CSS for Month Picker */
+        .ui-datepicker-calendar {
+            display: none; /* Hide the calendar grid */
+        }
+        .ui-datepicker-buttonpane {
+            display: none; /* Hide the button panel */
+        }
+        .month-year-picker .ui-datepicker {
+            width: 200px; /* Adjust width as needed */
+        }
+        .month-year-picker .ui-datepicker-header {
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-left">
+            <div class="menu-icon dw dw-menu"></div>
+        </div>
+        <div class="header-right">
+            <div class="dashboard-setting user-notification">
+                <div class="dropdown">
+                    <a class="dropdown-toggle no-arrow" href="javascript:;" data-toggle="right-sidebar"></a>
+                </div>
+            </div>
+            <form action="{% url 'adhoc' %}" method="get" id="search-form">
+                <div class="user-info-dropdown" id="search">
+                    <div class="dropdown">
+                        <div class="input-group">
+                            <div class="form-group">
+                                <input id="monthPicker" name="monthselect" class="form-control month-picker" type="text" style="margin-top: 4%;margin-left: -10%;" />
+                            </div>
+                            <span onclick="var input = this.previousElementSibling; input.value = ''; input.focus();" style="position: absolute;margin-left: 80%;margin-top: 9%;cursor:pointer" id="cross">
+                                <a href="{% url 'adhoc' %}" style="color: rgb(24, 24, 24);"></a>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="user-info-dropdown">
+                <div class="dropdown">
+                    <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                        <span class="user-icon">
+                            {% if k.image %}
+                            <img src="{{ k.image.url }}" alt="" style="width: 100%; height:100% ">
+                            {% else %}
+                            <img src="{% static 'logo/userlogo.png' %}" id="photo" style="width: 100%; height:100% ">
+                            {% endif %} 
+                        </span>
+                        <span class="user-name">{{request.user.username}}</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                        <a class="dropdown-item" href="{% url 'createpersonalinfo' %}"><i class="dw dw-user1"></i> Profile</a>
+                        <a class="dropdown-item" href="{% url 'department' %}" data-toggle="right-sidebar"><i class="dw dw-settings2"></i> Settings</a>
+                        <a class="dropdown-item" href="{% url 'help_page' %}"><i class="dw dw-help"></i> Help</a>
+                        <a class="dropdown-item" href="{% url 'logout' %}"><i class="dw dw-logout"></i> Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="left-side-bar">
+        <div class="brand-logo mt-3">
+            <a href="{% url 'dashboard' %}">
+                {% if request.user.company_type %}
+                    {% if request.user.company_type.inverse_logo %}
+                    <img src="{{ request.user.company_type.inverse_logo.url }}" style="width: 100%; height: 100%;">
+                    {% else %}
+                    <img src="{% static 'logo/deskapp-logo-white.svg' %}" alt="" class="light-logo">
+                    {% endif %}
+                {% else %}
+                    <img src="{% static 'logo/deskapp-logo-white.svg' %}" alt="" class="light-logo">
+                {% endif %}
+            </a>
+            <div class="close-sidebar" data-toggle="left-sidebar-close">
+                <i class="ion-close-round"></i>
+            </div>
+        </div>
+        <div class="menu-block customscroll">
+            <div class="sidebar-menu">
+                <ul id="accordion-menu">
+                    <br>
+                    <li class="active" style="background-color:black">
+                        <a href="{% url 'dashboard' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-house-1"></span><span class="mtext"><b>Dashboard</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'companyprofile' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-building"></span><span class="mtext"><b>Company Profile</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'personalinfonav' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-user1"></span><span class="mtext"><b>My Profile</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'leave' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-calendar-1"></span><span class="mtext"><b>Leave</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'directory' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-list"></span><span class="mtext"><b>Directory</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'dailylog' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon bi bi-check2-square"></span><span class="mtext"><b>Attendance</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'calender' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-calendar"></span><span class="mtext"><b>Holiday Calendar</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'runpayroll_overview' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-money-2"></span><span class="mtext"><b>Payroll</b></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="main-container">
+        <div class="card-box height-100-p overflow-hidden">
+            <ul class="nav nav-tabs customtab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'runpayroll_overview' %}">Run Payroll</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'create_salary' %}">Setup Payroll</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'payroll_dec' %}">Declaration</a>
+                </li>
+            </ul>
+            <div class="min-height-100px">
+                <ul class="nav nav-tabs customtab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'runpayroll_overview' %}">Overview</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'runpayroll' %}">Attendance & Leave</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'salary_revision' %}">Salary Revision</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'pay_register' %}">Pay Register</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'payout' %}">Payout</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'adhoc' %}">Variable & Adhoc</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'salary_onhold' %}">Salary on Hold</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="min-height-100px">
+                <ul class="nav nav-tabs customtab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'adhoc' %}">Adhoc</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'adhoc_component' %}">Adhoc Earnings</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'adhoc_deductions' %}">Adhoc Deduction</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="pd-20 card-box">
+                <div class="row">
+                    <div class="col-md-10">
+                        <h6 class="float-left">Adhoc</h6> 
+                    </div>
+                    <div class="col-md-2">
+                        <i class="fa fa-plus-circle" id="add" data-toggle="modal" data-target="#rules_add" style="font-size:24px; color:rgb(29, 29, 29);float: right;cursor: pointer; margin-left: 10px;"></i>
+                    </div>
+                </div>
+                <div class="modal fade bs-example-modal-lg" id="rules_add">
+                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Adhoc</h4>
+                                <button type="button" class="close" data-dismiss="modal">×</button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{% url 'create_adhoc' %}?monthselect={{ month_str }}+{{ selected_year }}" method="post" enctype="multipart/form-data" class="form-container" id="adhocForm">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="monthselect" value="{{ month_str }}">
+                                    <input type="hidden" name="yearselect" value="{{ selected_year }}">
+                                    <div class="row" id="componentFieldsContainer">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Employee Name <span style="color:red">*</span></label>
+                                                <select class="form-control select2" name="empname" id="empname" required style="width: 100%;">
+                                                    <option value="">Select Employee Name</option>
+                                                    {% for i in userlist %}
+                                                        <option value="{{ i.id }}">{{ i.username }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Component Type <span style="color:red">*</span></label>
+                                                <select class="form-control" name="componentType" id="componentType" required onchange="updateComponentNames()">
+                                                    <option value="disabled">Select Component Type</option>
+                                                    <option value="Earning">Earning</option>
+                                                    <option value="Deduction">Deduction</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Component Name <span style="color:red">*</span></label>
+                                                <select name="componentName[]" class="form-control" id="componentName" required>
+                                                    <option value="">Select Component Name</option>
+                                                    {% for i in adhocearning %}
+                                                        <option value="{{ i.id }}" data-type="Earning">{{ i.component_name }}</option>
+                                                    {% endfor %}
+                                                    {% for i in adhocdeduction %}
+                                                        <option value="{{ i.id }}" data-type="Deduction">{{ i.component_name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Amount <span style="color:red">*</span></label>
+                                                <input type="number" step="0.01" name="amounts[]" class="form-control" required placeholder="Enter amount">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Save</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="agGrid" style="height: 600px; width: 100%;" class="ag-theme-alpine"></div>
+                {% for i in adhoclist %}
+                <div class="modal fade" id="editadhoc_{{ i.id }}" tabindex="-1" role="dialog">
+                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                        <div class="modal-content">
+                            <form action="{% url 'edit_adhoc' %}?monthselect={{ month_str }}+{{ selected_year }}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="adhocid" value="{{ i.id }}">
+                                <input type="hidden" name="monthselect" value="{{ month_str }}">
+                                <input type="hidden" name="yearselect" value="{{ selected_year }}">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Edit Adhoc Component</h5>
+                                    <button type="button" class="close" data-dismiss="modal">×</button>
+                                </div>
+                                <div class="modal-body row">
+                                    <div class="col-md-6">
+                                        <label>Employee Name <span style="color:red;">*</span></label>
+                                        <select name="empname" class="form-control" required>
+                                            <option value="">Select</option>
+                                            {% for user in userlist %}
+                                                <option value="{{ user.id }}" {% if user.id == i.user_id.id %}selected{% endif %}>{{ user.username }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Component Type <span style="color:red;">*</span></label>
+                                        <select class="form-control" name="componenttype" id="componenttype_{{ i.id }}" required onchange="updateComponentNames({{ i.id }})">
+                                            <option value="">Select</option>
+                                            <option value="Earning" {% if i.cmptype == 'Earning' %}selected{% endif %}>Earning</option>
+                                            <option value="Deduction" {% if i.cmptype == 'Deduction' %}selected{% endif %}>Deduction</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mt-2">
+                                        <label>Component Name <span style="color:red;">*</span></label>
+                                        <select class="form-control" name="componentname" id="componentname_{{ i.id }}" required>
+                                            <option value="">Select</option>
+                                            {% for earning in adhocearning %}
+                                                <option class="earning-option_{{ i.id }}" value="{{ earning.id }}" {% if i.adhocearning and earning.id == i.adhocearning.id %}selected{% endif %}>{{ earning.component_name }}</option>
+                                            {% endfor %}
+                                            {% for deduction in adhocdeduction %}
+                                                <option class="deduction-option_{{ i.id }}" value="{{ deduction.id }}" {% if i.adhocdeduction and deduction.id == i.adhocdeduction.id %}selected{% endif %}>{{ deduction.component_name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mt-2">
+                                        <label>Amount <span style="color:red;">*</span></label>
+                                        <input type="number" name="amount" class="form-control" value="{{ i.amount }}" required>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary">Update</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <!-- JS -->
+    <script src="{% static 'index/vendors/scripts/core.js' %}"></script>
+    <script src="{% static 'index/vendors/scripts/script.min.js' %}"></script>
+    <script src="{% static 'index/vendors/scripts/process.js' %}"></script>
+    <script src="{% static 'index/vendors/scripts/layout-settings.js' %}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const gridOptions = {
+                columnDefs: [
+                    { 
+                        headerName: 'Emp ID', 
+                        field: 'empid', 
+                        width: 100, 
+                        pinned: 'left', 
+                        cellRenderer: params => {
+                            if (params.data && params.data.user_id) {
+                                return `<a class="name" href="{% url 'view_personalinfo' id=0 %}".replace('0', params.data.user_id)>${params.value || 'N/A'}</a>`;
+                            }
+                            return params.value || 'N/A';
+                        }
+                    },
+                    { 
+                        headerName: 'Name', 
+                        field: 'name', 
+                        width: 200, 
+                        pinned: 'left', 
+                        cellRenderer: params => {
+                            if (params.data && params.data.user_id) {
+                                return `<a class="name" href="{% url 'view_personalinfo' id=0 %}".replace('0', params.data.user_id)>${params.value || 'N/A'}</a>`;
+                            }
+                            return params.value || 'N/A';
+                        }
+                    },
+                    { headerName: 'Component Type', field: 'cmptype', width: 150 },
+                    { 
+                        headerName: 'Component Name', 
+                        field: 'component_name', 
+                        width: 250,
+                        valueGetter: params => {
+                            if (params.data) {
+                                if (params.data.cmptype === 'Earning' && params.data.adhocearning) {
+                                    return params.data.adhocearning.component_name || 'N/A';
+                                } else if (params.data.cmptype === 'Deduction' && params.data.adhocdeduction) {
+                                    return params.data.adhocdeduction.component_name || 'N/A';
+                                }
+                            }
+                            return 'N/A';
+                        }
+                    },
+                    { 
+                        headerName: 'Amount', 
+                        field: 'amount', 
+                        width: 120, 
+                        cellStyle: { textAlign: 'left' },
+                        valueFormatter: params => params.value ? parseFloat(params.value).toFixed(2) : '0.00'
+                    },
+                    { 
+                        headerName: 'Action', 
+                        field: 'action', 
+                        width: 200, 
+                        cellRenderer: params => {
+                            if (!params.data || !params.data.id) return '';
+                            const deleteUrl = "{% url 'delete_adhoc' id=0 %}".replace('0', params.data.id) + `?monthselect=${encodeURIComponent('{{ month_str }}')}+{{ selected_year }}`;
+                            return `
+                                <button class="btn btn-info text-white btn-link" data-toggle="modal" data-target="#editadhoc_${params.data.id}">
+                                    Update
+                                </button>
+                                <a class="btn btn-danger ms-2 text-white" href="${deleteUrl}" onclick="return confirm('Are you sure to delete?')">
+                                    Delete
+                                </a>`;
+                        }
+                    }
+                ],
+                rowData: [
+                    {% for i in adhoclist %}
+                    {
+                        id: {{ i.id|default_if_none:'null' }},
+                        empid: '{{ i.user_id.empid|default_if_none:"" }}',
+                        name: '{{ i.user_id.username|escapejs }}',
+                        cmptype: '{{ i.cmptype|default_if_none:"" }}',
+                        adhocearning: {% if i.adhocearning %}{ component_name: '{{ i.adhocearning.component_name|escapejs }}' }{% else %}null{% endif %},
+                        adhocdeduction: {% if i.adhocdeduction %}{ component_name: '{{ i.adhocdeduction.component_name|escapejs }}' }{% else %}null{% endif %},
+                        amount: '{{ i.amount|default_if_none:"0" }}',
+                        user_id: {{ i.user_id.id|default_if_none:'null' }}
+                    }{% if not forloop.last %},{% endif %}
+                    {% endfor %}
+                ],
+                pagination: true,
+                paginationPageSize: 50,
+                domLayout: 'normal', // Enable scrolling
+                defaultColDef: {
+                    sortable: true,
+                    filter: true,
+                    resizable: true
+                },
+                suppressHorizontalScroll: false, // Enable horizontal scrolling
+                onGridReady: function(params) {
+                    params.api.sizeColumnsToFit(); // Adjust column sizes to fit
+                }
+            };
+
+            const gridDiv = document.querySelector('#agGrid');
+            if (gridDiv) {
+                new agGrid.Grid(gridDiv, gridOptions);
+            } else {
+                console.error('AG Grid container #agGrid not found');
+            }
+        });
+
+        function updateComponentNames(id) {
+            const selectedType = document.getElementById(id ? 'componenttype_' + id : 'componentType')?.value;
+            const componentNameSelect = document.getElementById(id ? 'componentname_' + id : 'componentName');
+            if (!componentNameSelect) return;
+
+            if (!id) {
+                componentNameSelect.innerHTML = '<option value="">Select Component Name</option>';
+                {% for i in adhocearning %}
+                    if (selectedType === "Earning") {
+                        componentNameSelect.innerHTML += '<option value="{{ i.id }}">{{ i.component_name }}</option>';
+                    }
+                {% endfor %}
+                {% for i in adhocdeduction %}
+                    if (selectedType === "Deduction") {
+                        componentNameSelect.innerHTML += '<option value="{{ i.id }}">{{ i.component_name }}</option>';
+                    }
+                {% endfor %}
+            } else {
+                const earnings = document.getElementsByClassName('earning-option_' + id);
+                const deductions = document.getElementsByClassName('deduction-option_' + id);
+                for (let i = 0; i < earnings.length; i++) {
+                    earnings[i].style.display = selectedType === 'Earning' ? 'block' : 'none';
+                }
+                for (let j = 0; j < deductions.length; j++) {
+                    deductions[j].style.display = selectedType === 'Deduction' ? 'block' : 'none';
+                }
+            }
+        }
+
+        $(document).ready(function () {
+            // Function to parse URL parameters
+            function getUrlParameter(name) {
+                name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+                var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+                var results = regex.exec(location.search);
+                return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+            }
+
+            // Initialize the month picker
+            $("#monthPicker").datepicker({
+                dateFormat: 'MM yyyy', // Format as "January 2025"
+                changeMonth: true,
+                changeYear: true,
+                showButtonPanel: false, // Disable button panel
+                yearRange: '2000:2030', // Restrict year range
+                onSelect: function(dateText) {
+                    // Update input field, localStorage, and submit form
+                    $(this).val(dateText);
+                    localStorage.setItem("monthselect", dateText);
+                    $("#search-form").submit();
+                },
+                beforeShow: function(input, inst) {
+                    // Ensure only month and year are shown
+                    inst.dpDiv.addClass('month-year-picker');
+                    setTimeout(function() {
+                        inst.dpDiv.find('.ui-datepicker-calendar').hide(); // Hide calendar
+                    }, 0);
+                }
+            });
+
+            // Set initial value from URL, localStorage, or backend variables
+            var urlSelectedDate = getUrlParameter('monthselect');
+            var localStorageSelectedDate = localStorage.getItem("monthselect");
+            var backendMonth = "{{ month_str }} {{ selected_year }}".trim(); // Use backend variables
+            var defaultDate = urlSelectedDate || localStorageSelectedDate || backendMonth || new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+            try {
+                $("#monthPicker").datepicker('setDate', defaultDate);
+                $("#monthPicker").val(defaultDate); // Explicitly set input value
+            } catch (e) {
+                console.warn("Invalid date format for month picker, using current date:", e);
+                var currentDate = new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+                $("#monthPicker").datepicker('setDate', currentDate);
+                $("#monthPicker").val(currentDate); // Explicitly set input value
+            }
+
+            // Handle manual change to ensure form submission
+            $("#monthPicker").on('change', function() {
+                var selectedDate = $(this).val();
+                if (selectedDate) {
+                    localStorage.setItem("monthselect", selectedDate);
+                    $("#search-form").submit();
+                }
+            });
+
+            // Initialize Select2 for employee dropdown
+            $('#empname').select2({
+                placeholder: "Select an employee",
+                allowClear: false,
+                language: {
+                    searching: function() { return "Searching..."; }
+                }
+            });
+
+            $('#empname').on('select2:open', function (e) {
+                var searchBox = $(".select2-search__field");
+                if (searchBox.length > 0) {
+                    searchBox.attr('placeholder', 'Search...');
+                }
+            });
+        });
+
+        function UpdateComponentNameFields() {
+            var componentData = document.getElementById('componentName');
+            var selectedOption = componentData.options[componentData.selectedIndex];
+            var componentName = selectedOption.text;
+            var componentId = componentData.value;
+            var container = document.getElementById('componentFieldsContainer');
+            if (componentId) {
+                var componentSetWrapper = document.createElement('div');
+                componentSetWrapper.className = 'row component-set-wrapper';
+                var componentWrapper = document.createElement('div');
+                componentWrapper.className = 'col-md-6';
+                var componentNameDiv = document.createElement('div');
+                componentNameDiv.className = 'form-group';
+                componentNameDiv.innerHTML = `
+                    <label>Selected Component Name <span style="color:red">*</span></label>
+                    <input type="text" class="form-control" value="${componentName}" disabled>
+                    <input type="hidden" name="componentName[]" value="${componentId}">
+                `;
+                componentWrapper.appendChild(componentNameDiv);
+                componentSetWrapper.appendChild(componentWrapper);
+                var amountWrapper = document.createElement('div');
+                amountWrapper.className = 'col-md-6';
+                var amountDiv = document.createElement('div');
+                amountDiv.className = 'form-group';
+                amountDiv.innerHTML = `
+                    <div class="d-flex justify-content-between align-items-center">
+                        <label>Amount <span style="color:red">*</span></label>
+                        <a href="#" class="" onclick="removeComponentSet(this)" title="Remove">
+                            <i class="fa fa-window-close"></i>
+                        </a>
+                    </div>
+                    <input pattern="\\d+" title="Please enter a valid integer" type="text" name="amounts[]" class="form-control" required>
+                `;
+                amountWrapper.appendChild(amountDiv);
+                componentSetWrapper.appendChild(amountWrapper);
+                container.appendChild(componentSetWrapper);
+            }
+        }
+
+        function removeComponentSet(element) {
+            var componentSetWrapper = element.closest('.component-set-wrapper');
+            componentSetWrapper.remove();
+        }
+
+        document.getElementById("adhocForm").addEventListener("submit", function () {
+            console.log("Adhoc form submitted");
+        });
+    </script>
+</body>
+</html>

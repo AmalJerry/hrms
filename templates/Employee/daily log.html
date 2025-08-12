@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+{% load static %}
+{% load custom_filters %}
+<html>
+
+  <head>
+    <!-- Basic Page Info -->
+    <meta charset="utf-8" />
+
+    <title>HRMS</title>
+    <link rel="icon" href="/static/logo/apple-touch-icon.png" type="image/x-icon" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Site favicon -->
+    <!-- <link rel="apple-touch-icon" sizes="180x180" href="static/index/vendors/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="static/index/vendors/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="static/index/vendors/images/favicon-16x16.png"> -->
+
+    <!-- Mobile Specific Metas -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
+
+    <!-- Google Font -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <!-- CSS -->
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="static/index/vendors/styles/core.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="static/index/vendors/styles/icon-font.min.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="static/index/src/plugins/jquery-steps/jquery.steps.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="static/index/vendors/styles/style.css"
+    />
+    
+    <!-- Bootstrap Datepicker CSS -->
+    <!-- <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.9.0/dist/css/bootstrap-datepicker.min.css"
+      rel="stylesheet"
+    /> -->
+    <!-- Custom Keen them date picker -->
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"> -->
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "UA-119386393-1");
+    </script>
+  </head>
+  <body>
+    <style type="text/css">
+      /* Daily Log CSS */
+      .summary-wrap {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        padding: 10px 17px 15px 17px;
+        border-radius: 5px;
+        border: solid 1px rgba(181, 212, 255, 0.6);
+        background-color: #e5f0ff;
+      }
+    
+      .summary-items {
+        margin-left: 25px;
+      }
+    
+      .label {
+        font-size: 10px;
+        font-weight: 600;
+        font-style: italic;
+        line-height: 1.4;
+        letter-spacing: 0.1px;
+        text-align: center;
+        color: #424656;
+        margin-bottom: 10px;
+      }
+    
+      .value {
+        font-size: 10px;
+        font-weight: bold;
+        line-height: 1.4;
+        letter-spacing: 0.1px;
+        text-align: center;
+        color: #141f2b;
+      }
+    
+      .date-selector {
+        width: 150px;
+        border-radius: 3px;
+        border: solid 0.5px #bec3d2;
+        background: transparent url('../../images/attendance/event_note.svg') right 12px center no-repeat;
+        outline: none;
+        color: #8590af;
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 1.08;
+        padding: 0px 30px 0px 12px;
+      }
+    
+      .working-time {
+        width: 30px;
+        height: 5px;
+        background: #0092ff;
+        position: relative;
+        top: -38px;
+        width: calc(100%);
+        z-index: 1;
+      }
+    
+      .working-time::before {
+        left: 0;
+        content: "";
+        height: 15px;
+        width: 3px;
+        background: #0092ff;
+        position: absolute;
+        top: -5px;
+        border-radius: 5px;
+      }
+    
+      .working-time::after {
+        right: 0;
+        content: "";
+        height: 15px;
+        width: 3px;
+        background: #0092ff;
+        position: absolute;
+        top: -5px;
+        border-radius: 5px;
+      }
+    
+      .hide-after::after {
+        content: none !important;
+      }
+    
+      .timeline-marker-wrap {
+        display: flex;
+        -webkit-box-pack: justify;
+        -webkit-justify-content: space-between;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        border-top: 5px solid rgba(112, 112, 112, 0.16);
+        padding-top: 10px;
+        position: relative;
+      }
+    
+      .timeline-marker-wraps {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: justify;
+        -webkit-justify-content: space-between;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        padding-top: 10px;
+        position: relative;
+      }
+    
+      .timeline-marker {
+        font-size: 10px;
+        font-weight: 600;
+        line-height: 1.4;
+        color: #3a444d;
+      }
+    
+      .employee-worked {
+        height: 15px;
+        position: absolute;
+        top: -47px;
+        background-image: linear-gradient(45deg, rgba(0, 0, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(0, 0, 255, 0.15) 50%, rgba(0, 0, 255, 0.15) 75%, transparent 75%, transparent);
+        background-size: 1rem 1rem;
+        cursor: pointer;
+        width: 0%;
+      }
+    
+      .bg-red-strip {
+        background-color: #d15c67 !important;
+      }
+    
+      .employee-worked::before {
+        left: 0;
+        content: "";
+        height: 15px;
+        width: 12px;
+        position: absolute;
+        top: 0;
+        background-color: #007fff;
+      }
+    
+      .employee-worked::after {
+        right: 0;
+        content: "";
+        height: 15px;
+        width: 12px;
+        position: absolute;
+        top: 0;
+        background-color: #007fff;
+      }
+    
+      .timeline-chart {
+        padding: 0 30px;
+        position: relative;
+        /* background: orange; */
+      }
+    
+      .timeline-bar-cont,
+      .timeline-bar-contFor24 {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        /* -webkit-box-pack: justify; */
+        -webkit-justify-content: space-between;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+      }
+    
+      .timeline-bar {
+        height: 150px;
+        width: 3px;
+        border-right: 1px dashed #ddd;
+      }
+    
+      /* End */
+      /* Progress Bar CSS */
+      .active-bar {
+        animation: colors 1s infinite alternate !important;
+      }
+    
+      .timeline-tracker {
+        background: #f7f7f7;
+        height: 40px;
+        padding: 0 30px;
+      }
+    
+      #container {
+        /* width: 100%; */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 2%;
+      }
+    
+      #time-bar {
+        width: 100%;
+        height: 10px;
+        background-color: #0092ff;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+      }
+    
+      #progress-indicator {
+        height: 76%;
+        width: 0;
+        background-color: green;
+        position: absolute;
+        top: 0;
+        left: 0;
+        transition: width 1s ease-in-out;
+      }
+    
+      #hour-indicators {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        position: absolute;
+        margin-top: 3%;
+      }
+    
+      #progress-bar {
+        margin-top: -2%;
+        width: 100%;
+        height: 20px;
+        position: relative;
+      }
+    
+      .break-time {
+        left: 0;
+        width: 0%;
+        height: 15px;
+        position: absolute;
+        top: -47px;
+        background-color: #ffff;
+        background-size: 1rem 1rem;
+        cursor: pointer;
+      }
+    
+      .break-time::before {
+        left: 0;
+        content: "";
+        height: 15px;
+        width: 12px;
+        position: absolute;
+        top: 0;
+        background-color: #ffff;
+      }
+    
+      .break-time::after {
+        right: 0;
+        content: "";
+        height: 15px;
+        width: 12px;
+        position: absolute;
+        top: 0;
+        background-color: #ffff;
+      }
+    
+    
+      .colorOrange {
+        background-image: linear-gradient(45deg, rgba(251, 146, 1, 0.5) 25%, transparent 25%, transparent 50%, rgba(251, 146, 1, 0.5) 50%, rgba(251, 146, 1, 0.5) 75%, transparent 75%, transparent) !important;
+      }
+    
+      .colorOrange::before {
+        left: 0;
+        content: "";
+        height: 15px;
+        width: 12px;
+        position: absolute;
+        top: 0;
+        background-color: rgba(251, 146, 1, 1);
+      }
+    
+      .colorOrange::after {
+        right: 0;
+        content: "";
+        height: 15px;
+        width: 12px;
+        position: absolute;
+        top: 0;
+        background-color: rgba(251, 146, 1, 1);
+      }
+    
+      .colorRed {
+        background-image: linear-gradient(45deg, rgba(251, 34, 1, 0.5) 25%, transparent 25%, transparent 50%, rgba(251, 35, 1, 0.5) 50%, rgba(251, 35, 1, 0.5) 75%, transparent 75%, transparent) !important;
+    
+      }
+    
+      .colorRed::before {
+        left: 0;
+        content: "";
+        height: 15px;
+        width: 12px;
+        position: absolute;
+        top: 0;
+        background-color: rgba(251, 35, 1, 1)
+      }
+    
+      .colorRed::after {
+        right: 0;
+        content: "";
+        height: 15px;
+        width: 12px;
+        position: absolute;
+        top: 0;
+        background-color: rgba(251, 35, 1, 1)
+      }
+    
+      /* End */
+      .anomaliy-item {
+        padding: 5px 10px;
+        border-radius: 20px;
+        box-shadow: -1px 2px 3px rgba(63, 69, 75, 0.1);
+        background-color: #fff;
+        font-size: 10px;
+        font-weight: 600;
+        line-height: 1.4;
+        letter-spacing: 0.1px;
+        text-align: center;
+        color: #424656;
+        display: inline-block;
+        margin-bottom: 5px;
+        margin-left: 5px;
+      }
+    </style>
+    <div class="header">
+      <div class="header-left">
+        <div class="menu-icon dw dw-menu"></div>
+      </div>
+      <div class="header-right">
+        <div class="user-info-dropdown">
+          <div class="dropdown">
+            <a
+              class="dropdown-toggle"
+              href="#"
+              role="button"
+              data-toggle="dropdown"
+            >
+            <span class="user-icon">
+              {% if k.image %}
+              <img src="{{ k.image.url }}" alt="" style="width: 100%; height:100% ">
+              {% else %}
+              <img src="/static/logo/userlogo.png" id="photo" style="width: 100%; height:100% ">
+              {% endif %}
+           </span>
+              <!--<span style="margin-left: 0px;" class="user-name">{{request.user.sname}}</span>-->
+              <span style="margin-left: 0px" class="user-name"
+                >{{request.user.username}}</span
+              >
+            </a>
+            <div
+              class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list"
+            >
+              <a class="dropdown-item" href="{% url 'createpersonalinfo' %}"
+                ><i class="dw dw-user1"></i> Profile</a
+              >
+              <!-- <a class="dropdown-item" href="javascript:;" data-toggle="right-sidebar"><i class="dw dw-settings2"></i> Setting</a> -->
+              <!-- <a class="dropdown-item" href="{% url 'help_page' %}"
+                ><i class="dw dw-help"></i> Help</a
+              > -->
+              <a class="dropdown-item" href="{% url 'logout' %}"
+                ><i class="dw dw-logout"></i> Logout</a
+              >
+            </div>
+          </div>
+          <!--<div class="github-link">
+                <a href="https://github.com/dropways/deskapp" target="_blank"><img src="static/index/vendors/images/github.svg" alt=""></a>
+            </div>-->
+        </div>
+      </div>
+    </div>
+
+    <div class="left-side-bar">
+
+      <div class="brand-logo mt-3">
+     <a href="{% url 'empdailylog' %}">
+      {% if request.user.company_type %}
+      {% if request.user.company_type.inverse_logo %}
+      <img src="{{ request.user.company_type.inverse_logo.url }}" style="width: 100%; height: 100%;">
+      {% else %}
+      <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+      {% endif %}
+      {% else %}
+      <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+      {% endif %}
+       </a>
+        <!-- <a href="index.html">  -->
+
+        <!-- <img
+          src="{{ data.logo.url }}"
+          style="
+            width: 90%;
+            height: 90%;
+            margin-left: 10px;
+            margin-top: -2cccccpx;
+          "
+        /> -->
+        <!-- {% if data.logo %}
+             <img src="{{ c.logo.url }}" style="width: 99.5% ;height: 100%; margin-left: 1px ;margin-top: -12px" >
+        {% else %}
+             <img src="media/default_image.png" id="photo" style="width: 90% ;height: 90%; margin-left: 10px ;margin-top: -2cccccpx" >
+		    {% endif %} -->
+        <!-- </a> -->
+        <div class="close-sidebar" data-toggle="left-sidebar-close">
+          <i class="ion-close-round"></i>
+        </div>
+      </div><br>
+
+      <div class="menu-block customscroll">
+        <div class="sidebar-menu">
+            <ul id="accordion-menu">
+                <li class="dropdown">
+                </li>
+                <li class="btn-primary active" style="background-color: black">
+                    <a href="{% url 'empdash' %}" class="dropdown-toggle no-arrow">
+                    <span class="micon dw dw-house-1"></span><span class="mtext"><b>Dashboard</b></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'empoverview' %}" class="dropdown-toggle no-arrow">
+                    <span class="micon dw dw-building"></span><span class="mtext"><b>Company Profile</b></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'emppersonalinfonav' %}" class="dropdown-toggle no-arrow">
+                    <span class="micon dw dw-user1"></span><span class="mtext"><b>My Profile</b></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'empleave' %}" class="dropdown-toggle no-arrow">
+                    <span class="micon dw dw-calendar-1"></span><span class="mtext"><b>Leave</b></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'empdirectory' %}" class="dropdown-toggle no-arrow">
+                    <span class="micon dw dw-list"></span><span class="mtext"><b>Directory</b></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'empdailylog' %}" class="dropdown-toggle no-arrow">
+                    <span class="micon bi bi-check2-square"></span><span class="mtext"><b>Attendance</b></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'emp_calender' %}" class="dropdown-toggle no-arrow">
+                    <span class="micon dw dw-calendar"></span><span class="mtext"><b>Holiday Calendar</b></span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+      </div>
+    </div>
+    <div class="mobile-menu-overlay"></div>
+
+    <div class="main-container">
+      <div class="card-box height-100-p overflow-hidden">
+        <ul class="nav nav-tabs customtab" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" href="#">Logs</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'empautomationlog' %}"
+              >Automation Logs</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'empattendanceRule' %}">Rules</a>
+          </li>
+        </ul>
+        <div class="min-height-200px pd-20">
+          <div class="tab">
+            <ul class="nav nav-pills" role="tablist">
+              <li class="nav-item">
+                <a
+                  class="nav-link active text-blue"
+                  data-toggle="tab"
+                  href="#home5"
+                  role="tab"
+                  aria-selected="true"
+                  >Daily Log</a
+                >
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link text-blue"
+
+                  href="{% url 'emp_monthly_log' %}"
+
+                  >Monthly Log</a
+                >
+              </li>
+ 
+            </ul>
+            <hr />
+            <div class="row d-flex flex-wrap align-items-center mb-3">
+              <div class="col-md-4 d-flex">
+                <div class="col summary-wrap">
+                  <!-- Work Duration  -->
+                  <div class="summary-items">
+                    <p class="label">
+                      Work Duration:
+                    </p>
+                
+                    <p class="label" id="work_duration_id">
+                      {% if work_duration|time:"H:i:s" != '00:00:00' and work_duration != None %}
+                      <strong> {{work_duration|time:"H"}} Hours</strong>
+                      <strong> {{work_duration|time:"i"}} Mins</strong>
+                      {%else%}
+                    <p class="value">-- --</p>
+                    {%endif%}
+                    </p>
+                  </div>
+                  <!-- End Wrok Duration -->
+                  <!-- Break Duration -->
+                  <div class="summary-items">
+                    <p class="label">
+                      Break Duration:
+                    </p>
+                
+                    <p class="label" id="break_duration_id">
+                      {% if  break_duration|time:"H:i:s" != '00:00:00' and break_duration != None %}
+                      <strong> {{break_duration|time:"H"}} Hours</strong>
+                      <strong> {{break_duration|time:"i"}} Mins</strong>
+                      {%else%}
+                    <p class="value">-- -- --</p>
+                    {%endif%}
+                    </p>
+                  </div>
+                  <!-- End Break Duration -->
+                  <!-- Over Time Duration -->
+                  <div class="summary-items">
+                    <p class="label">
+                      Overtime duration:
+                    </p>
+                
+                    <p class="label" id="overtime_duration_id">
+                      {% if overtime_duration|time:"H:i:s" != '00:00:00' and overtime_duration != None %}
+                      <strong> {{overtime_duration|time:"H"}} Hours</strong>
+                      <strong> {{overtime_duration|time:"i"}} Mins</strong>
+                      {%else%}
+                      <p class="value">-- --</p>
+                      {%endif%}
+                    </p>
+                  </div>
+                  <!-- End OverTime Duration -->
+                </div>
+              </div>
+              <div class="col-md-4 d-flex flex-wrap justify-content-center align-items-center">
+                <div class="">
+                    <span style="width:12px;height: 12px;display: inline-block;background:#007fff;vertical-align:middle;"></span>
+                    <span style="font-size:10px;font-weight: 600;margin-left: 5px;">No Anomalies</span>
+                </div>
+                <div class="px-2">
+                  <span><span style="width:12px;height: 12px;display: inline-block;background:#fe2448;vertical-align:middle;"></span>
+                  <span style="font-size:10px;font-weight: 600;margin-left: 5px;">Anomalies</span></span>
+                </div>
+                <div>
+                  <span><span style="width:12px;height: 12px;display: inline-block;background:#ff8a19;vertical-align:middle;"></span>
+                  <span style="font-size:10px;font-weight: 600;margin-left: 5px;">Auto Clock Out</span></span>
+                </div>
+              </div>
+              <div class="col-md-3 d-flex justify-content-center align-items-center">
+                <form action="{% url 'empdailylog' %}" method="get" id="dateForm">
+                  <div class="input-group flex align-items-baseline">
+                    <span id="prev-btn" style="margin-top: 0px;padding-right: 15px; cursor: pointer;color: blue;font-style: italic;">
+                      <i class="icon-copy ion-ios-arrow-back">&nbsp;Prev</i>
+                    </span>
+                    
+                      <input type="text" name="selected_date" class="form-control date-picker" placeholder="Pick a date" id="datepicker"
+                        style = "width: 20rem;" readonly />
+                    <span id="next-btn" style="margin-top: 0px; padding-left: 15px; cursor: pointer;color: blue;font-style: italic;">
+                      Next&nbsp;<i class="icon-copy ion-ios-arrow-forward"></i>
+                    </span>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div class="row" style="margin-left: 0%;">
+              <div class="summary-wrap">
+                <span style="font-size: 14px;">Anomalies</span>
+                {% if anomaly_type %}
+                  {% for anomaly in anomaly_type %}
+                    {% if anomaly %}
+                      <span class="anomaliy-item">
+                        {{anomaly}}
+                      </span>
+                    {% endif %}
+                  {% endfor %}
+                {%endif%}
+              </div>
+            </div>
+            <div class="tab-content">
+              <div class="timeline-chart">
+                <div class="timeline-bar-cont">
+                  <div class="timeline-bar"></div>
+                  <div class="timeline-bar"></div>
+                  <div class="timeline-bar"></div>
+                  <div class="timeline-bar"></div>
+                  <div class="timeline-bar"></div>
+                  <div class="timeline-bar"></div>
+                  <div class="timeline-bar"></div>
+                  <div class="timeline-bar"></div>
+                  <div class="timeline-bar"></div>
+                  <div class="timeline-bar"></div>
+                  <div class="timeline-bar"></div>
+                  <div class="timeline-bar"></div>
+                  <div class="timeline-bar"></div>
+                  <div class="timeline-bar"></div>
+                  <div class="timeline-bar"></div>
+                  <div class="timeline-bar"></div>
+                  <div class="timeline-bar"></div>
+                  <div class="timeline-bar"></div>
+                  <div class="timeline-bar"></div>
+                  <div class="timeline-bar"></div>
+                  <div class="timeline-bar"></div>
+                  <div class="timeline-bar"></div>
+                  <div class="timeline-bar"></div>
+                  <div class="timeline-bar"></div>
+                  <div class="timeline-bar"></div>
+                </div>
+                <div class="timeline-bar-contFor24" style="display: none;">
+                  <div class="timeline-bar"></div>
+                    <div class="timeline-bar"></div>
+                    <div class="timeline-bar"></div>
+                    <div class="timeline-bar"></div>
+                    <div class="timeline-bar"></div>
+                    <div class="timeline-bar"></div>
+                    <div class="timeline-bar"></div>
+                    <div class="timeline-bar"></div>
+                    <div class="timeline-bar"></div>
+                    <div class="timeline-bar"></div>
+                    <div class="timeline-bar"></div>
+                    <div class="timeline-bar"></div>
+                    <div class="timeline-bar"></div>
+                    <div class="timeline-bar"></div>
+                    <div class="timeline-bar"></div>
+                    <div class="timeline-bar"></div>
+                    <div class="timeline-bar"></div>
+                    <div class="timeline-bar"></div>
+                    <div class="timeline-bar"></div>
+                    <div class="timeline-bar"></div>
+                    <div class="timeline-bar"></div>
+                    <div class="timeline-bar"></div>
+                    <div class="timeline-bar"></div>
+                    <div class="timeline-bar"></div>
+                    <div class="timeline-bar"></div>
+                    <div class="timeline-bar"></div>
+                    <div class="timeline-bar"></div>
+                    <div class="timeline-bar"></div>
+                    <div class="timeline-bar"></div>
+                    <div class="timeline-bar"></div>
+                    <div class="timeline-bar"></div>
+                    <div class="timeline-bar"></div>
+                    <div class="timeline-bar"></div>
+                    <div class="timeline-bar"></div>
+                    <div class="timeline-bar"></div>
+                    <div class="timeline-bar"></div>
+                    <div class="timeline-bar"></div>
+                    <div class="timeline-bar"></div>
+                    <div class="timeline-bar"></div>
+                    <div class="timeline-bar"></div>
+                    <div class="timeline-bar"></div>
+                    <div class="timeline-bar"></div>
+                    <div class="timeline-bar"></div>
+                    <div class="timeline-bar"></div>
+                    <div class="timeline-bar"></div>
+                    <div class="timeline-bar"></div>
+                    <div class="timeline-bar"></div>
+                    <div class="timeline-bar"></div>
+                    <div class="timeline-bar"></div>
+                    <div class="timeline-bar"></div>
+                </div>
+              </div>
+              <div class="timeline-tracker">
+                <div class="timeline-marker-wrap" >
+                </div>
+                <div class="timeline-marker-wraps">
+                  <script>
+                      if(false){
+                          $('#bar0').width('75.28055555555555%');
+                          $('#bar0').addClass('active-bar');
+                      }
+                  </script>
+                </div>
+                <div class="working-time_line">
+                  <div class="working-time">
+                </div>
+               </div>
+              </div>
+              <div class="tab-pane fade show active" id="home5" role="tabpanel">
+                <div class="pd-20">
+                  <br>
+                  <div class="table-responsive">
+                    <table class="table table-bordered" id="tableId">
+                      <thead>
+                        <tr style="background-color: rgb(233, 227, 227)">
+                          <th>Sl No</th>
+                          <th>Time</th>
+                          <th>Type</th>
+                          <th>IP Address</th>
+                          <!-- <th>Location</th> -->
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% if punch_list %}
+                        {%for punch in punch_list%}
+                        <tr>
+                          <td>{{forloop.counter}}</td>
+                          {%if 'in_time' in punch %}
+                          <!-- <td>{{punch.slno}}</td> -->
+                          {% if punch.in_time is not None %}
+                          <td>{{punch.in_time |date:"h:i A"}}</td>
+                          {%else%}
+                          <td>--</td>
+                          {% endif %}
+                          <td>{{punch.in_type}}</td>
+                          <td>{{punch.ip_address}}</td>
+                          {%else%}
+                          <!-- <td>{{punch.slno}}</td> -->
+                          {% if punch.out_time is not None %}
+                          <td>{{punch.out_time |date:"h:i A"}}</td>
+                          {%else%}
+                          <td>--</td>
+                          {% endif %}
+                          <td>{{punch.out_type}}</td>
+                          <td>{{punch.ip_address}}</td>
+                          {%endif%}
+                        </tr>
+                  
+                        {% endfor %}
+                        {%else%}
+                        <tr>
+                          <td>--</td>
+                          <td>--</td>
+                          <td>--</td>
+                          <td>--</td>
+                          <!-- <td>--</td> -->
+                  
+                        </tr>
+                        {%endif%}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <!-- MONTHLY LOG -->
+              <div class="tab-pane fade" id="profile5" role="tabpanel">
+                <div class="pd-20">
+                  <a href="#" style="color: blue">Reset Filter</a>
+                  <div class="col-md-4 col-sm-12" style="float: right">
+                    <form>
+                      <div class="form-group">
+                        <style>
+                          .inputWithIcon input[type="text"] {
+                            padding-left: 30px;
+                          }
+
+                          .inputWithIcon {
+                            position: relative;
+                          }
+
+                          .inputWithIcon i {
+                            position: absolute;
+                            left: 10;
+                            top: 6px;
+                            padding: 9px 8px;
+                            color: rgb(148, 145, 145);
+                            transition: 0.3s;
+                          }
+                        </style>
+                        <!-- <label>Select Date Range</label> -->
+                        <div class="inputWithIcon">
+                          <i
+                            class="icon-copy fa fa-calendar"
+                            aria-hidden="true"
+                          ></i>
+                          <input
+                            class="form-control datetimepicker-range"
+                            placeholder="Select Date Range"
+                            type="text"
+                          />
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                  <!-- <br><br><br><br><br> -->
+                  <div class="table-responsive">
+                  
+                    <table class="table table-striped">
+                      <tr>
+                        <!-- <th style="background-color:rgb(233, 227, 227)"> -->
+                        <th scope="col">Date</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">In Time</th>
+                        <th scope="col">Out Time</th>
+                        <th scope="col">Work Duration</th>
+                        <th scope="col">Overtime Duration</th>
+                        <th scope="col">Break Duration</th>
+                        <th scope="col">Breaks</th>
+                      </tr>
+                      <tbody>
+                        {% if punches_in_month%}
+                        {% for data in punches_in_month %}
+                        <tr>
+                          <td>{{data.date|date:'d M Y'}}</td>
+                          <td>Active</td>
+                          <td>{{data.clock_in_time|date:'g:i A'}}</td>
+                          <td>{{data.clock_out_time|date:'g:i A'}}</td>
+                          <td>{{work_duration}}</td>
+                          <td>{{data.}}</td>
+                          <td>{{break_duration}}</td>
+                          <td>{{data.}}</td>
+                        </tr>
+                        {%endfor%}
+                        {%endif%}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- js -->
+    <script src="static/index/vendors/scripts/core.js"></script>
+    <script src="static/index/vendors/scripts/script.min.js"></script>
+    <script src="static/index/vendors/scripts/process.js"></script>
+    <script src="static/index/vendors/scripts/layout-settings.js"></script>
+    <script src="static/index/src/plugins/jquery-steps/jquery.steps.js"></script>
+    <script src="static/index/vendors/scripts/steps-setting.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <script>
+      $(document).ready(function () {
+        var selectedDate = "{{ selected_date|date:'d F Y' }}";
+        console.log('Selected date: ', selectedDate);
+        var currentDate = new Date();
+        var currentDateString = formatDate(currentDate);
+
+        $("#datepicker").datepicker({
+          dateFormat: 'dd MM yyyy',
+          maxDate: currentDate,
+          onSelect: function (date) {
+            selectedDate = date;
+            console.log('Welcome!');
+            $("#datepicker").val(selectedDate);
+
+            $("#dateForm").submit();
+          }
+        });
+
+        $("#datepicker").val(selectedDate);
+
+        $("#prev-btn").click(function () {
+          showPreviousDate();
+        });
+
+        $("#next-btn").click(function () {
+          showNextDate();
+        });
+      });
+
+
+      function showPreviousDate() {
+        const datePicker = document.getElementById("datepicker");
+        const currentDate = new Date(datePicker.value);
+        currentDate.setDate(currentDate.getDate() - 1);
+        datePicker.value = formatDate(currentDate);
+        datePicker.form.submit();
+
+      }
+
+      function showNextDate() {
+        const current_Date = new Date();
+        const datePicker = document.getElementById("datepicker");
+        const currentDate = new Date(datePicker.value);
+        const maxDate = new Date(current_Date);
+        currentDate.setDate(currentDate.getDate() + 1);
+
+
+        if (maxDate <= currentDate) {
+
+          $("#next-btn").prop("disabled", true);
+          return;
+        }
+
+
+        datePicker.value = formatDate(currentDate);
+        datePicker.form.submit();
+      }
+
+      function formatDate(date) {
+        const day = date.getDate();
+        const month = date.toLocaleString("en-US", { month: "long" });
+        const year = date.getFullYear();
+        return `${day} ${month} ${year}`;
+      }
+    </script>
+
+
+    <script>
+
+      var punchLogs = [];
+      var punch_data = {{ json_data| safe}};
+      punchLogs.push(punch_data.custom_punch_logs)
+
+      /*================ Get all the punches ================*/
+      var punchList = [];
+      var employee_first_punch = "";
+      var empPunchFirst = "";
+      var empPunchLast = "";
+
+      // console.log('Punch Logs: ', punchLogs);
+      $.each(punchLogs, function (index, responseValue) {
+        if (responseValue.length) {
+
+          empPunchFirst = responseValue[0].time;
+          empPunchLast = responseValue.slice(-1)[0].time;
+          $.each(responseValue, function (i, item) {
+            var punches = moment(item.time, "HH:mm:ss");
+            punchList.push(moment(punches));
+          })
+        }
+        else { }
+      });
+      // console.log(punchList);
+      /*================ End Here ================*/
+
+      /*================ Converting 24 hours to 12 hors ================*/
+      var empPunchFirstdateTime = new Date(empPunchFirst);
+      var in_time = punch_data.org_in_time;
+      var out_time = punch_data.org_out_time
+      /*================ End here ================*/
+
+      /*================ Time Line Graph shwoing Logic ================*/
+      var a1 = moment(in_time);
+      var a2 = moment(out_time);
+      var momentempFirstPunch = (empPunchFirst != "" && empPunchFirst != 'null') ? moment(empPunchFirst, 'HH:mm:ss') : null;
+      var momentempLastPunch = (empPunchLast != "" && empPunchLast != 'null') ? moment(empPunchLast, 'HH:mm:ss') : null;
+      var t1 = null;
+      var b1 = (empPunchFirst != "" && empPunchFirst != 'null') ? moment(momentempFirstPunch.toDate(), 'YYYY-MM-DDTHH:mm:ss') : a1;
+      var b2 = (empPunchLast != "" && empPunchLast != 'null') ? moment(momentempLastPunch.toDate(), 'YYYY-MM-DDTHH:mm:ss') : a2;
+
+      t1 = moment.min(a1, b1);
+
+      var t2 = moment.max(a2, b2);
+      var deltaTime = moment.duration(t2.diff(t1)).asHours();
+      var timelineStart = 0;
+
+      if (deltaTime <= 12) {
+        console.log('if deltaTime <=12 ');
+        $(".timeline-bar-cont").show();
+        $(".timeline-bar-contFor24").hide();
+        timelineStart = 12
+      }
+      else if (deltaTime >= 12) {
+        $(".timeline-bar-cont").hide();
+        $(".timeline-bar-contFor24").show();
+        timelineStart = 24
+      }
+
+      /* Time format converter*/
+      function tConv24(time24) {
+        var ts = time24;
+        var h = (ts % 12) || 12;
+        h = (h < 10) ? (+h) : h;  // leading 0 at the left for 1 digit hours
+        var ampm = ts < 12 ? " AM" : " PM";
+        ts = h + ampm;
+        return ts;
+      };
+      var time_list = '';
+      time_list += '<div class="timeline-marker">' + tConv24(t1.add(0, 'hours').hours()) +
+        '</div>';
+      for (var i = 0; i < timelineStart; i++) {
+        time_list +=
+          '<div class="timeline-marker">' + tConv24(t1.add(1, 'hours').hours()) +
+          '</div>';
+      }
+      $(".timeline-marker-wrap").html(time_list);
+
+      /*================ End Time Line Graph ================*/
+      /*================ Work Time Line Graph ================*/
+      var timeLists = [];
+      var orgTimeIn = moment(punch_data.org_in_time);
+      var orgTimeOut = moment(punch_data.org_out_time);
+      var pucnhFirts = (empPunchFirst != '') ? empPunchFirst : orgTimeIn;
+      var getAllPunches = [];
+      var pairs = ''
+      var roundoffMinute = 0
+      startTime = moment.min(orgTimeIn, moment(pucnhFirts, 'HH:mm:ss'))
+      roundoffMinute = startTime.minutes();
+      var org_start_per = 0;
+      var org_end_per = 0;
+
+      org_start_per = moment.duration(orgTimeIn.diff(startTime)).asMinutes() + roundoffMinute;
+
+      getLeftPosOrgInFor12 = Math.round(org_start_per * 100) / 720;
+      getLeftPosOrgInFor24Hours = Math.round(org_start_per * 100) / 1440;
+
+
+      org_end_per = moment.duration(orgTimeOut.diff(startTime)).asMinutes() + roundoffMinute;
+      getLeftPosOrgOutFor12 = Math.round(org_end_per * 100) / 720;
+      getLeftPosOrgOutFor24Hours = Math.round(org_end_per * 100) / 1440;
+      $('.working-time_line').html('');
+
+      if (punch_data.length === 0) {
+
+        if (deltaTime <= 12) {
+          $('.working-time_line').append(`<div class="working-time" style="left:` + getLeftPosOrgInFor12 + `%; width:` + (getLeftPosOrgOutFor12 - getLeftPosOrgInFor12) + `%"></div>`)
+        }
+        else {
+          $('.working-time_line').append(`<div class="working-time" style="left:` + getLeftPosOrgInFor24Hours + `%; width:` + (getLeftPosOrgOutFor24Hours - getLeftPosOrgInFor24Hours) + `%"></div>`)
+
+        }
+
+      }
+      else {
+
+        if (deltaTime <= 12) {
+          $('.working-time_line').append(`<div class="working-time" style="left:` + getLeftPosOrgInFor12 + `%; width:` + (getLeftPosOrgOutFor12 - getLeftPosOrgInFor12) + `%"></div>`)
+        }
+        else {
+          $('.working-time_line').append(`<div class="working-time" style="left:` + getLeftPosOrgInFor24Hours + `%; width:` + (getLeftPosOrgOutFor24Hours - getLeftPosOrgInFor24Hours) + `%"></div>`)
+
+        }
+      }
+
+
+      var newpunchList = [];
+      if (punchList.length % 2 !== 0) {
+        punchList.push(moment(Date.now()));
+      }
+      var getLeftPosFor12;
+      var getLeftPosFor24Hours;
+      var getPositions = $.map(punchList, function (val, index) {
+
+        startPosition = moment.duration(val.diff(startTime)).asMinutes() + roundoffMinute;
+        // console.log('Start position: ', moment.duration(val.diff(startTime)).asHours() + roundoffMinute);
+        getLeftPosFor12 = Math.round(startPosition * 100) / 720;
+        // console.log('12Th pos: ',Math.round(startPosition * 100)/720);
+        getLeftPosFor24Hours = Math.round(startPosition * 100) / 1440;
+
+        if (deltaTime) {
+          newpunchList.push(getLeftPosFor12);
+        }
+        else {
+          newpunchList.push(getLeftPosFor24Hours);
+        }
+      });
+      /*================ End Work Time Line Graph ================*/
+      /*================ Get all pairs ================*/
+
+      var dict = [];
+      var counter = 0;
+      for (var n = 0; n < punch_data.custom_punch_logs.length; n = n + 2) {
+        dict[counter] = {};
+        dict[counter]['in'] = {
+          'per': newpunchList[n],
+          'data': punch_data.custom_punch_logs[n]
+        };
+        dict[counter]['out'] = {
+          'per': newpunchList[n + 1],
+          'data': punch_data.custom_punch_logs[n + 1]
+        };
+        counter = counter + 1;
+      }
+      var status = punch_data.status;
+      console.log('Status: ' ,status);
+      $.each(dict, function (key, value) {
+        let breakPosition;
+        let barWidth = (value.out.per - value.in.per)
+        if (dict.length >= 2) {
+
+          breakPosition = calculateBreakPosition(moment(dict[0].out.data.time, "HH:mm:ss"), moment(dict[1].in.data.time, "HH:mm:ss"));
+        }
+
+        // console.log('out data: ', dict);
+        if (breakPosition !== undefined) {
+          if (key == 0) {
+            console.log('break position key == 0');
+            barWidth = barWidth - breakPosition.width;
+            pairs += '<div class="employee-worked logout-error' + (isUndefined(value.out.data) ? ' hide-after' : '') + '" style="left:' + value.in.per + '%; width:' + `${barWidth}` + '%""></div>';
+          }
+          if (key == 1) {
+            console.log('break position key == 1');
+            barWidth =barWidth - breakPosition.width
+            let leftPosition = value.in.per + breakPosition.width;
+            pairs += '<div class="employee-worked logout-error' + (isUndefined(value.out.data) ? ' hide-after' : '') + '" style="left:' + `${leftPosition}` + '%; width:' + `${barWidth}` + '%""></div>';
+
+          }
+        }
+        else {
+          console.log('break position Else');
+          pairs += '<div class="employee-worked logout-error' + (isUndefined(value.out.data) ? ' hide-after' : '') + '" style="left:' + `${value.in.per}` + '%; width:' + `${barWidth}` + '%""></div>';
+
+        }
+      });
+      console.log('Dict: ', dict);
+      /*================ End ================*/
+      $(".timeline-marker-wraps").html(pairs);
+      // console.log('Pairs: ',pairs);
+      if(status == 'AN'){
+
+      $('.employee-worked').addClass('colorRed');
+      }
+      else if(status == 'AC'){
+        $('.employee-worked').addClass('colorOrange');
+      }
+      else {
+          // $(".timeline-marker-wraps").removeClass('colorOrange');
+        }
+      function isUndefined(object) {
+        console.log('Object: ', object);
+        if (object == 'undefined' || object == undefined) {
+          return true;
+        }
+        else {
+          return false;
+        }
+      }
+
+      function calculateBreakPosition(breakStart, breakEnd) {
+        let breakDuration = moment.duration(moment(breakEnd).diff(breakStart));
+        let breakPercentage = ((Math.abs(breakDuration.asHours()) / 24 * 100)) * 2;
+
+        breakStartPosition = moment.duration(moment(breakStart).diff(startTime)).asMinutes() + roundoffMinute;
+        getBreakLeftPosFor12 = Math.round(breakStartPosition * 100) / 720;
+        getBreakLeftPosFor24Hours = Math.round(breakStartPosition * 100) / 1440;
+
+        // console.log('================================');
+        // console.log(breakDuration,breakPercentage);
+        if (deltaTime <= 12) {
+
+          let breakPosition = {
+            width: breakPercentage,
+            left: getBreakLeftPosFor12 + '%',
+          };
+          return breakPosition;
+        }
+        if (deltaTime >= 12) {
+          let breakPosition = {
+            width: breakPercentage,
+            left: getBreakLeftPosFor24Hours + '%',
+          };
+          return breakPosition;
+        }
+      }
+    </script>
+  </body>
+</html>

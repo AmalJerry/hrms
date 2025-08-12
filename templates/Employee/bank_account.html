@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html>
+{% load static %}
+<head>
+    <!-- Basic Page Info -->
+    <meta charset="utf-8">
+   
+    <title>HRMS</title>
+      <link rel="icon" href="/static/logo/apple-touch-icon.png" type="image/x-icon"> 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Site favicon -->
+    <!-- <link rel="apple-touch-icon" sizes="180x180" href="static/index/vendors/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="static/index/vendors/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="static/index/vendors/images/favicon-16x16.png"> -->
+
+    <!-- Mobile Specific Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/core.css">
+    <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/icon-font.min.css">
+    <link rel="stylesheet" type="text/css" href="static/index/src/plugins/jquery-steps/jquery.steps.css">
+    <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/style.css">
+
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-119386393-1');
+    </script>
+        <style>
+            i{
+                cursor: pointer;
+            }
+            .alert{
+                background-color: white;
+                border: none;
+            }
+
+        </style>
+    
+</head>
+<body>
+
+    <div class="header">
+        <div class="header-left">
+            <div class="menu-icon dw dw-menu"></div>
+            <!-- <div class="search-toggle-icon dw dw-search2" data-toggle="header_search"></div> -->
+            <!-- <div class="header-search">
+                <form>
+                    <div class="form-group mb-0">
+                        <i class="dw dw-search2 search-icon"></i>
+                        <input type="text" class="form-control search-input" placeholder="Search Here">
+                    </div>
+                </form>
+            </div> -->
+        </div>
+        <div class="header-right">
+           
+            <!-- <div class="user-notification">
+                <div class="dropdown">
+                    <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
+                        <i class="icon-copy dw dw-notification"></i>
+                        <span class="badge notification-active"></span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <div class="notification-list mx-h-350 customscroll">
+                            <ul>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/img.jpg" alt="">
+                                        <h3>John Doe</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/photo1.jpg" alt="">
+                                        <h3>Lea R. Frith</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/photo2.jpg" alt="">
+                                        <h3>Erik L. Richards</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/photo3.jpg" alt="">
+                                        <h3>John Doe</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/photo4.jpg" alt="">
+                                        <h3>Renee data. Hansen</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/img.jpg" alt="">
+                                        <h3>Vicki M. Coleman</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+            <div class="user-info-dropdown">
+                <div class="dropdown">
+                    <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                        <span class="user-icon">
+                            {% if k.image %}
+                            <img src="{{ k.image.url }}" alt="" style="width: 100%; height:100% ">
+                            {% else %}
+                            <img src="/static/logo/userlogo.png" id="photo" style="width: 100%; height:100% ">
+                            {% endif %} 
+                         </span>
+                        <span class="user-name">{{request.user.username}}</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                        <a class="dropdown-item" href="{% url 'empcreatepersonalinfo' %}"><i class="dw dw-user1"></i> Profile</a>
+                        <!-- <a class="dropdown-item" href="{% url 'department' %}" data-toggle="right-sidebar"><i class="dw dw-settings2"></i> Settings</a> -->
+                        <!-- <a class="dropdown-item" href="{% url 'help_page' %}"><i class="dw dw-help"></i> Help</a> -->
+                        <a class="dropdown-item" href="{% url 'logout' %}"><i class="dw dw-logout"></i> Logout</a>
+                    </div>
+                </div>
+            </div>
+            <!--<div class="github-link">
+                <a href="https://github.com/dropways/deskapp" target="_blank"><img src="static/index/vendors/images/github.svg" alt=""></a>
+            </div>-->
+        </div>
+    </div>
+
+    <!-- <div class="right-sidebar"> -->
+        <!-- <div class="sidebar-title"> -->
+            <!-- <h3 class="weight-600 font-16 text-blue"> -->
+                 <!-- Settings -->
+                <!--<span class="btn-block font-weight-400 font-12">User Interface Settings</span>-->
+            <!-- </h3> -->
+            <!-- <div class="close-sidebar" data-toggle="right-sidebar-close">
+                <i class="icon-copy ion-close-round"></i>
+            </div> -->
+        <!-- </div> -->
+
+        <!-- <div class="right-sidebar-body customscroll">
+            <div class="right-sidebar-body-content">
+                				<h4 class="weight-600 font-18 pb-10" ><a href="{% url 'department' %}">Department</a> </h4>
+				<h4 class="weight-600 font-18 pb-10" ><a href="{% url 'subdepartment' %}">Sub Department</a> </h4>
+				<h4 class="weight-600 font-18 pb-10"><a href="{% url 'designation' %}">Designation</a></h4>
+				<h4 class="weight-600 font-18 pb-10"><a href="{% url 'job' %}">Job Title</a></h4>
+				<h4 class="weight-600 font-18 pb-10"><a href="{% url 'wrk' %}">Work location</a></h4>
+            </div>
+        </div> -->
+    <!-- </div> -->
+   
+    <div class="left-side-bar">
+		<!-- <div class="brand-logo" style="margin-top: -12px;"> -->
+			<!-- <a href="index.html">  -->
+
+                <div class="brand-logo mt-3">
+                    <a href="{% url 'empbank_account' %}">
+                        {% if request.user.company_type %}
+                        {% if request.user.company_type.inverse_logo %}
+                        <img src="{{ request.user.company_type.inverse_logo.url }}" style="width: 100%; height: 100%;">
+                        {% else %}
+                        <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+                        {% endif %}
+                        {% else %}
+                        <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+                        {% endif %}
+                      </a>
+			<div class="close-sidebar" data-toggle="left-sidebar-close"> 
+			   <i class="ion-close-round"></i>
+			</div>
+		</div> <br>
+       
+       
+        <div class="menu-block customscroll">
+
+            <div class="sidebar-menu">
+                <ul id="accordion-menu">
+                    <li class="dropdown">
+                    </li>
+                    <li class="btn-primary active" style="background-color: black">
+                        <a href="{% url 'empdash' %}" class="dropdown-toggle no-arrow">
+                        <span class="micon dw dw-house-1"></span><span class="mtext"><b>Dashboard</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'empoverview' %}" class="dropdown-toggle no-arrow">
+                        <span class="micon dw dw-building"></span><span class="mtext"><b>Company Profile</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'emppersonalinfonav' %}" class="dropdown-toggle no-arrow">
+                        <span class="micon dw dw-user1"></span><span class="mtext"><b>My Profile</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'empleave' %}" class="dropdown-toggle no-arrow">
+                        <span class="micon dw dw-calendar-1"></span><span class="mtext"><b>Leave</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'empdirectory' %}" class="dropdown-toggle no-arrow">
+                        <span class="micon dw dw-list"></span><span class="mtext"><b>Directory</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'empdailylog' %}" class="dropdown-toggle no-arrow">
+                        <span class="micon bi bi-check2-square"></span><span class="mtext"><b>Attendance</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'emp_calender' %}" class="dropdown-toggle no-arrow">
+                        <span class="micon dw dw-calendar"></span><span class="mtext"><b>Holiday Calendar</b></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+  
+
+    <div class="mobile-menu-overlay"></div>
+
+    <div class="main-container">
+        <!-- <div class="pd-ltr-20 xs-pd-20-10">
+            <div class="min-height-200px"> -->
+        <div class="card-box height-100-px overflow-hidden">
+            <ul class="nav nav-tabs customtab" role="tablist">
+         
+                <li class="nav-item">
+                    <a class="nav-link "  href="{% url 'emppersonalinfonav' %}" >Personal</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"  href="{% url 'empworknav' %}" >Work</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"  href="{% url 'empteamnav' %}" >Team</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"  href="{% url 'empeducationnav' %}" >Education</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"  href="{% url 'empfamilynav' %}" >Family</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'empdocumentsnav' %}" >Documents</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link " href="{% url 'empworkweeknav' %}" >Work Week</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'empbank_account' %}" >Payroll</a>
+                </li>
+                <li class="nav-item">
+                   <a class="nav-link" href="{% url 'empe_exit' %}" >E-Exit</a>
+               </li>
+               
+                <!-- <li class="nav-item">
+                    <a class="nav-link" href="{% url 'empfilemanagernav' %}" >File Manager</a>
+                </li> -->
+            </ul>
+                        
+             
+            <ul class="nav nav-tabs customtab" role="tablist" >
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'emppayrollnav' %}">Pay Slip</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'empsalary_structure' %}">Salary Structure</a>
+                </li>
+                <!-- <li class="nav-item">
+                    <a class="nav-link" href="{% url 'empdeclaration' %}">Declaration</a>
+                </li> -->
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'empbank_account' %}">Bank Account</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'reimbursements' %}">Reimbursements</a>
+                </li>
+                                
+                                </ul>
+                                <div class="min-height-200px">
+                                 
+                                                        
+                                <div class="pd-20 card-box mb-30" style="margin-bottom: 0;">
+                                
+                            
+                                    <h6>SALARY ACCOUNT DETAILS</h6><hr>
+                                        
+                                
+                                    <form action="{% url 'empupdate_bank-account' %} " method="post" enctype="multipart/form-data" class="form-container" role="form" >
+                                        {% csrf_token %}
+                                        
+                                        
+                                        
+                                            <div class="row">
+                                                
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label >Account Holder's Name <span style="color:red">&#42</span></label>
+                                                        <input pattern="[a-zA-Z\s]+" type="text" class="form-control" id="name" name="name" value="{% if bankdatas.account_holder_name %}{{bankdatas.account_holder_name}}{% endif %}" required > 
+                                                        <span id="accountholder" style="color: red;font-size: small;"></span>                                                                        
+                                                    </div>   
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label >Bank Name <span style="color:red">&#42</span></label>
+                                                        <input pattern="[a-zA-Z\s]+" type="text" class="form-control" id="bankname" name="bankname" value="{% if bankdatas.bank_name %}{{bankdatas.bank_name}}{% endif %}" required >   
+                                                        <span id="bankaccountholder" style="color: red;font-size: small;"></span>                                                                      
+                                                    </div>                                                     
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label >Account Number <span style="color:red">&#42</span></label>
+                                                        <input type="text" class="form-control" id="acctno" name="acctno" value="{% if bankdatas.account_number %}{{bankdatas.account_number}}{% endif %}" required > 
+                                                        <span id="accountnumber" style="color: red;font-size: small;"></span>                                                                        
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label >Branch Name <span style="color:red">&#42</span></label>
+                                                        <input pattern="[a-zA-Z\s]+" type="text" class="form-control" id="branchname" name="branchname" value="{% if bankdatas.branch_name %}{{bankdatas.branch_name}}{% endif %}" required > 
+                                                        <span id="bankbranchname" style="color: red;font-size: small;"></span>                                                                         
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label >IFSC Code <span style="color:red">&#42</span></label>
+                                                        <input type="text" class="form-control" id="ifsccode" name="ifsccode" value="{% if bankdatas.IFSC_code %}{{bankdatas.IFSC_code}}{% endif %}" required >  
+                                                        <span id="bankifsccode" style="color: red;font-size: small;"></span>                                                                        
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label >City <span style="color:red">&#42</span></label>
+                                                        <input pattern="[a-zA-Z\s]+" type="text" class="form-control" id="city" name="city" value="{% if bankdatas.city %}{{bankdatas.city}}{% endif %}" required >   
+                                                        <span id="bankcity" style="color: red;font-size: small;"></span>                                                                      
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label >ESI Number<span style="color:red">&#42</span></label>
+                                                        <input  type="text" class="form-control" id="bankesa" name="esa" value="{% if bankdatas.esa %}{{bankdatas.esa}}{% endif %}" required >   
+                                                        <span id="bankesa" style="color: red;font-size: small;"></span>                                                                      
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label >PF Number<span style="color:red">&#42</span></label>
+                                                        <input type="text" class="form-control" id="bankpfnum" name="pfnum" value="{% if bankdatas.pfnum %}{{bankdatas.pfnum}}{% endif %}" required >   
+                                                        <span id="bankpfnum" style="color: red;font-size: small;"></span>                                                                      
+                                                    </div>
+                                                </div>
+                                                    
+                                            </div>    
+                                            
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                             <button type="submit" class="btn btn-primary float-right" >Save</button>
+                                            </div>
+                                        </div> 
+                
+                                    </form>
+                                
+                            </div>
+                        </div>
+                    </div>
+
+
+                
+            </div>
+            
+        </div>
+    </div>
+    <!-- js -->
+    <script src="static/index/vendors/scripts/core.js"></script>
+    <script src="static/index/vendors/scripts/script.min.js"></script>
+    <script src="static/index/vendors/scripts/process.js"></script>
+    <script src="static/index/vendors/scripts/layout-settings.js"></script>
+    <script src="static/index/src/plugins/jquery-steps/jquery.steps.js"></script>
+    <script src="static/index/vendors/scripts/steps-setting.js"></script>
+
+    <script>
+        function validateForm() {
+            var bankInput = document.getElementById("name");
+            var trimmedbankInput = bankInput.value.trim();
+            var accountholder = document.getElementById("accountholder");
+
+            var banknameInput = document.getElementById("bankname");
+            var trimmedbanknameInput = banknameInput.value.trim();
+            var bankaccountholder = document.getElementById("bankaccountholder")
+
+            var account_numberinput = document.getElementById("acctno");
+            var trimmedaccount_numberinput = account_numberinput.value.trim();
+            var accountnumber = document.getElementById("accountnumber")
+
+            var branch_nameinput = document.getElementById("branchname");
+            var trimmedbranch_nameinput =  branch_nameinput.value.trim();
+            var bankbranchname = document.getElementById("bankbranchname")
+
+            var ifsccodeinput = document.getElementById("ifsccode");
+            var trimmedifsccodeinput =  ifsccodeinput.value.trim();
+            var bankifsccode = document.getElementById("bankifsccode")
+
+            var cityinput = document.getElementById("city");
+            var trimmedcityinput =  cityinput.value.trim();
+            var bankcity = document.getElementById("bankcity")
+
+            var esainput = document.getElementById("esa");
+            var trimmedesainput =  esainput.value.trim();
+            var bankesa = document.getElementById("bankesa")
+
+            var pfnuminput = document.getElementById("pfnum");
+            var trimmedpfnuminput =  pfnuminput.value.trim();
+            var bankpfnum = document.getElementById("pfnum")
+
+
+        
+        if (trimmedbankInput === "") {
+                accountholder.textContent = "Account holder required";
+              
+              return false; 
+            }
+        if (trimmedbanknameInput === "") {
+                bankaccountholder.textContent = "Bank Name required";
+              
+              return false; 
+            }
+        if (trimmedaccount_numberinput === "") {
+                accountnumber.textContent = "Account Number required";
+              
+              return false; 
+            }
+        if (trimmedbranch_nameinput === "") {
+               bankbranchname.textContent = "Branch name required";
+              
+              return false; 
+            }
+        if (trimmedifsccodeinput === "") {
+               bankifsccode.textContent = "Ifsc code required";
+              
+              return false; 
+            }
+        if (trimmedcityinput === "") {
+               bankcity.textContent = "City required";
+              
+              return false; 
+            }
+        if (trimmedesainput === "") {
+               bankesa.textContent = "esa required";
+              
+              return false; 
+            }
+        if (trimmedpfnuminput === "") {
+               bankpfnum.textContent = "pfnum required";
+              
+              return false; 
+            }
+
+
+
+
+            accountholder.textContent = "";
+            bankaccountholder.textContent ="";
+            accountnumber.textContent = "";
+            bankbranchname.textContent = "";
+            bankifsccode.textContent = "";
+            bankcity.textContent = "";
+            bankesa.textContent = "";
+            bankpfnum.textContent = "";
+            return true;
+        }
+          
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Basic Page Info -->
+    <meta charset="utf-8">
+    <title>HRMS</title>
+    <link rel="icon" href="/static/logo/apple-touch-icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ag-grid-community/styles/ag-grid.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ag-grid-community/styles/ag-theme-alpine.css">
+    <script src="https://cdn.jsdelivr.net/npm/ag-grid-community/dist/ag-grid-community.min.js"></script>
+    <!-- Other CSS and JS files -->
+    <link rel="stylesheet" type="text/css" href="/static/index/vendors/styles/core.css">
+    <link rel="stylesheet" type="text/css" href="/static/index/vendors/styles/icon-font.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/index/src/plugins/datatables/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/index/src/plugins/datatables/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/index/vendors/styles/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <style>
+        /* AG Grid Styles */
+        .ag-theme-alpine {
+            border-radius: 12px;
+            overflow: hidden;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 14px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .ag-header {
+            background-color: #3f51b5;  /* Change to match your theme */
+           
+            font-weight: 600;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .ag-header-cell {
+            background-color: #3f51b5;
+            color: white;
+            border-right: 1px solid #5c6bc0;
+            padding: 10px 8px;
+        }
+        .ag-header-cell:hover {
+            background-color: #ffffff;
+            color: rgb(0, 0, 0);
+            border-right: 1px solid #5c6bc0;
+            padding: 10px 8px;
+    }
+
+        .ag-header-cell:last-child {
+            border-right: none;
+        }
+
+        .ag-cell {
+            border-right: 1px solid #e0e0e0;
+            border-bottom: 1px solid #f0f0f0;
+            padding: 10px 8px;
+            background-color: white;
+        }
+
+        .ag-cell:last-child {
+            border-right: none;
+        }
+
+        .ag-row:hover {
+            background-color: #f5f7fa !important;
+        }
+
+        .ag-row-odd {
+            background-color: #fafbfc;
+        }
+
+        .ag-row-selected {
+            background-color: #d0eaff !important;
+        }
+
+        .ag-body-viewport::-webkit-scrollbar {
+            height: 8px;
+            width: 8px;
+        }
+
+        .ag-body-viewport::-webkit-scrollbar-thumb {
+            background: #bdbdbd;
+            border-radius: 4px;
+        }
+
+        /* Style filter inputs */
+        .ag-floating-filter-full-body input,
+        .ag-floating-filter input {
+            padding: 6px 8px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            background-color: #ffffff;
+            font-size: 13px;
+            color: #333;
+        }
+
+        /* Dropdown filter style (set filter) */
+        .ag-set-filter-list {
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            padding: 8px;
+        }
+
+        .ag-set-filter-item {
+            padding: 4px 6px;
+            border-radius: 4px;
+            margin-bottom: 4px;
+        }
+
+        .ag-set-filter-item:hover {
+            background-color: #e3f2fd;
+        }
+
+        /* Main filter dropdown container */
+        .ag-theme-alpine .ag-filter {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 16px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 14px;
+            min-width: 220px;
+        }
+
+        /* Each filter section inside */
+        .ag-theme-alpine .ag-filter-body {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        /* Search input inside set filter */
+        .ag-theme-alpine .ag-mini-filter {
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 12px;
+        }
+
+        /* Checkbox container */
+        .ag-theme-alpine .ag-set-filter-list {
+            max-height: 200px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        /* Individual checkbox item */
+        .ag-theme-alpine .ag-set-filter-item {
+            padding: 6px 10px;
+            border-radius: 6px;
+            transition: background 0.2s ease;
+        }
+
+        .ag-theme-alpine .ag-set-filter-item:hover {
+            background-color: #e3f2fd;
+        }
+
+        /* Input fields inside filter popup */
+        .ag-theme-alpine .ag-filter input[type="text"],
+        .ag-theme-alpine .ag-filter input[type="number"],
+        .ag-theme-alpine .ag-filter input[type="date"] {
+            padding: 8px 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* Filter condition dropdown */
+        .ag-theme-alpine .ag-filter-select {
+            padding: 6px 8px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .ag-theme-alpine .ag-filter-apply-panel {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 12px;
+            gap: 8px;
+        }
+
+        .ag-theme-alpine .ag-filter-apply-panel button {
+            background-color: #3f51b5;
+            color: #fff;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .ag-theme-alpine .ag-filter-apply-panel button:hover {
+            background-color: #303f9f;
+        }
+        /* Individual checkbox item */
+.ag-theme-alpine .ag-set-filter-item {
+    padding: 6px 10px;
+    border-radius: 6px;
+    transition: background 0.2s ease;
+}
+
+.ag-theme-alpine .ag-set-filter-item:hover {
+    background-color: #e3f2fd;
+}
+/* Input fields inside filter popup */
+.ag-theme-alpine .ag-filter input[type="text"],
+.ag-theme-alpine .ag-filter input[type="number"],
+.ag-theme-alpine .ag-filter input[type="date"] {
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Filter condition dropdown */
+.ag-theme-alpine .ag-filter-select {
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+.ag-theme-alpine .ag-filter-apply-panel {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 12px;
+    gap: 8px;
+}
+
+.ag-theme-alpine .ag-filter-apply-panel button {
+    background-color: #3f51b5;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.ag-theme-alpine .ag-filter-apply-panel button:hover {
+    background-color: #303f9f;
+}
+.ag-theme-alpine .ag-set-filter-list::-webkit-scrollbar {
+    width: 6px;
+}
+.ag-theme-alpine .ag-set-filter-list::-webkit-scrollbar-thumb {
+    background-color: #bdbdbd;
+    border-radius: 3px;
+}
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="header-left">
+            <div class="menu-icon dw dw-menu"></div>
+            <form method="post" action="{% url 'search_punch_logs' %}" id="punch-log-form" style="margin-left: -60%;">
+                {% csrf_token %}
+                <div class="form-group" style="position: fixed; margin-top: -1.5%; margin-left: 27%; width: 20%;">
+                    <select id="username" name="username" class="form-control" style="width: 70%;">
+                        <option value=""></option>
+                        {% for emp in user_data %}
+                            <option value="{{ emp.id }}" {% if emp.id|stringformat:"s" == username %}selected{% endif %}>{{ emp.username }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group" style="position: fixed; margin-top: -1.5%; margin-left: 42%; width: 25%;">
+                    <input name="monthselect" class="form-control month-picker" type="text" style=" width: 52.8%;background-color: white;margin-top:-0.1%;" value="{% if monthselect %}{{ monthselect }}{% else %}{{ formated }}{% endif %}" required>
+                </div>
+                <a href="{% url 'search_punch_logs' %}" type="button" class="btn btn-secondary" data-dismiss="modal" style=" text-align: center;padding: 0.1rem 0.5rem;position: fixed; margin-left: 62%; margin-top: -0.8%; color: white; cursor: pointer; width: 4.4%;">Clear</a>
+                <button id="submit-btn" class="btn btn-primary" style=" text-align: center;padding: 0.1rem 0.5rem;position: fixed; margin-left: 57%; margin-top: -0.8%; cursor: pointer; color: white;width: 4.4%;">
+                    Submit
+                </button>
+            </form>
+        </div>                
+        <div class="header-right">
+            <div class="dashboard-setting user-notification">
+                <div class="dropdown">
+                    <a class="dropdown-toggle no-arrow" href="javascript:;" data-toggle="right-sidebar"></a>
+                </div>
+            </div>
+            <div class="user-info-dropdown" style="margin-top: 2%;margin-right: 1%;" id="export-att">
+                <div class="dropdown">
+                    <button class="btn btn-primary" data-toggle="modal" href="#export_Modal" style="border-color: white;width: 5.9;">Export</button>
+                </div>
+            </div>
+            <div class="user-info-dropdown">
+				<div class="dropdown">
+					<a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+						<span class="user-icon">
+							{% if k.image %}
+                            <img src="{{ k.image.url }}" alt="" style="width: 100%; height:100% ">
+                        {% else %}
+						<img src="/static/logo/userlogo.png" id="photo" style="width: 100%; height:100% ">
+                        {% endif %}  						</span>
+						<span class="user-name">{{request.user.username}}</span>
+					</a>
+					<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+						<a class="dropdown-item" href="{% url 'createpersonalinfo' %}"><i class="dw dw-user1"></i> Profile</a>
+						<a class="dropdown-item" href="{% url 'department' %}" data-toggle="right-sidebar"><i class="dw dw-settings2"></i> Settings</a>
+						<a class="dropdown-item" href="{% url 'help_page' %}"><i class="dw dw-help"></i> Help</a>
+						<a class="dropdown-item" href="{% url 'logout' %}"><i class="dw dw-logout"></i> Logout</a>
+					</div>
+				</div>
+			</div>
+        </div>
+    </div>    
+
+    <div class="left-side-bar">
+        <div class="brand-logo mt-3">
+            <a href="{% url 'dashboard' %}">
+                {% if request.user.company_type %}
+                    {% if request.user.company_type.inverse_logo %}
+                    <img src="{{ request.user.company_type.inverse_logo.url }}" style="width: 100%; height: 100%;">
+                    {% else %}
+                    <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+                    {% endif %}
+                {% else %}
+                <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+                {% endif %}
+            </a>
+            <div class="close-sidebar" data-toggle="left-sidebar-close">
+                <i class="ion-close-round"></i>
+            </div>
+        </div>
+        <div class="menu-block customscroll">
+            <div class="sidebar-menu">
+                <ul id="accordion-menu">
+                    <br>
+                    <li class="btn-primary active" style="background-color:black">
+                        <a href="{% url 'dashboard' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-house-1"></span><span class="mtext"><b>Dashboard</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'companyprofile' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-building"></span><span class="mtext"><b>Company Profile</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'personalinfonav' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-user1"></span><span class="mtext"><b>My Profile</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'leave' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-calendar-1"></span><span class="mtext"><b>Leave</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'directory' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-list"></span><span class="mtext"><b>Directory</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'dailylog' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon bi bi-check2-square"></span><span class="mtext"><b>Attendance</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'calender' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-calendar"></span><span class="mtext"><b>Holiday Calendar</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'runpayroll_overview' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-money-2"></span><span class="mtext"><b>Payroll</b></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="card-box height-100-px overflow-hidden">
+            <ul class="nav nav-tabs customtab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'dailylog' %}">Logs</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'attendance_logs' %}">Attendance Logs</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'search_punch_logs' %}">Attendance Month Logs</a> 
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'automationlog' %}">Automation Logs</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'list-request-approvals' %}">Approvals</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'attendanceRule' %}">Rules</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'view_assignattendancerule' %}">Assign Rule</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'attendance_workweek' %}">Work Week</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'view_assignworkweek' %}">Assign Work Week</a>
+                </li>
+            </ul>
+            <div class="card-box">
+                <div class="ag-grid-wrapper">
+                    <div class="ag-toolbar">
+                    
+                    </div>
+                    <div id="myGrid" class="ag-theme-alpine styled-grid" style="height: 600px; width: 100%;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let rowData = [
+                {% for punch in Punch_obj %}
+                {
+                    empid: "{{ punch.user.empid }}",
+                    user_id:"{{punch.user.id}}",
+                    username: "{{ punch.user.username }}",
+                    status: "{{ punch.status }}",
+                    date: "{{ punch.date|date:'d F Y' }}",
+                    first_clock_in_time: "{{ punch.first_clock_in_time|date:'g:i A' }}",
+                    first_clock_out_time: "{% if punch.first_clock_out_time %}{{ punch.first_clock_out_time|date:'g:i A' }}{% else %}-- -- --{% endif %}",
+                    work_duration: "{{ punch.work_duration }}",
+                    overtime: "{{ punch.overtime }}",
+                    break_duration: "{{ punch.break_duration }}",
+                    break_count: "{{ punch.break_count }}",
+                    location: "{{ punch.user.wrklcn.location }}",
+                    department: "{{ punch.user.department.name }}",
+                    anomalies: "{% if punch.status == 'AN' %}1{% else %}-- -- --{% endif %}",
+                    WfhOrWfo: "{{ punch.WfhOrWfo }}"
+                },
+                {% empty %}
+                {% endfor %}
+            ];
+            console.log("Row data sample:", rowData[0]);
+
+
+            const columnDefs = [
+                              {
+                    headerName: "Emp ID",
+                    field: "empid",
+                    cellRenderer: (params) => {
+                        const link = document.createElement('a');
+                        link.href = `/view_personalinfo${params.data.user_id}`;
+                        link.textContent = params.value;
+                        link.target = '_blank';
+                        return link;
+                    }
+                },
+
+                
+      
+                {
+                    headerName: "Name",
+                    field: "username",
+                    cellRenderer: (params) => {
+                        if (!params.data || !params.data.user_id || !params.data.username) return "--";
+                        return `<a href="/view_personalinfo${params.data.user_id}" target="_blank">${params.data.username}</a>`;
+                    },
+                    cellRendererParams: { suppressCount: true },
+                },
+
+                { headerName: "Status", field: "status" },
+                { headerName: "Date", field: "date" },
+                { headerName: "In Time", field: "first_clock_in_time" },
+                { headerName: "Out Time", field: "first_clock_out_time" },
+                { headerName: "Work Duration", field: "work_duration" },
+                { headerName: "Overtime Duration", field: "overtime" },
+                { headerName: "Break Duration", field: "break_duration" },
+                { headerName: "Breaks", field: "break_count" },
+                { headerName: "Location", field: "location" },
+                { headerName: "Department", field: "department" },
+                { headerName: "Outstanding Anomalies", field: "anomalies" },
+                { headerName: "WFH/WFO", field: "WfhOrWfo" },
+            ];
+
+            const gridOptions = {
+                columnDefs: columnDefs,
+                rowData: rowData,
+                pagination: true,
+                 
+                rowHeight: 48,
+                headerHeight: 60,
+                paginationPageSize: 25,
+                defaultColDef: {
+                    sortable: true,
+                    filter: true,
+                    resizable: true,
+                    flex: 1,
+                    minWidth: 130,
+                },
+            };
+
+            const eGridDiv = document.querySelector('#myGrid');
+            agGrid.createGrid(eGridDiv, gridOptions);
+        });
+    </script>
+</body>
+</html>

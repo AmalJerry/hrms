@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Basic Page Info -->
+    <meta charset="utf-8">
+    <title>HRMS</title>
+    <link rel="icon" href="/static/logo/apple-touch-icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <!-- Site favicon -->
+    <!-- <link rel="apple-touch-icon" sizes="180x180" href="static/index/vendors/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="static/index/vendors/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="static/index/vendors/images/favicon-16x16.png"> -->
+
+    <!-- Mobile Specific Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/core.css">
+    <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/icon-font.min.css">
+    <link rel="stylesheet" type="text/css" href="static/index/src/plugins/jquery-steps/jquery.steps.css">
+    <link rel="stylesheet" type="text/css" href="static/index/vendors/styles/style.css">
+
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-119386393-1');
+    </script>
+    <script>
+
+        flatpickr("[data-behavior='flatpickr']", {
+            allowInput: true,
+            dateFormat: "Y-m-d"
+        });
+    </script>
+
+</head>
+
+<body>
+
+    <div class="header">
+        <div class="header-left">
+            <div class="menu-icon dw dw-menu"></div>
+            <h6 class="text-primary" style="padding-left: 20px;">Impersonate Employee: {{data.username}}</h6>
+        </div>
+        <div class="header-right">
+            <div class="dashboard-setting user-notification">
+                <div class="dropdown">
+                    <a class="dropdown-toggle no-arrow" href="javascript:;" data-toggle="right-sidebar">
+
+                    </a>
+                </div>
+            </div>
+            <!-- <div class="user-notification">
+                <div class="dropdown">
+                    <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
+                        <i class="icon-copy dw dw-notification"></i>
+                        <span class="badge notification-active"></span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <div class="notification-list mx-h-350 customscroll">
+                            <ul>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/img.jpg" alt="">
+                                        <h3>John Doe</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/photo1.jpg" alt="">
+                                        <h3>Lea R. Frith</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/photo2.jpg" alt="">
+                                        <h3>Erik L. Richards</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/photo3.jpg" alt="">
+                                        <h3>John Doe</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/photo4.jpg" alt="">
+                                        <h3>Renee I. Hansen</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <img src="static/index/vendors/images/img.jpg" alt="">
+                                        <h3>Vicki M. Coleman</h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+            <div class="user-info-dropdown">
+                <div class="dropdown">
+                    <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                        <span class="user-icon">
+
+                            {% if myprofile.image %}
+                            <img src="{{ myprofile.image.url }}" alt="" style="width: 100%; height:100% ">
+                            {% else %}
+                            <img src="/static/logo/userlogo.png" id="photo" style="width: 100%; height:100% ">
+                            {% endif %}
+                        </span>
+                        <span class="user-name">{{request.user.username}}</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                        <a class="dropdown-item" href="{% url 'createpersonalinfo' %}"><i class="dw dw-user1"></i>
+                            Profile</a>
+                        <a class="dropdown-item" href="{% url 'department' %}" data-toggle="right-sidebar"><i
+                                class="dw dw-settings2"></i> Settings</a>
+                        <a class="dropdown-item" href="{% url 'help_page' %}"><i class="dw dw-help"></i> Help</a>
+                        <a class="dropdown-item" href="{% url 'logout' %}"><i class="dw dw-logout"></i> Logout</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="right-sidebar">
+        <div class="sidebar-title">
+            <h3 class="weight-600 font-16 text-blue">
+                Settings
+                <!--<span class="btn-block font-weight-400 font-12">User Interface Settings</span>-->
+            </h3>
+            <div class="close-sidebar" data-toggle="right-sidebar-close">
+                <i class="icon-copy ion-close-round"></i>
+            </div>
+        </div>
+
+        <div class="right-sidebar-body customscroll">
+            <div class="right-sidebar-body-content">
+                <h4 class="weight-600 font-18 pb-10"><a href="{% url 'department' %}">Department</a> </h4>
+                <h4 class="weight-600 font-18 pb-10"><a href="{% url 'subdepartment' %}">Sub Department</a> </h4>
+                <h4 class="weight-600 font-18 pb-10"><a href="{% url 'designation' %}">Designation</a></h4>
+                <h4 class="weight-600 font-18 pb-10"><a href="{% url 'job' %}">Job Title</a></h4>
+                <h4 class="weight-600 font-18 pb-10"><a href="{% url 'wrk' %}">Work location</a></h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="left-side-bar">
+        <div class="brand-logo mt-3">
+            <a href="{% url 'dashboard' %}">
+                {% if request.user.company_type %}
+                {% if request.user.company_type.inverse_logo %}
+                <img src="{{ request.user.company_type.inverse_logo.url }}" style="width: 100%; height: 100%;">
+                {% else %}
+                <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+                {% endif %}
+                {% else %}
+                <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+                {% endif %}
+            </a>
+            <div class="close-sidebar" data-toggle="left-sidebar-close">
+                <i class="ion-close-round"></i>
+            </div>
+        </div>
+
+        <div class="menu-block customscroll">
+            <div class="sidebar-menu">
+                <ul id="accordion-menu">
+					
+					<br>
+					<li class="btn-primary active" style="background-color:black">
+						<a href="{% url 'dashboard' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-house-1"></span><span class="mtext"><b>Dashboard</b></span>
+						</a>
+					</li>
+					
+					<li>
+						<a href="{% url 'companyprofile' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-building"></span><span class="mtext"><b>Company Profile</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'personalinfonav' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-user1"></span><span class="mtext"><b>My Profile</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'leave' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-calendar-1"></span><span class="mtext"><b>Leave</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'directory' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-list"></span><span class="mtext"><b>Directory</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'dailylog' %}" class="dropdown-toggle no-arrow">
+							<span class="micon bi bi-check2-square"></span><span class="mtext"><b>Attendance</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'calender' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-calendar"></span><span class="mtext"><b>Holiday Calendar</b></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'runpayroll_overview' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-money-2"></span><span class="mtext"><b>Payroll</b></span>
+						</a>
+					</li>
+
+
+				</ul>
+            </div>
+        </div>
+    </div>
+
+    </div>
+    <div class="main-container">
+        <!-- <div class=""> -->
+        <div class="card-box height-100-px overflow-hidden">
+            <!-- <div class="profile-tab ">
+                <div class="tab height"> -->
+            <!-- <br><h4 class="text-blue h4" style="padding-left:30px">COMPANY PROFILE</h4> -->
+            <ul class="nav nav-tabs customtab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link " href="{% url 'view_personalinfo' id=data.id %}">Personal</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'view_work' id=data.id %}">Work</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link " href="{% url 'view_team' id=data.id %}">Team</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'view_education' id=data.id %}">Education</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'view_family' id=data.id %}">Family</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'view_document' id=data.id %}">Document</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'view_workweek' id=data.id %}">Work Week</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'view_daily_log' id=data.id %}">Attendance</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'view_payroll' id=data.id %}">Payroll</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'list_generated_certificates' %}">Experience Certificates</a>
+                </li>
+                </li>
+                <!-- </div> -->
+            </ul>
+
+            <!-- <div class="main-container" style="padding-top: 0px; " >    -->
+
+            <div class="min-height-200px">
+                <!-- <div class="pd-20 card-box mb-30"> -->
+                <!-- <div class="clearfix" style="padding-left: 20px;">
+                                <h4 class="text-blue h4">MY PROFILE</h4>
+                            </div>                               -->
+                <!-- <h5 style="padding-left: 20px;">Work</h5> -->
+                <!-- <section> -->
+                <form id="Work" action="{% url 'admin_create_empwork' id=data.id  %} " method="post"
+                    enctype="multipart/form-data" class="form-container" role="form">
+                    {% csrf_token %}
+
+                    <div class="pd-20 card-box" id="basicinfo">
+                        <h6>BASIC INFO</h6>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Employee ID</label>
+                                    <input type="number" class="form-control" name="Empid" id="Empid"
+                                        value="{{data.empid}}">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <style>
+                                        .inputWithIcon input[type="text"] {
+                                            padding-left: 30px;
+                                        }
+
+                                        .inputWithIcon {
+                                            position: relative;
+                                        }
+
+                                        .inputWithIcon i {
+                                            position: absolute;
+                                            left: 10;
+                                            top: 6px;
+                                            padding: 9px 8px;
+                                            color: rgb(148, 145, 145);
+                                            transition: 0.3s;
+
+                                        }
+                                    </style>
+                                    <label>Date of Joining <span style="color:red">&#42</span></label>
+                                    <div class="inputWithIcon">
+                                        <i class="icon-copy fa fa-calendar" aria-hidden="true"></i>
+                                        <input class="form-control date-picker" placeholder="Select Date" type="text"
+                                            name="Joindate" id="Joindate"
+                                            value="{% if data.datejoin %}{{data.datejoin}}{% endif %}" required
+                                            readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Probation Period </label>
+
+                                    <input type="text" class="form-control" name="Probationperiod" id="Probationperiod"
+                                        value="{% if data.probperiod %}{{data.probperiod}}{% endif %}">
+
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Employee Type <span style="color:red">&#42</span></label>
+                                    <select class="custom-select form-control" name="Emptype" required>
+                                        <option value="" disabled>Select Employee Type</option>
+                                        <option value="Full Time" {% if data.emptype == 'Full Time' %}selected{% endif %}>
+                                            Full Time</option>
+                                        <option value="Part Time" {% if data.emptype == 'Part Time' %}selected{% endif %}>
+                                            Part Time</option>
+                                        <option value="Intern" {% if data.emptype == 'Intern' %}selected{% endif %}>Intern
+                                        </option>
+                                        <option value="Contract" {% if data.emptype == 'Contract' %}selected{% endif %}>
+                                            Contract</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Work Location <span style="color:red">&#42</span></label>
+                                    <select class="custom-select form-control" id="wrklcn" name="wrklcn" required>
+                                        <option value="">Select Work Location</option>
+                                        {% for j in wr %}
+                                        <option value="{{j.id}}" {% if j.id == data.wrklcn.id %} selected {% endif %}>
+                                            {{j.location}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Employee Status <span style="color:red">*</span></label>
+                                    <select class="custom-select form-control" name="Empstatus" required id="statusSelect">
+                                        <option value="">Select Status</option>
+                                        <option value="Onboarding" {% if data.status == 'Onboarding' %}selected{% endif %}>Onboarding</option>
+                                        <option value="Active" {% if data.status == 'Active' %}selected{% endif %}>Active</option>
+                                        <option value="Inactive" {% if data.status == 'Inactive' %}selected{% endif %}>Inactive</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div id="inactiveWarningModal" class="custom-modal" style="display: none;">
+                                <div class="custom-modal-content">
+                                    <i class="fa fa-exclamation-triangle warning-icon"></i>
+                                    <p>
+                                        <strong><span id="warningUsername">{{ data.username }}</span></strong> has
+                                        <strong><span id="warningCount">{{ direct_reports_count }}</span></strong> direct reporting member(s).
+                                    </p>
+                                    <p>Please reassign them before marking as <strong>Inactive</strong>.</p>
+                                    <button id="closeWarningModal" class="btn btn-warning mt-2">Okay</button>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- </div>
+                                        <div class="pd-20 card-box mb-30"> -->
+                        <h6>WORK INFO</h6>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Designation <span style="color:red">&#42</span></label>
+                                    <select class="custom-select form-control" name="designation" id="designation"
+                                        required>
+                                        <option value="">Select Designation</option>
+                                        {% for j in dsn %}
+                                            <option value="{{j.id}}" {% if j.id == data.designation.id %} selected {% endif %}>{{j.name}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Job Title <span style="color:red">&#42</span></label>
+                                    <select class="custom-select form-control" name="jobtitle" id="jobtitle" required>
+                                        <option value="">Select Job title</option>
+                                        {% for j in jttl %}
+                                            <option value="{{j.id}}" {% if j.id == data.jobtitle.id %} selected {% endif %}>{{j.name}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Department <span style="color:red">&#42</span></label>
+                                    <select class="custom-select form-control" name="department" id="department"
+                                        required>
+                                        <option value="">Select Department</option>
+                                        {% for department in dpt %}
+                                            <option value="{{ department.id }}" {% if department.id == data.department.id %}selected{% endif %}>{{ department.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Sub Department <span style="color:red">&#42</span></label>
+                                    <select class="custom-select form-control" name="subdepartment" id="subdepartment"
+                                        required>
+
+                                        <option value="">Select Sub Department</option>
+
+                                        {% for i in sd %}
+                                            <option value="{{i.id}}" {% if i.id == data.subdepartment.id %} selected {% endif %}>{{ i.subname }}</option>
+
+                                        {% endfor %}
+
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Work Experience <span style="color:red"></span></label>
+
+                                    <input type="text" class="form-control" name="Workexp" id="Workexp"
+                                        value="{% if data.wrkexp %}{{data.wrkexp}}{% endif %}">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 float-right">
+                                <button type="submit" class="btn btn-primary float-right"
+                                    onclick="enblnxt1()">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <!-- js -->
+    <script src="static/index/vendors/scripts/core.js"></script>
+    <script src="static/index/vendors/scripts/script.min.js"></script>
+    <script src="static/index/vendors/scripts/process.js"></script>
+    <script src="static/index/vendors/scripts/layout-settings.js"></script>
+    <script src="static/index/src/plugins/jquery-steps/jquery.steps.js"></script>
+    <script src="static/index/vendors/scripts/steps-setting.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <script>
+        // JavaScript to update subdepartment options based on the selected department
+        const departmentSelect = document.getElementById("department");
+        const subdepartmentSelect = document.getElementById("subdepartment");
+
+        departmentSelect.addEventListener("change", function () {
+            const selectedDepartmentId = departmentSelect.value;
+
+            // Clear the subdepartment dropdown
+            subdepartmentSelect.innerHTML = '<option value="" disabled>Select Subdepartment</option>';
+
+            // Populate the subdepartment dropdown with corresponding subdepartments
+            {% for subdepartment in sd %}
+            if ("{{ subdepartment.depname.id }}" === selectedDepartmentId) {
+                const option = document.createElement("option");
+                option.value = "{{ subdepartment.id }}";
+                option.text = "{{ subdepartment.subname }}";
+                subdepartmentSelect.appendChild(option);
+            }
+            {% endfor %}
+        });
+    </script>
+
+    <script>
+        setTimeout(function () {
+            if ($('#msg1').length > 0) {
+                $('#msg1').remove();
+            }
+        }, 7000),
+            setTimeout(function () {
+                if ($('#msg2').length > 0) {
+                    $('#msg2').remove();
+                }
+            }, 7000),
+            setTimeout(function () {
+                if ($('#msg3').length > 0) {
+                    $('#msg3').remove();
+                }
+            }, 7000)
+
+    </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const statusSelect = document.getElementById('statusSelect');
+    const modal = document.getElementById('inactiveWarningModal');
+    const closeBtn = document.getElementById('closeWarningModal');
+    const hasDirectReports = {{ has_direct_reports|yesno:"true,false" }};
+    const currentStatus = "{{ data.status }}";
+
+    function showModal() {
+        modal.style.display = 'flex';
+        setTimeout(() => {
+            statusSelect.value = currentStatus;
+        }, 500);
+    }
+
+    closeBtn.addEventListener('click', () => {
+        modal.style.display = 'none';
+    });
+
+    statusSelect.addEventListener('change', function() {
+        if (this.value === 'Inactive' && hasDirectReports) {
+            showModal();
+        }
+    });
+
+    document.querySelector('form').addEventListener('submit', function(e) {
+        if (statusSelect.value === 'Inactive' && hasDirectReports) {
+            e.preventDefault();
+            showModal();
+            return false;
+        }
+    });
+});
+</script>
+<style>
+    .custom-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1050;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.custom-modal-content {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    animation: popupFadeIn 0.3s ease-in-out;
+}
+
+.warning-icon {
+    font-size: 36px;
+    color: #d9534f;
+    margin-bottom: 15px;
+}
+
+@keyframes popupFadeIn {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+</style>
+</body>
+</html>

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="utf-8">
+    <title>HRMS</title>
+    <link rel="icon" href="{% static 'logo/apple-touch-icon.png' %}" type="image/x-icon">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <!-- Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" type="text/css" href="{% static 'index/vendors/styles/core.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'index/vendors/styles/icon-font.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'index/src/plugins/jquery-steps/jquery.steps.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'index/vendors/styles/style.css' %}">
+
+    <!-- AG Grid CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/ag-grid-community@32.0.2/dist/styles/ag-grid.css">
+    <link rel="stylesheet" href="https://unpkg.com/ag-grid-community@32.0.2/dist/styles/ag-theme-alpine.css">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'UA-119386393-1');
+    </script>
+
+</head>
+
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-left">
+            <div class="menu-icon dw dw-menu"></div>
+        </div>
+        <div class="header-right">
+            <div class="dashboard-setting user-notification">
+                <div class="dropdown">
+                    <a class="dropdown-toggle no-arrow" href="javascript:;" data-toggle="right-sidebar"></a>
+                </div>
+            </div>
+            <div class="user-info-dropdown">
+                <div class="dropdown">
+                    <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                        <span class="user-icon">
+                            {% if k.image %}
+                                <img src="{{ k.image.url }}" style="width: 100%; height: 100%;">
+                            {% else %}
+                                <img src="{% static 'logo/userlogo.png' %}" style="width: 100%; height: 100%;">
+                            {% endif %}
+                        </span>
+                        <span class="user-name">{{ request.user.username }}</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                        <a class="dropdown-item" href="{% url 'createpersonalinfo' %}"><i class="dw dw-user1"></i> Profile</a>
+                        <a class="dropdown-item" href="{% url 'department' %}"><i class="dw dw-settings2"></i> Settings</a>
+                        <a class="dropdown-item" href="{% url 'help_page' %}"><i class="dw dw-help"></i> Help</a>
+                        <a class="dropdown-item" href="{% url 'logout' %}"><i class="dw dw-logout"></i> Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="left-side-bar">
+        <div class="brand-logo mt-3">
+            <a href="{% url 'dashboard' %}">
+                {% if request.user.company_type and request.user.company_type.inverse_logo %}
+                    <img src="{{ request.user.company_type.inverse_logo.url }}" style="width: 100%; height: 100%;">
+                {% else %}
+                    <img src="{% static 'logo/deskapp-logo-white.svg' %}" alt="" class="light-logo">
+                {% endif %}
+            </a>
+            <div class="close-sidebar" data-toggle="left-sidebar-close">
+                <i class="ion-close-round"></i>
+            </div>
+        </div>
+
+        <div class="menu-block customscroll">
+            <div class="sidebar-menu">
+                <ul id="accordion-menu">
+                    <br>
+                    <li class="btn-primary active" style="background-color: black">
+                        <a href="{% url 'dashboard' %}" class="dropdown-toggle no-arrow">
+                            <span class="micon dw dw-house-1"></span><span class="mtext"><b>Dashboard</b></span>
+                        </a>
+                    </li>
+                    <li><a href="{% url 'companyprofile' %}" class="dropdown-toggle no-arrow"><span class="micon dw dw-building"></span><span class="mtext"><b>Company Profile</b></span></a></li>
+                    <li><a href="{% url 'personalinfonav' %}" class="dropdown-toggle no-arrow"><span class="micon dw dw-user1"></span><span class="mtext"><b>My Profile</b></span></a></li>
+                    <li><a href="{% url 'leave' %}" class="dropdown-toggle no-arrow"><span class="micon dw dw-calendar-1"></span><span class="mtext"><b>Leave</b></span></a></li>
+                    <li><a href="{% url 'directory' %}" class="dropdown-toggle no-arrow"><span class="micon dw dw-list"></span><span class="mtext"><b>Directory</b></span></a></li>
+                    <li><a href="{% url 'dailylog' %}" class="dropdown-toggle no-arrow"><span class="micon bi bi-check2-square"></span><span class="mtext"><b>Attendance</b></span></a></li>
+                    <li><a href="{% url 'calender' %}" class="dropdown-toggle no-arrow"><span class="micon dw dw-calendar"></span><span class="mtext"><b>Holiday Calendar</b></span></a></li>
+                    <li><a href="{% url 'runpayroll_overview' %}" class="dropdown-toggle no-arrow"><span class="micon dw dw-money-2"></span><span class="mtext"><b>Payroll</b></span></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <div class="card-box height-100-px overflow-hidden">
+            <ul class="nav nav-tabs customtab" role="tablist">
+                <li class="nav-item"><a class="nav-link" href="{% url 'personalinfonav' %}">Personal</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'worknav' %}">Work</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'view_team' request.user.id %}">Team</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'educationnav' %}">Education</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'familynav' %}">Family</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'documentsnav' %}">Document</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'workweeknav' %}">Work Week</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'pay_slip' %}">Payroll</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'e_exit' %}">E-Exit</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'filemanagernav' %}">Filemanager</a></li>
+                <li class="nav-item"><a class="nav-link active" href="{% url 'list_generated_certificates' %}">Experience Certificates</a></li>
+            </ul><br><br>
+
+            <div class="container">
+                <h5 class="mb-4">Generated Experience Certificates</h5>
+
+                {% if certificates %}
+                    <!-- AG Grid Container -->
+                    <div id="certificateGrid" class="ag-theme-alpine" style="height: 400px; width: 100%;"></div>
+
+                    <!-- AG Grid JavaScript -->
+                    <script src="https://unpkg.com/ag-grid-community@32.0.2/dist/ag-grid-community.min.js"></script>
+                    <script>
+                        // AG Grid column definitions
+                        const columnDefs = [
+                            { 
+                                headerName: "Employee ID", 
+                                field: "empid", 
+                                cellRenderer: params => {
+                                    console.log("Employee ID URL:", params.data.view_personalinfo_url);
+                                    return `<a class="link" href="${params.data.view_personalinfo_url}">${params.value}</a>`;
+                                }
+                            },
+                            { 
+                                headerName: "Employee Name", 
+                                field: "username", 
+                                cellRenderer: params => {
+                                    console.log("Employee Name URL:", params.data.view_personalinfo_url);
+                                    return `<a class="superhero" href="${params.data.view_personalinfo_url}">${params.value}</a>`;
+                                }
+                            },
+                            { headerName: "Phone", field: "phone" },
+                            { headerName: "Email", field: "email" },
+                            { headerName: "Designation", field: "designation" },
+                            { headerName: "Issued Date", field: "issued_date" },
+                            { 
+                                headerName: "Download", 
+                                field: "download", 
+                                cellRenderer: params => {
+                                    console.log("Download URL:", params.data.admin_view_certificate_pdf_url);
+                                    return `<a href="${params.data.admin_view_certificate_pdf_url}" class="btn-download" target="_blank"><button class="btn btn-warning text-white">Download PDF</button></a>`;
+                                }
+                            }
+                        ];
+
+                        // AG Grid row data from Django template
+                        const rowData = [
+                            {% for cert in certificates %}
+                            {% if cert.user %}
+                            {
+                                empid: "{{ cert.user.empid|default:'' }}",
+                                username: "{{ cert.user.username|default:'' }}",
+                                phone: "{{ cert.user.phone|default:'' }}",
+                                email: "{{ cert.user.email|default:'' }}",
+                                designation: "{{ cert.user.designation.name|default:'' }}",
+                                issued_date: "{{ cert.issued_date|date:'d M Y, H:i' }}",
+                                user_id: {{ cert.user.id|default:0 }},
+                                view_personalinfo_url: "{% url 'view_personalinfo' cert.user.id %}",
+                                admin_view_certificate_pdf_url: "{% url 'admin_view_certificate_pdf' cert.user.id %}"
+                            }{% if not forloop.last %},{% endif %}
+                            {% endif %}
+                            {% endfor %}
+                        ];
+
+                        // AG Grid options
+                        const gridOptions = {
+                            columnDefs: columnDefs,
+                            rowData: rowData,
+                            defaultColDef: {
+                                sortable: true,
+                                filter: true,
+                                resizable: true
+                            }
+                        };
+
+                        // Initialize AG Grid
+                        document.addEventListener('DOMContentLoaded', () => {
+                            const gridDiv = document.querySelector('#certificateGrid');
+                            new agGrid.Grid(gridDiv, gridOptions);
+                        });
+                    </script>
+                {% else %}
+                    <p>No experience certificates have been generated yet.</p>
+                {% endif %}
+            </div><br><br>
+        </div>
+    </div>
+
+    <style>
+        .link {
+            color: black;
+        }
+        .link:hover {
+            color: rgb(3, 167, 218);
+        }
+        .superhero {
+            color: black;
+        }
+        .superhero:hover {
+            color: rgb(3, 167, 218);
+        }
+        .ag-header {
+            background-color: #3f51b5;
+            /* Change to match your theme */
+            color: white;
+            font-weight: 600;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .ag-header-cell {
+            background-color: #3f51b5;
+            color: white;
+            border-right: 1px solid #5c6bc0;
+            padding: 10px 8px;
+        }
+
+        .ag-header-cell:hover {
+            background-color: #ffffff;
+            color: rgb(13, 13, 13);
+            border-right: 1px solid #5c6bc0;
+            padding: 10px 8px;
+        }
+    </style>
+
+    <!-- Scripts -->
+    <script src="{% static 'index/vendors/scripts/core.js' %}"></script>
+    <script src="{% static 'index/vendors/scripts/script.min.js' %}"></script>
+    <script src="{% static 'index/vendors/scripts/process.js' %}"></script>
+    <script src="{% static 'index/vendors/scripts/layout-settings.js' %}"></script>
+    <script src="{% static 'index/src/plugins/jquery-steps/jquery.steps.js' %}"></script>
+    <script src="{% static 'index/vendors/scripts/steps-setting.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+</body>
+</html>
