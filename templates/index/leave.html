@@ -64,57 +64,96 @@
 </head>
 <body>
 
-    <div class="header">
+    <div class="mainSideBarFlex">
+<div class="left-side-bar">
+        <div class="headBlockMain">
+            <div  class="bgSecMainall">
+    <div class="profileIconDiv">
+        <div  class="profileImgWrapper">
+            <img src="/media/school-logo.png" alt="" >
+        
+        </div>
+        <div  class="profiletxt">
+            <span  class="head-name">Edship Technologies</span>
+            <p  class="sub-head">Transport Dashboard</p>
+        </div></div><div  class="school-info">
+            <div  class="flex-container">
+                <div class="schoolInfoImgWrapper">
+                    <img  src="/media/school-image.png" alt="School Logo" class="logo">
+                </div><div  class="schooolInfoDetails">
+                    <h2>Public School</h2>
+                    <div  class="location">
+                        <i  class="bi bi-geo-alt"></i>
+                        <span >Kaloor, Kochi</span></div></div></div></div></div>
+        </div>
+
+      
+       <div class="menu-block customscroll">
+            <div class="sidebar-menu">
+               <ul id="accordion-menu">
+					
+			
+			
+					<li>
+						<a  href="{% url 'personalinfonav' %}" class="dropdown-toggle no-arrow active">
+                          
+                                	<span class="micon dw dw-user1"></span>
+                                    <span class="mtext">My Profile</span>
+                    
+						
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'leave' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-calendar-1"></span>
+                            <span class="mtext">Leave</span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'directory' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-list"></span>
+                            <span class="mtext">Directory</span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'dailylog' %}" class="dropdown-toggle no-arrow">
+							<span class="micon bi bi-check2-square"></span>
+                            <span class="mtext">Attendance</span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'calender' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-calendar"></span>
+                            <span class="mtext">Holiday Calendar</span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'runpayroll_overview' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-money-2"></span>
+                            <span class="mtext">Payroll</span>
+						</a>
+					</li>
+
+
+				</ul>
+            </div>
+        </div>
+    </div>
+
+            <div class="main-container">
+        <div class="header">
         <div class="header-left">
             <div class="menu-icon dw dw-menu"></div>
-            <!-- <div class="search-toggle-icon dw dw-search2" data-toggle="header_search"></div> -->
-            <!-- <div class="header-search">
-                <form>
-                    <div class="form-group mb-0">
-                        <i class="dw dw-search2 search-icon"></i>
-                        <input type="text" class="form-control search-input" placeholder="Search Here">
-                    </div>
-                </form>
-            </div> -->
+
         </div>
         <div class="header-right">
             <div class="dashboard-setting user-notification">
                 <div >
-                    <button class="btn btn-primary" data-toggle="modal" data-target="#applyLeaveModal">Apply For Leave</button>
+                    <button class="btn btn-primary applyLeaveBtn " data-toggle="modal" data-target="#applyLeaveModal">Apply For Leave</button>
                 </div>    
             </div>
 
-            <!-- <div class="user-notification">
-                <div class="dropdown">
-                    <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
-                        <i class="icon-copy dw dw-notification"></i>
-                        <span class="badge notification-active"></span>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right">
-                        <div class="notification-list mx-h-350 customscroll">
-                            <ul class="notification-list mx-h-350 customscroll">
-                                
-                                {% for notification in notifications reversed %}
-                                <li class="notification" data-notification-id="{{ notification.notification_id }}">
-                                    <a href="#" onclick="handleNotificationClick('{{ notification.notification_id }}')">
-                                        <img src="{{ notification.image_url }}" alt="">
-                                        <span style="font-size: small;color: black;">{{ notification.message }}</span>
-                                    </a>
-                                </li>
-                                {% endfor %}
-                            </ul>
-                            <div id="notification-container">
-                                <p id="no-notification-message" style="display: none;">No new notifications</p>
-                            </div>
-    
-                            <div id="notification-container">
-                                <a href="{% url 'notification' %}" type="button" class="btn btn-primary btn-sm " style="width: 60%;">See All Notifications</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
-
+        
 
             <div class="user-info-dropdown">
                 <div class="dropdown">
@@ -122,9 +161,9 @@
                         <span class="user-icon">
                              
                         {% if k.image %}
-                            <img src="{{ k.image.url }}" alt="" style="width: 100%; height:100% ">
+                            <img src="{{ k.image.url }}" alt="" >
                         {% else %}
-                        <img src="/static/logo/userlogo.png" id="photo" style="width: 100%; height:100% ">
+                        <img src="/static/logo/userlogo.png" id="photo" >
                         {% endif %}   
                         </span>
                         <span class="user-name">{{request.user.username}}</span>
@@ -137,11 +176,215 @@
                     </div>
                 </div>
             </div>
-            <!--<div class="github-link">
-                <a href="https://github.com/dropways/deskapp" target="_blank"><img src="static/index/vendors/images/github.svg" alt=""></a>
-            </div>-->
+   
         </div>
     </div>
+        <div class="card-box height-100-px overflow-hidden">
+                       
+            <ul class="nav nav-tabs customtab" role="tablist">
+                <li class="nav-item">
+                <a class="nav-link active"  href="{% url 'leave' %}">Apply Leave</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"  href="{% url 'admin_log' %}" role="tab">My Logs</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"  href="{% url 'log' %}" role="tab">Team Logs</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"  href="{% url 'balance' %}" >Balance</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link"  href="{% url 'Rules' %}" >Rules</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"  href="{% url 'assignrule' %}" >Assign Rules</a>
+                </li>
+               
+            </ul>
+
+            <div class="pd-20 card-box">
+
+                <div class="scrollMainAllWidth">
+                    <div class="gridAllOneHoliday " >
+                        <div>
+                            {% for rule in assigned_rules %}
+                                {% for applied_rule in rule.rules_applied.all %}
+
+                            <div class="spacingBottomMain">    
+                                <div class="displayGridMain">
+                                   
+                                        <h6>{{ applied_rule.leavename }}</h6> 
+                                
+                                    <div>
+                                   
+                                        <span class="tick-icon" id="tickIcon{{ rule.id }}" style="display: none;">
+                                            <i class="icon-copy ion-checkmark" onclick="submitForm('{{ rule.id }}')"></i>
+                                        </span>&nbsp;
+                                        <span class="cross-icon" id="crossIcon{{ rule.id }}" style="display: none;">
+                                            <i class="icon-copy ion-close" onclick="cancelEdit('{{ rule.id }}')"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                
+                                <form action="{% url 'update_leaves' %}" class="form-container" method="post" id="editForm{{ rule.id }}" style="display: none;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="rule_id" value="{{ rule.id }}">
+                                    <ul class="list-group">
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            Credited Leaves
+                                        
+                                            <input type="text" class="form-control" name="creditedleaves" value="{{ rule.creditedleaves }}">
+                                        
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            Applied Leaves
+                                           
+                                            <input type="text" class="form-control" name="appliedleaves" value="{{ rule.appliedleaves }}">
+                                         
+                                        </li>
+                                    </ul>
+                                </form>
+                                
+                                <div id="viewForm{{ rule.id }}">
+                                    <form action="" class="form-container" method="post">
+                                        {% csrf_token %}
+                                        <ul class="list-group">
+                                            {% if applied_rule.days|to_int > 0 %}
+                                              
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    Credited Leaves
+                                                    <span class="badge badge-primary badge-pill" name="creditedleaves">{{ rule.creditedleaves }}</span>
+                                                </li>
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    Total Leaves
+                                                    <span class="badge badge-primary badge-pill">{{ applied_rule.days }}</span>
+                                                </li>
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    Applied Leaves
+                                                    <span class="badge badge-primary badge-pill">{{ rule.appliedleaves }}</span>
+                                                </li>
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    Penalty Deduction
+                                                    <span class="badge badge-primary badge-pill">{{ rule.penaltydeduction }}</span>
+                                                </li>
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    Leave Balance
+                                                    <span class="badge badge-primary badge-pill">{{ rule.leavebalance }}</span>
+                                                </li>
+
+                                                {% elif applied_rule.days|to_int >= 0 and applied_rule.leavename == 'Comp Off' %}
+                                              
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    Credited Leaves
+                                                    <span class="badge badge-primary badge-pill" name="creditedleaves">{{ rule.creditedleaves }}</span>
+                                                </li>
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    Total Leaves
+                                                    <span class="badge badge-primary badge-pill">{{ rule.creditedleaves }}</span>
+                                                </li>
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    Applied Leaves
+                                                    <span class="badge badge-primary badge-pill">{{ rule.appliedleaves }}</span>
+                                                </li>
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    Penalty Deduction
+                                                    <span class="badge badge-primary badge-pill">{{ rule.penaltydeduction }}</span>
+                                                </li>
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    Leave Balance
+                                                    <span class="badge badge-primary badge-pill">{{ rule.leavebalance }}</span>
+                                                </li>
+
+                                            {%else%}
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    Applied Leaves
+                                                    <span class="badge badge-primary badge-pill">{{ rule.appliedleaves }}</span>
+                                                </li>
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    Penalty Deduction
+                                                    <span class="badge badge-primary badge-pill">{{ rule.penaltydeduction }}</span>
+                                                </li>
+                                            {% endif %}
+                                        </ul>
+                                    </form>
+                                </div>
+    
+                            </div>
+                            {% endfor %}    
+                            {% endfor %}
+                        </div>
+                        
+                        <div>
+                            
+                            <!-- <div class="pd-10 card-box " style="margin-top: 1%;"> -->
+                                
+                                {% if assigned_rules %}
+                                    <div >
+                                        <div class="form-group">
+                                            <form action="{% url 'leave' %}" method="get" id="search-form">
+                                                <select class="form-control" name="Leavetype" id="search" required>
+                                                    {% for rule in assigned_rules %}
+                                                        {% for applied_rule in rule.rules_applied.all %}
+                                                            {% if query|to_int == applied_rule.id %}
+                                                                <p>{{query|is_int}} | {{applied_rule.id|is_int}}</p>
+                                                                <option value="{{ query }}"selected>{{ applied_rule.leavename }}</option>
+                                                            {% else %}
+                                                                <option value="{{ applied_rule.id }}" {% if applied_rule.id == selected_leave %}selected{% endif %}>
+                                                                    {{ applied_rule.leavename }}
+                                                                </option>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    {% endfor %}    
+                                                </select>
+                                            </form>
+
+                                        </div>
+                                    </div>
+                                {% endif %}    
+                                <div class="row">
+                                    <div class="col-md-12">
+                                         <div class="table-container d-md-block">
+                                            <table class="table table-responsive tableaMainall" id="leaves-table">
+                                                <thead>
+                                                    <!-- <th>Data Details</th> -->
+                                                    <!-- {% for month in months %}
+                                                        <th>{{month}}</th>
+                                                    {% endfor %} -->
+                                                    <tr>
+                                                    {% for column in monthly_metrics.column_name %}
+                                                        <th>{{column}}</th>
+                                                    {%endfor%}
+                                                    </tr>
+                                                </thead>
+                                                
+                                                <tbody>
+                                                    {% for row in monthly_metrics.data %}
+                                                        <tr>
+                                                            {% for cell in row %}
+                                                                <td>{{ cell }}</td>
+                                                            {% endfor %}
+                                                        </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>   
+                                    </div>
+                                </div>
+                            </div>
+                        
+                    </div>
+                </div>
+                    
+                
+            </div>
+        </div>
+        <!-- </div> -->
+    </div>
+
+    </div>
+
+
 
     <div class="modal fade bs-example-modal-md" id="applyLeaveModal">
         <div class="modal-dialog modal-md modal-dialog-centered">
@@ -259,287 +502,11 @@
         </div>
     </div>   
 
-    <div class="left-side-bar">
-        <div class="brand-logo mt-3">
-        <a href="{% url 'dashboard' %}">
-            {% if request.user.company_type %}
-				{% if request.user.company_type.inverse_logo %}
-				<img src="{{ request.user.company_type.inverse_logo.url }}" style="width: 100%; height: 100%;">
-				{% else %}
-				<img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
-				{% endif %}
-				{% else %}
-				<img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
-				{% endif %}
-        </a>
-        <div class="close-sidebar" data-toggle="left-sidebar-close">
-           <i class="ion-close-round"></i>
-        </div>
-     </div>
-      
-       <div class="menu-block customscroll">
 
-            <div class="sidebar-menu">
-                <ul id="accordion-menu">
-					
-					<br>
-					<li class="btn-primary active" style="background-color:black">
-						<a href="{% url 'dashboard' %}" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-house-1"></span><span class="mtext"><b>Dashboard</b></span>
-						</a>
-					</li>
-					
-					<li>
-						<a href="{% url 'companyprofile' %}" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-building"></span><span class="mtext"><b>Company Profile</b></span>
-						</a>
-					</li>
-					<li>
-						<a href="{% url 'personalinfonav' %}" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-user1"></span><span class="mtext"><b>My Profile</b></span>
-						</a>
-					</li>
-					<li>
-						<a href="{% url 'leave' %}" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-calendar-1"></span><span class="mtext"><b>Leave</b></span>
-						</a>
-					</li>
-					<li>
-						<a href="{% url 'directory' %}" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-list"></span><span class="mtext"><b>Directory</b></span>
-						</a>
-					</li>
-					<li>
-						<a href="{% url 'dailylog' %}" class="dropdown-toggle no-arrow">
-							<span class="micon bi bi-check2-square"></span><span class="mtext"><b>Attendance</b></span>
-						</a>
-					</li>
-					<li>
-						<a href="{% url 'calender' %}" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-calendar"></span><span class="mtext"><b>Holiday Calendar</b></span>
-						</a>
-					</li>
-					<li>
-						<a href="{% url 'runpayroll_overview' %}" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-money-2"></span><span class="mtext"><b>Payroll</b></span>
-						</a>
-					</li>
-
-
-				</ul>
-            </div>
-        </div>
-    </div>
   
 
-    <!-- <div class="mobile-menu-overlay"></div> -->
 
-    <div class="main-container">
-    
-        <div class="card-box height-100-px overflow-hidden">
-                       
-            <ul class="nav nav-tabs customtab" role="tablist">
-                <li class="nav-item">
-                <a class="nav-link active"  href="{% url 'leave' %}">Apply Leave</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link"  href="{% url 'admin_log' %}" role="tab">My Logs</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link"  href="{% url 'log' %}" role="tab">Team Logs</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link"  href="{% url 'balance' %}" >Balance</a>
-                </li>
-                <li class="nav-item">
-                <a class="nav-link"  href="{% url 'Rules' %}" >Rules</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link"  href="{% url 'assignrule' %}" >Assign Rules</a>
-                </li>
-               
-            </ul>
 
-            <div class="pd-20 card-box">
-
-                <div class="min-height-200px">
-                    <div class="row " >
-                        <div class="col-lg-4 col-md-4 col-sm-12 mb-30" >
-                            {% for rule in assigned_rules %}
-                                {% for applied_rule in rule.rules_applied.all %}
-                            <div class="pd-10 card-box " style="margin-top: 1%;">
-    
-                                <div class="row">
-                                    <div class="col-md-10">
-                                        <h6 class="h6">{{ applied_rule.leavename }}</h6> 
-                                    </div>
-                                    <div class="col-md-2">
-                                        <!-- <span class="edit-icon" id="editIcon{{ rule.id }}" onclick="toggleEditForm('{{ rule.id }}')">
-                                            <i class="icon-copy ion-edit"></i>
-                                        </span> -->
-                                        <span class="tick-icon" id="tickIcon{{ rule.id }}" style="display: none;">
-                                            <i class="icon-copy ion-checkmark" onclick="submitForm('{{ rule.id }}')"></i>
-                                        </span>&nbsp;
-                                        <span class="cross-icon" id="crossIcon{{ rule.id }}" style="display: none;">
-                                            <i class="icon-copy ion-close" onclick="cancelEdit('{{ rule.id }}')"></i>
-                                        </span>
-                                    </div>
-                                </div>
-                                
-                                <form action="{% url 'update_leaves' %}" class="form-container" method="post" id="editForm{{ rule.id }}" style="display: none;">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="rule_id" value="{{ rule.id }}">
-                                    <ul class="list-group">
-                                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                                            Credited Leaves
-                                            <div class="col-md-4">
-                                            <input type="text" class="form-control" name="creditedleaves" value="{{ rule.creditedleaves }}">
-                                            </div>
-                                        </li>
-                                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                                            Applied Leaves
-                                            <div class="col-md-4">
-                                            <input type="text" class="form-control" name="appliedleaves" value="{{ rule.appliedleaves }}">
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </form>
-                                
-                                <div id="viewForm{{ rule.id }}">
-                                    <form action="" class="form-container" method="post">
-                                        {% csrf_token %}
-                                        <ul class="list-group">
-                                            {% if applied_rule.days|to_int > 0 %}
-                                              
-                                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                    Credited Leaves
-                                                    <span class="badge badge-primary badge-pill" name="creditedleaves">{{ rule.creditedleaves }}</span>
-                                                </li>
-                                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                    Total Leaves
-                                                    <span class="badge badge-primary badge-pill">{{ applied_rule.days }}</span>
-                                                </li>
-                                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                    Applied Leaves
-                                                    <span class="badge badge-primary badge-pill">{{ rule.appliedleaves }}</span>
-                                                </li>
-                                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                    Penalty Deduction
-                                                    <span class="badge badge-primary badge-pill">{{ rule.penaltydeduction }}</span>
-                                                </li>
-                                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                    Leave Balance
-                                                    <span class="badge badge-primary badge-pill">{{ rule.leavebalance }}</span>
-                                                </li>
-
-                                                {% elif applied_rule.days|to_int >= 0 and applied_rule.leavename == 'Comp Off' %}
-                                              
-                                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                    Credited Leaves
-                                                    <span class="badge badge-primary badge-pill" name="creditedleaves">{{ rule.creditedleaves }}</span>
-                                                </li>
-                                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                    Total Leaves
-                                                    <span class="badge badge-primary badge-pill">{{ rule.creditedleaves }}</span>
-                                                </li>
-                                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                    Applied Leaves
-                                                    <span class="badge badge-primary badge-pill">{{ rule.appliedleaves }}</span>
-                                                </li>
-                                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                    Penalty Deduction
-                                                    <span class="badge badge-primary badge-pill">{{ rule.penaltydeduction }}</span>
-                                                </li>
-                                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                    Leave Balance
-                                                    <span class="badge badge-primary badge-pill">{{ rule.leavebalance }}</span>
-                                                </li>
-
-                                            {%else%}
-                                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                    Applied Leaves
-                                                    <span class="badge badge-primary badge-pill">{{ rule.appliedleaves }}</span>
-                                                </li>
-                                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                    Penalty Deduction
-                                                    <span class="badge badge-primary badge-pill">{{ rule.penaltydeduction }}</span>
-                                                </li>
-                                            {% endif %}
-                                        </ul>
-                                    </form>
-                                </div>
-    
-                            </div>
-                            {% endfor %}    
-                            {% endfor %}
-                        </div>
-                        
-                        <div class="col-lg-8 col-md-8 col-sm-12 mb-30">
-                            
-                            <!-- <div class="pd-10 card-box " style="margin-top: 1%;"> -->
-                                
-                                {% if assigned_rules %}
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <form action="{% url 'leave' %}" method="get" id="search-form">
-                                                <select class="form-control" name="Leavetype" id="search" required>
-                                                    {% for rule in assigned_rules %}
-                                                        {% for applied_rule in rule.rules_applied.all %}
-                                                            {% if query|to_int == applied_rule.id %}
-                                                                <p>{{query|is_int}} | {{applied_rule.id|is_int}}</p>
-                                                                <option value="{{ query }}"selected>{{ applied_rule.leavename }}</option>
-                                                            {% else %}
-                                                                <option value="{{ applied_rule.id }}" {% if applied_rule.id == selected_leave %}selected{% endif %}>
-                                                                    {{ applied_rule.leavename }}
-                                                                </option>
-                                                            {% endif %}
-                                                        {% endfor %}
-                                                    {% endfor %}    
-                                                </select>
-                                            </form>
-
-                                        </div>
-                                    </div>
-                                {% endif %}    
-                                <div class="row">
-                                    <div class="col-md-12">
-                                         <div class="table-container d-md-block">
-                                            <table class="table table-bordered table-responsive" id="leaves-table">
-                                                <thead>
-                                                    <!-- <th>Data Details</th> -->
-                                                    <!-- {% for month in months %}
-                                                        <th>{{month}}</th>
-                                                    {% endfor %} -->
-                                                    <tr>
-                                                    {% for column in monthly_metrics.column_name %}
-                                                        <th>{{column}}</th>
-                                                    {%endfor%}
-                                                    </tr>
-                                                </thead>
-                                                
-                                                <tbody>
-                                                    {% for row in monthly_metrics.data %}
-                                                        <tr>
-                                                            {% for cell in row %}
-                                                                <td>{{ cell }}</td>
-                                                            {% endfor %}
-                                                        </tr>
-                                                    {% endfor %}
-                                                </tbody>
-                                            </table>
-                                        </div>   
-                                    </div>
-                                </div>
-                            </div>
-                        
-                    </div>
-                </div>
-                    
-                
-            </div>
-        </div>
-        <!-- </div> -->
-    </div>
 
     <!-- js -->
     <script src="static/index/vendors/scripts/core.js"></script>
