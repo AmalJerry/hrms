@@ -56,51 +56,126 @@
             margin-right: 10px;
         }
         .ag-header {
-            background-color: #3f51b5;
-            /* Change to match your theme */
-            color: white;
+            color: #000000
             font-weight: 600;
-            border-bottom: 2px solid #e0e0e0;
         }
 
         .ag-header-cell {
-            background-color: #3f51b5;
-            color: white;
-            border-right: 1px solid #5c6bc0;
+           color: #000000
+            font-weight: 600;
             padding: 10px 8px;
         }
 
-        .ag-header-cell:hover {
-            background-color: #ffffff;
-            color: rgb(13, 13, 13);
-            border-right: 1px solid #5c6bc0;
-            padding: 10px 8px;
-        }
+      
     </style>
 </head>
 <body>
-    <div class="header">
+    <div class="mainSideBarFlex">
+        <div class="left-side-bar">
+        <div class="headBlockMain">
+            <div  class="bgSecMainall">
+    <div class="profileIconDiv">
+        <div  class="profileImgWrapper">
+            <img src="/media/school-logo.png" alt="" >
+        
+        </div>
+        <div  class="profiletxt">
+            <span  class="head-name">Edship Technologies</span>
+            <p  class="sub-head">Transport Dashboard</p>
+        </div></div><div  class="school-info">
+            <div  class="flex-container">
+                <div class="schoolInfoImgWrapper">
+                    <img  src="/media/school-image.png" alt="School Logo" class="logo">
+                </div><div  class="schooolInfoDetails">
+                    <h2>Public School</h2>
+                    <div  class="location">
+                        <i  class="bi bi-geo-alt"></i>
+                        <span >Kaloor, Kochi</span></div></div></div></div></div>
+        </div>
+
+      
+       <div class="menu-block customscroll">
+            <div class="sidebar-menu">
+               <ul id="accordion-menu">
+					
+			
+			
+					<li>
+						<a  href="{% url 'personalinfonav' %}" class="dropdown-toggle no-arrow active">
+                          
+                                	<span class="micon dw dw-user1"></span>
+                                    <span class="mtext">My Profile</span>
+                    
+						
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'leave' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-calendar-1"></span>
+                            <span class="mtext">Leave</span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'directory' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-list"></span>
+                            <span class="mtext">Directory</span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'dailylog' %}" class="dropdown-toggle no-arrow">
+							<span class="micon bi bi-check2-square"></span>
+                            <span class="mtext">Attendance</span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'calender' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-calendar"></span>
+                            <span class="mtext">Holiday Calendar</span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'runpayroll_overview' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-money-2"></span>
+                            <span class="mtext">Payroll</span>
+						</a>
+					</li>
+
+
+				</ul>
+            </div>
+        </div>
+    </div>
+  
+
+
+
+
+    
+    <div class="main-container">
+             <div class="header">
         <div class="header-left">
             <div class="menu-icon dw dw-menu"></div>
-            {% if is_view_family %}
-                <h6 class="text-primary" style="padding-left: 20px;">Impersonate Employee: {{data.username}}</h6>
-            {% endif %}
+            
         </div>
         <div class="header-right">
             <div class="dashboard-setting user-notification">
                 <div class="dropdown">
-                    <a class="dropdown-toggle no-arrow" href="javascript:;" data-toggle="right-sidebar"></a>
+                    <a class="dropdown-toggle no-arrow" href="javascript:;" data-toggle="right-sidebar">
+                        
+                    </a>
                 </div>
             </div>
+          
             <div class="user-info-dropdown">
                 <div class="dropdown">
                     <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
                         <span class="user-icon">
-                            {% if k.image %}
-                                <img src="{{ k.image.url }}" alt="" style="width: 100%; height:100% ">
+                         
+                            {% if myprofile.image %}
+                            <img src="{{ myprofile.image.url }}" alt="" >
                             {% else %}
-                                <img src="/static/logo/userlogo.png" id="photo" style="width: 100%; height:100% ">
-                            {% endif %}
+                            <img src="/static/logo/userlogo.png" id="photo" >
+                            {% endif %} 
                         </span>
                         <span class="user-name">{{request.user.username}}</span>
                     </a>
@@ -112,75 +187,9 @@
                     </div>
                 </div>
             </div>
+            
         </div>
     </div>
-
-    <div class="left-side-bar">
-        <div class="brand-logo mt-3">
-            <a href="{% url 'dashboard' %}">
-                {% if request.user.company_type %}
-                    {% if request.user.company_type.inverse_logo %}
-                        <img src="{{ request.user.company_type.inverse_logo.url }}" style="width: 100%; height: 100%;">
-                    {% else %}
-                        <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
-                    {% endif %}
-                {% else %}
-                    <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
-                {% endif %}
-            </a>
-            <div class="close-sidebar" data-toggle="left-sidebar-close">
-                <i class="ion-close-round"></i>
-            </div>
-        </div>
-        <div class="menu-block customscroll">
-            <div class="sidebar-menu">
-                <ul id="accordion-menu">
-                    <br>
-                    <li class="btn-primary active" style="background-color:black">
-                        <a href="{% url 'dashboard' %}" class="dropdown-toggle no-arrow">
-                            <span class="micon dw dw-house-1"></span><span class="mtext"><b>Dashboard</b></span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'companyprofile' %}" class="dropdown-toggle no-arrow">
-                            <span class="micon dw dw-building"></span><span class="mtext"><b>Company Profile</b></span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'personalinfonav' %}" class="dropdown-toggle no-arrow">
-                            <span class="micon dw dw-user1"></span><span class="mtext"><b>My Profile</b></span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'leave' %}" class="dropdown-toggle no-arrow">
-                            <span class="micon dw dw-calendar-1"></span><span class="mtext"><b>Leave</b></span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'directory' %}" class="dropdown-toggle no-arrow">
-                            <span class="micon dw dw-list"></span><span class="mtext"><b>Directory</b></span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'dailylog' %}" class="dropdown-toggle no-arrow">
-                            <span class="micon bi bi-check2-square"></span><span class="mtext"><b>Attendance</b></span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'calender' %}" class="dropdown-toggle no-arrow">
-                            <span class="micon dw dw-calendar"></span><span class="mtext"><b>Holiday Calendar</b></span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'runpayroll_overview' %}" class="dropdown-toggle no-arrow">
-                            <span class="micon dw dw-money-2"></span><span class="mtext"><b>Payroll</b></span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <div class="main-container">
         <div class="card-box height-100-p overflow-hidden">
             <ul class="nav nav-tabs customtab" role="tablist">
                 {% if is_view_family %}
@@ -251,7 +260,8 @@
                 {% endif %}
             </ul>
             <div class="min-height-200px">
-                <div class="pd-20 card-box mb-30" style="margin-bottom: 0;">
+            <div class="scrollMainAllWidth">
+                  <div class="pd-20 card-box mb-30" style="margin-bottom: 0;">
                     <div class="row">
                         <div class="col-md-10">
                             <h6 class="float-left">Family Members</h6>
@@ -277,14 +287,14 @@
                                         <div class="col-md">
                                             <div class="form-group">
                                                 <label>Name <span style="color:red">*</span></label>
-                                                <input class="form-control" type="text" id="nameid" name="Name3" required pattern="[a-zA-Z\s]+">
+                                                <input class="form-control custom-input" type="text" id="nameid" name="Name3" required pattern="[a-zA-Z\s]+">
                                                 <span id="nameError" style="color: red;font-size: small;"></span>
                                             </div>
                                         </div>
                                         <div class="col-md">
                                             <div class="form-group">
                                                 <label>Relationship <span style="color:red">*</span></label>
-                                                <select class="select form-control" name="Relationship" required>
+                                                <select class="custom-select form-control formMainSelectdiv" name="Relationship" required>
                                                     <option value="" disabled selected>Select Relationship</option>
                                                     <option>Father</option>
                                                     <option>Mother</option>
@@ -330,8 +340,8 @@
                                             </div>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="submit" class="btn btn-primary">Submit</button>
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                            <button type="submit" class="primary-button">Submit</button>
+                                            <button type="button" class="secondary-btn" data-dismiss="modal">Cancel</button>
                                         </div>
                                     </form>
                                 </div>
@@ -361,14 +371,14 @@
                                         <div class="col-md">
                                             <div class="form-group">
                                                 <label>Name <span style="color:red">*</span></label>
-                                                <input class="form-control" type="text" id="fname3" pattern="[a-zA-Z\s]+" name="Name6" required>
+                                                <input class="form-control custom-input" type="text" id="fname3" pattern="[a-zA-Z\s]+" name="Name6" required>
                                                 <span id="name_Error2" style="color: red;font-size: small;"></span>
                                             </div>
                                         </div>
                                         <div class="col-md">
                                             <div class="form-group">
                                                 <label>Relationship <span style="color:red">*</span></label>
-                                                <select class="select form-control" id="relation" name="Relationship1" required>
+                                                <select class="custom-select form-control formMainSelectdiv" id="relation" name="Relationship1" required>
                                                     <option>{% if l.relation %}{{l.relation}}{% else %}Select Relationship{% endif %}</option>
                                                     <option>Father</option>
                                                     <option>Mother</option>
@@ -414,8 +424,8 @@
                                         </div>
                                         <input hidden id="famid" name="fam_memberid">
                                         <div class="modal-footer">
-                                            <button type="submit" class="btn btn-primary">Submit</button>
-                                            <button type="button" class="btn btn-secondary" onclick="closeform()" data-dismiss="modal">Cancel</button>
+                                            <button type="submit" class="primary-button">Submit</button>
+                                            <button type="button" class="secondary-btn" onclick="closeform()" data-dismiss="modal">Cancel</button>
                                         </div>
                                     </form>
                                 </div>
@@ -447,14 +457,14 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label>Name <span style="color:red">*</span></label>
-                                                <input class="form-control" required pattern="[a-zA-Z\s]+" id="name_id" type="text" name="Name4">
+                                                <input class="form-control custom-input" required pattern="[a-zA-Z\s]+" id="name_id" type="text" name="Name4">
                                                 <span id="name_Error" style="color: red;font-size: small;"></span>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label>Relationship <span style="color:red">*</span></label>
-                                                <select class="select form-control" id="relation" name="Relationship1" required>
+                                                <select class="custom-select form-control formMainSelectdiv" id="relation" name="Relationship1" required>
                                                     <option value="" disabled selected>Select Relationship</option>
                                                     <option>Father</option>
                                                     <option>Mother</option>
@@ -470,12 +480,12 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label>Phone Number <span style="color:red">*</span></label>
-                                                <input class="form-control" type="text" name="Phone1" required pattern="[0-9]{10}">
+                                                <input class="form-control custom-input" type="text" name="Phone1" required pattern="[0-9]{10}">
                                             </div>
                                         </div>
                                         <div class="modal-footer" style="margin-right: 7px;">
-                                            <button type="submit" class="btn btn-primary">Submit</button>
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                            <button type="submit" class="primary-button">Submit</button>
+                                            <button type="button" class="secondary-btn" data-dismiss="modal">Cancel</button>
                                         </div>
                                     </form>
                                 </div>
@@ -505,14 +515,14 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label>Name <span style="color:red">*</span></label>
-                                                <input class="form-control" type="text" id="ename4" name="Name5" required pattern="[a-zA-Z\s]+">
+                                                <input class="form-control custom-input" type="text" id="ename4" name="Name5" required pattern="[a-zA-Z\s]+">
                                                 <span id="name_Error4" style="color: red;font-size: small;"></span>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label>Relationship <span style="color:red">*</span></label>
-                                                <select class="select form-control" id="relation1" name="Relationship2" required>
+                                                <select class="custom-select form-control formMainSelectdiv" id="relation1" name="Relationship2" required>
                                                     <option>{% if x.relation1 %}{{x.relation1}}{% else %}Select Relationship{% endif %}</option>
                                                     <option>Father</option>
                                                     <option>Mother</option>
@@ -528,13 +538,13 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label>Phone Number <span style="color:red">*</span></label>
-                                                <input class="form-control" type="number" id="phone1" name="Phone2" required pattern="[0-9]{10}">
+                                                <input class="form-control custom-input" type="number" id="phone1" name="Phone2" required pattern="[0-9]{10}">
                                             </div>
                                         </div>
                                         <input hidden id="emerid" name="emergencyid">
                                         <div class="modal-footer">
-                                            <button type="submit" class="btn btn-primary">Submit</button>
-                                            <button type="button" class="btn btn-secondary" onclick="closeform1()" data-dismiss="modal">Cancel</button>
+                                            <button type="submit" class="primary-button">Submit</button>
+                                            <button type="button" class="secondary-btn" onclick="closeform1()" data-dismiss="modal">Cancel</button>
                                         </div>
                                     </form>
                                 </div>
@@ -543,9 +553,11 @@
                     </div>
                 </div>
             </div>
+              
+            </div>
         </div>
     </div>
-
+  </div>
     <!-- js -->
     <script src="static/index/vendors/scripts/core.js"></script>
     <script src="static/index/vendors/scripts/script.min.js"></script>

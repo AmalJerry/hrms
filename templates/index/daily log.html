@@ -399,7 +399,83 @@
 </head>
 
 <body>
-  <div class="header">
+    <div class="mainSideBarFlex">
+       <div class="left-side-bar">
+          
+        <div class="brand-logo mt-3">
+       <a href="{% url 'empleave' %}">
+        {% if request.user.company_type %}
+        {% if request.user.company_type.inverse_logo %}
+        <img src="{{ request.user.company_type.inverse_logo.url }}" style="width: 100%; height: 100%;">
+        {% else %}
+        <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+        {% endif %}
+        {% else %}
+        <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
+        {% endif %}
+         </a>
+			<!-- <a href="index.html">  -->
+
+				 <!-- <img src="{{ data.logo.url }}" style="width: 90% ;height: 90%; margin-left: 10px ;margin-top: -2cccccpx" > -->
+            <!-- {% if data.logo %}
+              <img src="{{ data.logo.url }}" style="width: 99.5% ;height: 100%; margin-left: 1px ;margin-top: -12px" >
+            {% else %}
+              <img src="media/default_image.png" id="photo" style="width: 90% ;height: 90%; margin-left: 10px ;margin-top: -2cccccpx" >
+		    {% endif %} -->
+			<!-- </a> -->
+			<div class="close-sidebar" data-toggle="left-sidebar-close"> 
+			   <i class="ion-close-round"></i>
+			</div>
+		</div><br>
+       
+       
+        <div class="menu-block customscroll">
+
+            <div class="sidebar-menu">
+                <ul id="accordion-menu">
+                    <li class="dropdown">
+                    </li>
+                    <li  style="background-color: black">
+                        <a href="{% url 'empdash' %}" class="dropdown-toggle no-arrow">
+                        <span class="micon dw dw-house-1"></span><span class="mtext"><b>Dashboard</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'empoverview' %}" class="dropdown-toggle no-arrow">
+                        <span class="micon dw dw-building"></span><span class="mtext"><b>Company Profile</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'emppersonalinfonav' %}" class="dropdown-toggle no-arrow">
+                        <span class="micon dw dw-user1"></span><span class="mtext"><b>My Profile</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a  href="{% url 'empleave' %}" class="dropdown-toggle no-arrow active">
+                        <span class="micon dw dw-calendar-1"></span><span class="mtext"><b>Leave</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'empdirectory' %}" class="dropdown-toggle no-arrow">
+                        <span class="micon dw dw-list"></span><span class="mtext"><b>Directory</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'empdailylog' %}" class="dropdown-toggle no-arrow">
+                        <span class="micon bi bi-check2-square"></span><span class="mtext"><b>Attendance</b></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'emp_calender' %}" class="dropdown-toggle no-arrow">
+                        <span class="micon dw dw-calendar"></span><span class="mtext"><b>Holiday Calendar</b></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+        <div class="main-container">
+     <div class="header">
     <div class="header-left">
       <div class="menu-icon dw dw-menu"></div>
 
@@ -418,9 +494,9 @@
             <span class="user-icon">
 
               {% if k.image %}
-              <img src="{{ k.image.url }}" alt="" style="width: 100%; height:100% ">
+              <img src="{{ k.image.url }}" alt="" >
               {% else %}
-              <img src="/static/logo/userlogo.png" id="photo" style="width: 100%; height:100% ">
+              <img src="/static/logo/userlogo.png" id="photo">
               {% endif %}
             </span>
             <span class="user-name">{{request.user.username}}</span>
@@ -438,81 +514,6 @@
 
     </div>
   </div>
-
-  <div class="left-side-bar">
-    <div class="brand-logo mt-3">
-      <a href="{% url 'dashboard' %}">
-        {% if request.user.company_type %}
-        {% if request.user.company_type.inverse_logo %}
-        <img src="{{ request.user.company_type.inverse_logo.url }}" style="width: 100%; height: 100%;">
-        {% else %}
-        <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
-        {% endif %}
-        {% else %}
-        <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
-        {% endif %}
-      </a>
-      <div class="close-sidebar" data-toggle="left-sidebar-close">
-        <i class="ion-close-round"></i>
-      </div>
-    </div>
-
-    <div class="menu-block customscroll">
-      <div class="sidebar-menu">
-        <ul id="accordion-menu">
-					
-					<br>
-					<li class="btn-primary active" style="background-color:black">
-						<a href="{% url 'dashboard' %}" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-house-1"></span><span class="mtext"><b>Dashboard</b></span>
-						</a>
-					</li>
-					
-					<li>
-						<a href="{% url 'companyprofile' %}" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-building"></span><span class="mtext"><b>Company Profile</b></span>
-						</a>
-					</li>
-					<li>
-						<a href="{% url 'personalinfonav' %}" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-user1"></span><span class="mtext"><b>My Profile</b></span>
-						</a>
-					</li>
-					<li>
-						<a href="{% url 'leave' %}" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-calendar-1"></span><span class="mtext"><b>Leave</b></span>
-						</a>
-					</li>
-					<li>
-						<a href="{% url 'directory' %}" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-list"></span><span class="mtext"><b>Directory</b></span>
-						</a>
-					</li>
-					<li>
-						<a href="{% url 'dailylog' %}" class="dropdown-toggle no-arrow">
-							<span class="micon bi bi-check2-square"></span><span class="mtext"><b>Attendance</b></span>
-						</a>
-					</li>
-					<li>
-						<a href="{% url 'calender' %}" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-calendar"></span><span class="mtext"><b>Holiday Calendar</b></span>
-						</a>
-					</li>
-					<li>
-						<a href="{% url 'runpayroll_overview' %}" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-money-2"></span><span class="mtext"><b>Payroll</b></span>
-						</a>
-					</li>
-
-
-				</ul>
-      </div>
-    </div>
-  </div>
-  <div class="mobile-menu-overlay"></div>
-
-  <div class="main-container">
-   
     <div class="card-box height-100-px overflow-hidden">
       <ul class="nav nav-tabs customtab" role="tablist">
         <li class="nav-item">
@@ -893,6 +894,14 @@
       </div>
     </div>
   </div>
+
+      </div>
+
+
+ 
+  <div class="mobile-menu-overlay"></div>
+
+
   </div>
   </div>
   </div>

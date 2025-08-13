@@ -18,7 +18,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
 
     <!-- CSS -->
     <link rel="stylesheet" type="text/css" href="/static/index/vendors/styles/core.css">
@@ -30,7 +31,9 @@
     <link rel="stylesheet" href="https://unpkg.com/ag-grid-community@32.1.0/styles/ag-theme-quartz.css">
 
     <!-- Jquery -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <!-- AG Grid JS -->
     <script src="https://unpkg.com/ag-grid-community@32.1.0/dist/ag-grid-community.min.js"></script>
@@ -70,7 +73,7 @@
             flex: 1;
             max-width: 300px;
             position: relative;
-            
+
         }
 
         .header-search .form-group {
@@ -82,7 +85,7 @@
         .header-search .search-input {
             height: 38px;
             padding-right: 80px;
-            
+
         }
 
         .header-search .dropdown {
@@ -102,8 +105,8 @@
             position: relative;
             padding-top: 20px;
             padding-left: 20px;
-            
-            
+
+
         }
 
 
@@ -111,7 +114,7 @@
             height: 38px;
             padding: 6px 30px 6px 12px;
             width: 100%;
-            
+
         }
 
         .month-picker-container .clear-icon {
@@ -291,402 +294,472 @@
 </head>
 
 <body>
-    <div class="header">
-        <div class="menu-icon dw dw-menu"></div>
-        <div class="search-toggle-icon dw dw-search2" data-toggle="header_search"></div>
-        <div class="header-search">
-            <form action="{% url 'search_runpayroll' %}" method="GET">
-                <div class="form-group">
-                   
-                    <input type="text" data-live-search="true" class="form-control search-input" name="search" {% if query is None %} placeholder="Search" {% else %} value="{{query}}" {% endif %}>
-                    <span onclick="var input = this.previousElementSibling; input.value = ''; input.focus();" class="clear-icon" id="search-cross">
-                        <a href="{% url 'runpayroll' %}" style="color: grey;">x</a>
-                    </span>
-                    <div class="dropdown">
-                        <button class="btn-primary dropdown-toggle no-arrow" role="button">
-                            <i class="fa fa-search" style="color: white;"></i>
-                        </button>
+
+    <div class="mainSideBarFlex">
+        <div class="left-side-bar">
+            <div class="headBlockMain">
+                <div class="bgSecMainall">
+                    <div class="profileIconDiv">
+                        <div class="profileImgWrapper">
+                            <img src="/media/school-logo.png" alt="">
+
+                        </div>
+                        <div class="profiletxt">
+                            <span class="head-name">Edship Technologies</span>
+                            <p class="sub-head">Transport Dashboard</p>
+                        </div>
+                    </div>
+                    <div class="school-info">
+                        <div class="flex-container">
+                            <div class="schoolInfoImgWrapper">
+                                <img src="/media/school-image.png" alt="School Logo" class="logo">
+                            </div>
+                            <div class="schooolInfoDetails">
+                                <h2>Public School</h2>
+                                <div class="location">
+                                    <i class="bi bi-geo-alt"></i>
+                                    <span>Kaloor, Kochi</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </form>
-        </div>
-        <div class="month-picker-container">
-            <form action="{% url 'runpayroll' %}" method="get" id="search-form">
-                <div class="form-group">
-                    <input id="monthPicker" name="monthselect" class="form-control month-picker" type="text" />
-                    <span onclick="var input = this.previousElementSibling; input.value = ''; input.focus();" class="clear-icon" id="month-cross">
-                        <a href="{% url 'runpayroll' %}" style="color: grey;">x</a>
-                    </span>
-                </div>
-            </form>
-        </div>
-        <div class="export-button">
-            <button class="btn btn-primary" data-toggle="modal" href="#export_Modal">Export</button>
-        </div>
-        <div class="user-info-dropdown">
-            <div class="dropdown">
-                <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-                    <span class="user-icon">
-                        {% if k.image %}
-                        <img src="{{ k.image.url }}" alt="User Image">
-                        {% else %}
-                        <img src="/static/logo/userlogo.png" id="photo" alt="Default User Image">
-                        {% endif %}
-                    </span>
-                    <span class="user-name">{{request.user.username}}</span>
-                </a>
-                <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-                    <a class="dropdown-item" href="{% url 'createpersonalinfo' %}"><i class="dw dw-user1"></i> Profile</a>
-                    <a class="dropdown-item" href="{% url 'department' %}" data-toggle="right-sidebar"><i class="dw dw-settings2"></i> Settings</a>
-                    <a class="dropdown-item" href="{% url 'help_page' %}"><i class="dw dw-help"></i> Help</a>
-                    <a class="dropdown-item" href="{% url 'logout' %}"><i class="dw dw-logout"></i> Logout</a>
-                </div>
             </div>
-        </div>
-    </div>
 
-    <div class="left-side-bar">
-        <div class="brand-logo mt-3">
-            <a href="{% url 'dashboard' %}">
-                {% if request.user.company_type %}
-                {% if request.user.company_type.inverse_logo %}
-                <img src="{{ request.user.company_type.inverse_logo.url }}" style="width: 100%; height: 100%;">
-                {% else %}
-                <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
-                {% endif %}
-                {% else %}
-                <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
-                {% endif %}
-            </a>
-            <div class="close-sidebar" data-toggle="left-sidebar-close">
-                <i class="ion-close-round"></i>
+
+            <div class="menu-block customscroll">
+                <div class="sidebar-menu">
+                    <ul id="accordion-menu">
+
+
+
+                        <li>
+                            <a href="{% url 'personalinfonav' %}" class="dropdown-toggle no-arrow active">
+
+                                <span class="micon dw dw-user1"></span>
+                                <span class="mtext">My Profile</span>
+
+
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'leave' %}" class="dropdown-toggle no-arrow">
+                                <span class="micon dw dw-calendar-1"></span>
+                                <span class="mtext">Leave</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'directory' %}" class="dropdown-toggle no-arrow">
+                                <span class="micon dw dw-list"></span>
+                                <span class="mtext">Directory</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'dailylog' %}" class="dropdown-toggle no-arrow">
+                                <span class="micon bi bi-check2-square"></span>
+                                <span class="mtext">Attendance</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'calender' %}" class="dropdown-toggle no-arrow">
+                                <span class="micon dw dw-calendar"></span>
+                                <span class="mtext">Holiday Calendar</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'runpayroll_overview' %}" class="dropdown-toggle no-arrow">
+                                <span class="micon dw dw-money-2"></span>
+                                <span class="mtext">Payroll</span>
+                            </a>
+                        </li>
+
+
+                    </ul>
+                </div>
             </div>
         </div>
-        <div class="menu-block customscroll">
-            <div class="sidebar-menu">
-                <ul id="accordion-menu">
+
+
+
+
+
+        <div class="mobile-menu-overlay"></div>
+
+        <div class="main-container">
+            <div class="header">
+                <div class="header-left">
+                    <div class="menu-icon dw dw-menu"></div>
+
+                </div>
+                <div class="header-right">
+                    <div class="dashboard-setting user-notification">
+                        <div class="dropdown">
+                            <a class="dropdown-toggle no-arrow" href="javascript:;" data-toggle="right-sidebar">
+
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="user-info-dropdown">
+                        <div class="dropdown">
+                            <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                                <span class="user-icon">
+
+                                    {% if myprofile.image %}
+                                    <img src="{{ myprofile.image.url }}" alt="">
+                                    {% else %}
+                                    <img src="/static/logo/userlogo.png" id="photo">
+                                    {% endif %}
+                                </span>
+                                <span class="user-name">{{request.user.username}}</span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                                <a class="dropdown-item" href="{% url 'createpersonalinfo' %}"><i
+                                        class="dw dw-user1"></i>
+                                    Profile</a>
+                                <a class="dropdown-item" href="{% url 'department' %}" data-toggle="right-sidebar"><i
+                                        class="dw dw-settings2"></i> Settings</a>
+                                <a class="dropdown-item" href="{% url 'help_page' %}"><i class="dw dw-help"></i>
+                                    Help</a>
+                                <a class="dropdown-item" href="{% url 'logout' %}"><i class="dw dw-logout"></i>
+                                    Logout</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="card-box">
+                <!-- <ul class="nav nav-tabs customtab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'runpayroll_overview' %}">Run Payroll</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'create_salary' %}">Setup Payroll</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'payroll_dec' %}">Declaration</a>
+                    </li>
+                </ul> -->
+                <div class="min-height-100px">
+                    <ul class="nav nav-tabs customtab spaceDivBottom" role="tablist">
+                        <!-- <li class="nav-item">
+                            <a class="nav-link" href="{% url 'runpayroll_overview' %}">Overview</a>
+                        </li> -->
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{% url 'runpayroll' %}">Attendance & Leave</a>
+                        </li>
+                        <!-- <li class="nav-item">
+                            <a class="nav-link" href="{% url 'salary_revision' %}">Salary Revision</a>
+                        </li> -->
+                        <!-- <li class="nav-item">
+                            <a class="nav-link" href="{% url 'pay_register' %}">Pay Register</a>
+                        </li> -->
+                        <!-- <li class="nav-item">
+                            <a class="nav-link" href="{% url 'payout' %}">Payout</a>
+                        </li> -->
+                        <!-- <li class="nav-item">
+                            <a class="nav-link" href="{% url 'adhoc' %}">Variable & Adhoc</a>
+                        </li> -->
+                        <!-- <li class="nav-item">
+                            <a class="nav-link" href="{% url 'salary_onhold' %}">Salary on Hold</a>
+                        </li> -->
+                    </ul>
+                </div>
+
+                <div class="min-height-100px">
+                    <ul class="nav nav-tabs customtab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{% url 'runpayroll' %}">Attendance</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'payroll_leave' %}">Leave</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="pd-20 card-box">
+                    {% csrf_token %}
+                    <div class="modal fade bs-example-modal-lg" id="export" tabindex="-1" role="dialog"
+                        aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Export</h4>
+                                    <button type="button" class="close" data-dismiss="modal">×</button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <span class="emp_count" id="selected-employees-count">0 Employee
+                                                    Selected</span>
+                                                <hr>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label>Selected Fields</label>
+                                            <div class="form-group container-with-scrollbar">
+                                                <ul id="selected-fields-list">
+                                                    <li class="rule-badge">Employee ID</li>
+                                                    <li class="rule-badge">Employee Name</li>
+                                                    <li class="rule-badge">Department</li>
+                                                    <li class="rule-badge">Designation</li>
+                                                    <li class="rule-badge">Primary Manager</li>
+                                                    <li class="rule-badge">Secondary Managers</li>
+                                                    <li class="rule-badge">Job Title</li>
+                                                    <li class="rule-badge">DOJ</li>
+                                                    <li class="rule-badge">Work Location</li>
+                                                    <li class="rule-badge">Employee Status</li>
+                                                    <li class="rule-badge">Employee Type</li>
+                                                    <li class="rule-badge">Probation Period</li>
+                                                    <li class="rule-badge">Contact Number</li>
+                                                    <li class="rule-badge">Official Email ID</li>
+                                                    <li class="rule-badge">Personal Email ID</li>
+                                                    <li class="rule-badge">Employee Emergency Contacts</li>
+                                                    <li class="rule-badge">CTC</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-9">
+                                            <label>Select Optional Fields</label>
+                                        </div>
+                                        <div class="col-md-3 dtcheckbox">
+                                            <input type="checkbox" style="transform: scale(1.5);" name="selectall"
+                                                id="selectallcheckbox">
+                                            <span class="dt-checkbox-label"></span>
+                                            <label>Select All</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group container-with-scrollbar">
+                                                <ul id="optional-fields-list">
+                                                    <li class="optional-field">
+                                                        <input type="checkbox" class="check-box" name="subdep"
+                                                            id="subdep"><span class="dt-checkbox-label"></span> Sub
+                                                        Department
+                                                    </li>
+                                                    <li class="optional-field">
+                                                        <input type="checkbox" class="check-box" name="marital-status"
+                                                            id="marital-status"><span class="dt-checkbox-label"></span>
+                                                        Marital Status
+                                                    </li>
+                                                    <li class="optional-field">
+                                                        <input type="checkbox" class="check-box" name="bloodgp"
+                                                            id="bloodgp"><span class="dt-checkbox-label"></span> Blood
+                                                        Group
+                                                    </li>
+                                                    <li class="optional-field">
+                                                        <input type="checkbox" class="check-box" name="address1"
+                                                            id="address1"><span class="dt-checkbox-label"></span>
+                                                        Current
+                                                        Address
+                                                    </li>
+                                                    <li class="optional-field">
+                                                        <input type="checkbox" class="check-box" name="address2"
+                                                            id="address2"><span class="dt-checkbox-label"></span>
+                                                        Permanent
+                                                        Address
+                                                    </li>
+                                                    <li class="optional-field">
+                                                        <input type="checkbox" class="check-box" name="eduinfo"
+                                                            id="eduinfo"><span class="dt-checkbox-label"></span>
+                                                        Educational
+                                                        Info
+                                                    </li>
+                                                    <li class="optional-field">
+                                                        <input type="checkbox" class="check-box" name="familymembers"
+                                                            id="familymembers"><span class="dt-checkbox-label"></span>
+                                                        Family Members
+                                                    </li>
+                                                    <li class="optional-field">
+                                                        <input type="checkbox" class="check-box" name="idproof"
+                                                            id="idproof"><span class="dt-checkbox-label"></span> ID
+                                                        Proof
+                                                    </li>
+                                                    <li class="optional-field">
+                                                        <input type="checkbox" class="check-box" name="otherdocument"
+                                                            id="otherdocument"><span class="dt-checkbox-label"></span>
+                                                        Other
+                                                        Documents
+                                                    </li>
+                                                    <li class="optional-field">
+                                                        <input type="checkbox" class="check-box" name="lastworkingday"
+                                                            id="lastworkingday"><span class="dt-checkbox-label"></span>
+                                                        Last
+                                                        Working Day
+                                                    </li>
+                                                    <li class="optional-field">
+                                                        <input type="checkbox" class="check-box" name="workhistory"
+                                                            id="workhistory"><span class="dt-checkbox-label"></span>
+                                                        Work
+                                                        History
+                                                    </li>
+                                                    <li class="optional-field">
+                                                        <input type="checkbox" class="check-box" name="leaverules"
+                                                            id="leaverules"><span class="dt-checkbox-label"></span>
+                                                        Leave
+                                                        Rules
+                                                    </li>
+                                                    <li class="optional-field">
+                                                        <input type="checkbox" class="check-box" name="attendancerules"
+                                                            id="attendancerules"><span class="dt-checkbox-label"></span>
+                                                        Attendance Rules
+                                                    </li>
+                                                    <li class="optional-field">
+                                                        <input type="checkbox" class="check-box" name="workweekrules"
+                                                            id="workweekrules"><span class="dt-checkbox-label"></span>
+                                                        Workweek Rules
+                                                    </li>
+                                                    <li class="optional-field">
+                                                        <input type="checkbox" class="check-box" name="gender"
+                                                            id="gender"><span class="dt-checkbox-label"></span> Gender
+                                                    </li>
+                                                    <li class="optional-field">
+                                                        <input type="checkbox" class="check-box" name="dob"
+                                                            id="dob"><span class="dt-checkbox-label"></span> DOB
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                    <input type="submit" class="btn btn-primary" value="Download" id="submit-button"
+                                        data-toggle="modal" href="#downloadexcel" disabled>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AG Grid Container -->
+                    <div id="dataGrid" class="ag-theme-quartz"></div>
+
+                    {% if not users %}
                     <br>
-                    <li class="btn-primary active" style="background-color:black">
-                        <a href="{% url 'dashboard' %}" class="dropdown-toggle no-arrow">
-                            <span class="micon dw dw-house-1"></span><span class="mtext"><b>Dashboard</b></span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'companyprofile' %}" class="dropdown-toggle no-arrow">
-                            <span class="micon dw dw-building"></span><span class="mtext"><b>Company Profile</b></span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'personalinfonav' %}" class="dropdown-toggle no-arrow">
-                            <span class="micon dw dw-user1"></span><span class="mtext"><b>My Profile</b></span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'leave' %}" class="dropdown-toggle no-arrow">
-                            <span class="micon dw dw-calendar-1"></span><span class="mtext"><b>Leave</b></span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'directory' %}" class="dropdown-toggle no-arrow">
-                            <span class="micon dw dw-list"></span><span class="mtext"><b>Directory</b></span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'dailylog' %}" class="dropdown-toggle no-arrow">
-                            <span class="micon bi bi-check2-square"></span><span class="mtext"><b>Attendance</b></span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'calender' %}" class="dropdown-toggle no-arrow">
-                            <span class="micon dw dw-calendar"></span><span class="mtext"><b>Holiday Calendar</b></span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'runpayroll_overview' %}" class="dropdown-toggle no-arrow">
-                            <span class="micon dw dw-money-2"></span><span class="mtext"><b>Payroll</b></span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
+                    <p style="text-align: center;">No Records Found</p>
+                    {% endif %}
+                    <br>
 
-    <div class="mobile-menu-overlay"></div>
-
-    <div class="main-container">
-        <div class="card-box">
-            <ul class="nav nav-tabs customtab" role="tablist">
-                <li class="nav-item">
-                    <a class="nav-link active" href="{% url 'runpayroll_overview' %}">Run Payroll</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'create_salary' %}">Setup Payroll</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'payroll_dec' %}">Declaration</a>
-                </li>
-            </ul>
-            <div class="min-height-100px">
-                <ul class="nav nav-tabs customtab" role="tablist">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'runpayroll_overview' %}">Overview</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="{% url 'runpayroll' %}">Attendance & Leave</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'salary_revision' %}">Salary Revision</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'pay_register' %}">Pay Register</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'payout' %}">Payout</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'adhoc' %}">Variable & Adhoc</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'salary_onhold' %}">Salary on Hold</a>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="min-height-100px">
-                <ul class="nav nav-tabs customtab" role="tablist">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="{% url 'runpayroll' %}">Attendance</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'payroll_leave' %}">Leave</a>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="pd-20 card-box">
-                {% csrf_token %}
-                <div class="modal fade bs-example-modal-lg" id="export" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered modal-lg">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title">Export</h4>
-                                <button type="button" class="close" data-dismiss="modal">×</button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <span class="emp_count" id="selected-employees-count">0 Employee Selected</span>
-                                            <hr>
-                                        </div>
+                    <div class="modal fade bs-example-modal-md" id="downloadexcel" tabindex="-1" role="dialog"
+                        aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-md">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <div>
+                                        <i class="icon-copy fa fa-check-circle" aria-hidden="true"
+                                            style="color: green; font-size: 90px; margin-left: 45%;"></i>
                                     </div>
-                                    <div class="col-md-12">
-                                        <label>Selected Fields</label>
-                                        <div class="form-group container-with-scrollbar">
-                                            <ul id="selected-fields-list">
-                                                <li class="rule-badge">Employee ID</li>
-                                                <li class="rule-badge">Employee Name</li>
-                                                <li class="rule-badge">Department</li>
-                                                <li class="rule-badge">Designation</li>
-                                                <li class="rule-badge">Primary Manager</li>
-                                                <li class="rule-badge">Secondary Managers</li>
-                                                <li class="rule-badge">Job Title</li>
-                                                <li class="rule-badge">DOJ</li>
-                                                <li class="rule-badge">Work Location</li>
-                                                <li class="rule-badge">Employee Status</li>
-                                                <li class="rule-badge">Employee Type</li>
-                                                <li class="rule-badge">Probation Period</li>
-                                                <li class="rule-badge">Contact Number</li>
-                                                <li class="rule-badge">Official Email ID</li>
-                                                <li class="rule-badge">Personal Email ID</li>
-                                                <li class="rule-badge">Employee Emergency Contacts</li>
-                                                <li class="rule-badge">CTC</li>
-                                            </ul>
-                                        </div>
+                                    <div style="margin-left: 15%;">
+                                        <b>Your request for export have been queued</b>
+                                    </div>
+                                    <div style="margin-left: 10%; justify-content: center;">
+                                        As soon as the export process is complete, you will receive an email with the
+                                        download link.
+                                        You may also view the status of your request by clicking File Manager
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-9">
-                                        <label>Select Optional Fields</label>
-                                    </div>
-                                    <div class="col-md-3 dtcheckbox">
-                                        <input type="checkbox" style="transform: scale(1.5);" name="selectall" id="selectallcheckbox">
-                                        <span class="dt-checkbox-label"></span>
-                                        <label>Select All</label>
-                                    </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                    <a href="{% url 'filemanagernav' %}" type="button"
+                                        class="btn btn-primary btn-sm">File
+                                        Manager</a>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group container-with-scrollbar">
-                                            <ul id="optional-fields-list">
-                                                <li class="optional-field">
-                                                    <input type="checkbox" class="check-box" name="subdep" id="subdep"><span class="dt-checkbox-label"></span> Sub Department
-                                                </li>
-                                                <li class="optional-field">
-                                                    <input type="checkbox" class="check-box" name="marital-status" id="marital-status"><span class="dt-checkbox-label"></span> Marital Status
-                                                </li>
-                                                <li class="optional-field">
-                                                    <input type="checkbox" class="check-box" name="bloodgp" id="bloodgp"><span class="dt-checkbox-label"></span> Blood Group
-                                                </li>
-                                                <li class="optional-field">
-                                                    <input type="checkbox" class="check-box" name="address1" id="address1"><span class="dt-checkbox-label"></span> Current Address
-                                                </li>
-                                                <li class="optional-field">
-                                                    <input type="checkbox" class="check-box" name="address2" id="address2"><span class="dt-checkbox-label"></span> Permanent Address
-                                                </li>
-                                                <li class="optional-field">
-                                                    <input type="checkbox" class="check-box" name="eduinfo" id="eduinfo"><span class="dt-checkbox-label"></span> Educational Info
-                                                </li>
-                                                <li class="optional-field">
-                                                    <input type="checkbox" class="check-box" name="familymembers" id="familymembers"><span class="dt-checkbox-label"></span> Family Members
-                                                </li>
-                                                <li class="optional-field">
-                                                    <input type="checkbox" class="check-box" name="idproof" id="idproof"><span class="dt-checkbox-label"></span> ID Proof
-                                                </li>
-                                                <li class="optional-field">
-                                                    <input type="checkbox" class="check-box" name="otherdocument" id="otherdocument"><span class="dt-checkbox-label"></span> Other Documents
-                                                </li>
-                                                <li class="optional-field">
-                                                    <input type="checkbox" class="check-box" name="lastworkingday" id="lastworkingday"><span class="dt-checkbox-label"></span> Last Working Day
-                                                </li>
-                                                <li class="optional-field">
-                                                    <input type="checkbox" class="check-box" name="workhistory" id="workhistory"><span class="dt-checkbox-label"></span> Work History
-                                                </li>
-                                                <li class="optional-field">
-                                                    <input type="checkbox" class="check-box" name="leaverules" id="leaverules"><span class="dt-checkbox-label"></span> Leave Rules
-                                                </li>
-                                                <li class="optional-field">
-                                                    <input type="checkbox" class="check-box" name="attendancerules" id="attendancerules"><span class="dt-checkbox-label"></span> Attendance Rules
-                                                </li>
-                                                <li class="optional-field">
-                                                    <input type="checkbox" class="check-box" name="workweekrules" id="workweekrules"><span class="dt-checkbox-label"></span> Workweek Rules
-                                                </li>
-                                                <li class="optional-field">
-                                                    <input type="checkbox" class="check-box" name="gender" id="gender"><span class="dt-checkbox-label"></span> Gender
-                                                </li>
-                                                <li class="optional-field">
-                                                    <input type="checkbox" class="check-box" name="dob" id="dob"><span class="dt-checkbox-label"></span> DOB
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                <input type="submit" class="btn btn-primary" value="Download" id="submit-button" data-toggle="modal" href="#downloadexcel" disabled>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- AG Grid Container -->
-                <div id="dataGrid" class="ag-theme-quartz"></div>
-
-                {% if not users %}
-                <br>
-                <p style="text-align: center;">No Records Found</p>
-                {% endif %}
-                <br>
-
-                <div class="modal fade bs-example-modal-md" id="downloadexcel" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered modal-md">
-                        <div class="modal-content">
-                            <div class="modal-body">
-                                <div>
-                                    <i class="icon-copy fa fa-check-circle" aria-hidden="true" style="color: green; font-size: 90px; margin-left: 45%;"></i>
-                                </div>
-                                <div style="margin-left: 15%;">
-                                    <b>Your request for export have been queued</b>
-                                </div>
-                                <div style="margin-left: 10%; justify-content: center;">
-                                    As soon as the export process is complete, you will receive an email with the download link.
-                                    You may also view the status of your request by clicking File Manager
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                <a href="{% url 'filemanagernav' %}" type="button" class="btn btn-primary btn-sm">File Manager</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    {% for user in users %}
-    <div class="modal fade bs-example-modal-sm" id="edittime{{ user.id }}">
-        <div class="modal-dialog modal-sm modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Edit Details</h4>
-                    <button type="button" class="close" data-dismiss="modal">×</button>
+        {% for user in users %}
+        <div class="modal fade bs-example-modal-sm" id="edittime{{ user.id }}">
+            <div class="modal-dialog modal-sm modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Edit Details</h4>
+                        <button type="button" class="close" data-dismiss="modal">×</button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{% url 'runpayroll' %}?monthselect={{ month_str }}+{{ selected_year }}"
+                            method="post" enctype="multipart/form-data" class="form-container" role="form"
+                            id="editworkweek" onsubmit="return validateForm()">
+                            {% csrf_token %}
+                            <input type="text" hidden name="lopid" id="lopid" value="{{ user.id }}">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <h6 class="shift-timings">{{ user.username }}</h6>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>LOP Days<span style="color:red">*</span></label>
+                                        <input type="text" pattern="\d+(\.\d+)?"
+                                            value="{% for lopcount in lop_count %}{% if lopcount.user_id.id == user.id %}{{ lopcount.lop_count }}{% endif %}{% endfor %}"
+                                            id="lopcount" name="lopcount" class="form-control" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>WFO Count<span style="color:red">*</span></label>
+                                        <input type="text" pattern="\d+(\.\d+)?"
+                                            value="{% for WFOcount in WFO_count %}{% if WFOcount.user_id.id == user.id %}{{ WFOcount.wfocount }}{% endif %}{% endfor %}"
+                                            id="WFOcount" name="WFOcount" class="form-control" required>
+                                        <input type="hidden" name="wfoid" id="wfoid"
+                                            value="{% for WFOcount in WFO_count %}{% if WFOcount.user_id.id == user.id %}{{ WFOcount.user_id.id }}{% endif %}{% endfor %}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary" onsubmit="hideadd">Submit</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                <div class="modal-body">
-                    <form action="{% url 'runpayroll' %}?monthselect={{ month_str }}+{{ selected_year }}" method="post" enctype="multipart/form-data" class="form-container" role="form" id="editworkweek" onsubmit="return validateForm()">
-                        {% csrf_token %}
-                        <input type="text" hidden name="lopid" id="lopid" value="{{ user.id }}">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <h6 class="shift-timings">{{ user.username }}</h6>
+            </div>
+        </div>
+        {% endfor %}
+
+        <form action="{% url 'export_runpayroll' %}" method="post" onsubmit="return validateForm()">
+            {% csrf_token %}
+            <div class="modal fade bs-example-modal-sm" id="export_Modal" tabindex="-1" role="dialog"
+                aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-sm">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Export</h4>
+                            <button type="button" class="close" data-dismiss="modal">×</button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label>Select Month and Year</label>
                                 </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label>LOP Days<span style="color:red">*</span></label>
-                                    <input type="text" pattern="\d+(\.\d+)?" value="{% for lopcount in lop_count %}{% if lopcount.user_id.id == user.id %}{{ lopcount.lop_count }}{% endif %}{% endfor %}" id="lopcount" name="lopcount" class="form-control" required>
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label>WFO Count<span style="color:red">*</span></label>
-                                    <input type="text" pattern="\d+(\.\d+)?" value="{% for WFOcount in WFO_count %}{% if WFOcount.user_id.id == user.id %}{{ WFOcount.wfocount }}{% endif %}{% endfor %}" id="WFOcount" name="WFOcount" class="form-control" required>
-                                    <input type="hidden" name="wfoid" id="wfoid" value="{% for WFOcount in WFO_count %}{% if WFOcount.user_id.id == user.id %}{{ WFOcount.user_id.id }}{% endif %}{% endfor %}">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <input class="form-control month-picker" type="text" name="month" id="month"
+                                            placeholder="Select Month and Year" style="background-color: white;"
+                                            readonly>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary" onsubmit="hideadd">Submit</button>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button type="submit" id="exportButton" class="btn btn-primary" data-toggle="modal"
+                                href="">Export</button>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
-        </div>
+        </form>
     </div>
-    {% endfor %}
-
-    <form action="{% url 'export_runpayroll' %}" method="post" onsubmit="return validateForm()">
-        {% csrf_token %}
-        <div class="modal fade bs-example-modal-sm" id="export_Modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-sm">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Export</h4>
-                        <button type="button" class="close" data-dismiss="modal">×</button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <label>Select Month and Year</label>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <input class="form-control month-picker" type="text" name="month" id="month" placeholder="Select Month and Year" style="background-color: white;" readonly>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        <button type="submit" id="exportButton" class="btn btn-primary" data-toggle="modal" href="">Export</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </form>
 
     <!-- JS -->
     <script src="/static/index/vendors/scripts/core.js"></script>
@@ -772,34 +845,34 @@
                 ],
                 rowData: [
                     {% for user in users %}
-                    {
-                        id: {{ user.id }},
-                        empid: "{{ user.empid }}",
-                        username: "{{ user.username }}",
+            {
+                id: { { user.id } },
+                empid: "{{ user.empid }}",
+                    username: "{{ user.username }}",
                         absent_dates: `{% for data in formatted_data %}{% if data.empid == user.empid %}{% for date in data.absent_dates %}{% if forloop.first %}{{ date|date:"M j" }}{% else %}{% if date|date:"d" != data.absent_dates|first|date:"d" %}, {{ date|date:"j" }}{% endif %}{% endif %}{% endfor %}{% endif %}{% endfor %}`,
-                        absent_count: `{% for data in formatted_data %}{% if data.empid == user.empid %}{{ data.absent_count }}{% endif %}{% endfor %}`,
-                        anomaly_count: `{% for data in formatted_data %}{% if data.empid == user.empid %}{{ data.anomaly_count }}{% endif %}{% endfor %}`,
-                        lop_count: `{% for lopcount in lop_count %}{% if lopcount.user_id.id == user.id %}{{ lopcount.lop_count }}{% endif %}{% endfor %}`,
-                        wfo_count: `{% for WFOcount in WFO_count %}{% if WFOcount.user_id.id == user.id %}{{ WFOcount.wfocount|linebreaksbr|safe }}{% endif %}{% endfor %}`
-                    }{% if not forloop.last %},{% endif %}
-                    {% endfor %}
+                            absent_count: `{% for data in formatted_data %}{% if data.empid == user.empid %}{{ data.absent_count }}{% endif %}{% endfor %}`,
+                                anomaly_count: `{% for data in formatted_data %}{% if data.empid == user.empid %}{{ data.anomaly_count }}{% endif %}{% endfor %}`,
+                                    lop_count: `{% for lopcount in lop_count %}{% if lopcount.user_id.id == user.id %}{{ lopcount.lop_count }}{% endif %}{% endfor %}`,
+                                        wfo_count: `{% for WFOcount in WFO_count %}{% if WFOcount.user_id.id == user.id %}{{ WFOcount.wfocount|linebreaksbr|safe }}{% endif %}{% endfor %}`
+            } {% if not forloop.last %}, {% endif %}
+            {% endfor %}
                 ],
-                pagination: true,
+            pagination: true,
                 paginationPageSize: 50,
-                domLayout: 'normal',
-                defaultColDef: {
-                    sortable: false,
+                    domLayout: 'normal',
+                        defaultColDef: {
+                sortable: false,
                     filter: true,
-                    resizable: true
-                },
-                animateRows: true,
+                        resizable: true
+            },
+            animateRows: true,
                 suppressRowClickSelection: true,
-                suppressHorizontalScroll: false,
-                suppressVerticalScroll: false
-            };
+                    suppressHorizontalScroll: false,
+                        suppressVerticalScroll: false
+        };
 
-            const gridDiv = document.querySelector('#dataGrid');
-            new agGrid.Grid(gridDiv, gridOptions);
+        const gridDiv = document.querySelector('#dataGrid');
+        new agGrid.Grid(gridDiv, gridOptions);
         });
     </script>
 
@@ -837,4 +910,5 @@
         });
     </script>
 </body>
+
 </html>

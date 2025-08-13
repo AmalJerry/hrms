@@ -29,10 +29,8 @@ input[type="submit"] {
 body {
   margin: 0;
   padding: 0;
-  font-family: "Inter", sans-serif;
-  font-weight: 400;
+  font-family: "Roboto", sans-serif;
   min-height: 100%;
-  color: #031e23;
   background: #ecf0f4;
 }
 a {
@@ -57,7 +55,7 @@ input,
 select,
 textarea {
   resize: none;
-  font-family: "Inter", sans-serif;
+  font-family: "Roboto", sans-serif;
 }
 select,
 textarea {
@@ -82,7 +80,7 @@ h6 {
   padding: 0;
   font-weight: 700;
   color: #202342;
-  font-family: "Inter", sans-serif;
+  font-family: "Roboto", sans-serif;
 }
 ol,
 p,
@@ -308,7 +306,7 @@ p {
 .h2,
 .h3 {
   color: #1b3133;
-  font-family: "Inter", sans-serif;
+  font-family: "Roboto", sans-serif;
 }
 .h2 {
   font-size: 28px;
@@ -329,7 +327,7 @@ p {
   font-size: 20px;
   line-height: 1.35;
   color: #1b3133;
-  font-family: "Inter", sans-serif;
+  font-family: "Roboto", sans-serif;
 }
 .h5 {
   font-size: 18px;
@@ -585,14 +583,14 @@ p {
   font-weight: 400;
   padding: 0.657rem 1rem;
   color: #444;
-  font-family: "Inter", sans-serif;
+  font-family: "Roboto", sans-serif;
   -webkit-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
 }
 .dropdown-item:focus,
 .dropdown-item:hover {
   background: #ecf0f4;
-  color: #1b00ff;
+  color: #1aa3ab;
 }
 .form-group {
   margin-bottom: 20px;
@@ -1329,8 +1327,7 @@ table.dataTable.dtr-inline.collapsed
 }
 .user-notification {
   float: right;
-  margin-right: 10px;
-  padding: 22px 5px 10px 0;
+  padding: 8px 5px 0px 0;
 }
 .user-notification .dropdown-toggle {
   font-size: 20px;
@@ -4273,4 +4270,132 @@ body.IE .register-page-wrap .container {
   border-radius: 7px;
   display: flex;
   gap: 5px;
+}
+
+.applyLeaveBtn {
+  background: #1aa3ab;
+  border: 1px #1aa3ab solid;
+  &:hover {
+    background: #ffbe18;
+    border: 1px #ffbe18 solid;
+  }
+}
+.badge-primary {
+  background: #1aa3ab;
+}
+.styleBtnmain{
+   background: #ffbe18!important;
+   color: #333!important;
+   color: #fff!important;
+       border: 1px #ffbe18 solid!important;
+}
+
+.spacingBottomMain {
+  margin-bottom: 20px;
+}
+.displayGridMain {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.tableaMainall {
+  border: 1px #ddd solid;
+  background: #fff;
+}
+.gridAllOneHoliday {
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 26px;
+}
+.quick-filter input {
+  padding: 10px 12px !important;
+  border-radius: 6px !important;
+}
+.mainCardAll {
+  padding: 13px !important;
+}
+
+.modal-footer {
+  display: flex;
+  gap: 10px;
+}
+
+.secondary-btn {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 6px 30px;
+  background: transparent;
+  border: 1px solid #ffbe18;
+  border-radius: 20px;
+  margin: 0;
+  box-shadow: none;
+  color: #000;
+  font-weight: 400;
+  font-size: 14px;
+}
+
+.primary-button {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 6px 30px;
+  font-size: 14px;
+  background: #ffbe18;
+  border: 1px solid #fff;
+  border-radius: 20px;
+  margin: 0;
+  box-shadow: none;
+  color: #fff;
+  font-weight: 400;
+}
+
+.custom-input {
+  font-size: 14px;
+  padding: 8px 10px;
+  border-radius: 7px;
+  font-weight: 300;
+  border: none;
+  box-shadow: none;
+  outline: none;
+  color: #666;
+  background: rgba(244, 240, 240, 0.7803921569);
+  border: 1px #ddd solid !important;
+  position: relative;
+}
+
+.formMainSelectdiv {
+  font-size: 14px !important;
+  padding: 8px 35px 8px 15px !important;
+  border-radius: 8px !important;
+  font-weight: 400 !important;
+  border: 1px #ddd solid !important;
+  box-shadow: none !important;
+  outline: none !important;
+  color: #aaa !important;
+  background: rgba(244, 240, 240, 0.7803921569);
+  background-position: right 0.7em center !important;
+  background-size: 1em !important;
+  margin-bottom: 0 !important;
+}
+
+.educationHedaer {
+  height: 100%;
+}
+
+.main-button {
+  background-color: #1aa3ab !important;
+  color:#fff !important;
+  border: none;
+  padding: 6px 15px !important;
+  margin: 0;
+  border-radius: 20px;
+  font-size: 13px;
+  transition: .4s;
+}
+
+.spaceDivBottom {
+    margin-bottom: 10px;
 }

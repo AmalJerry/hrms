@@ -135,103 +135,83 @@
 </head>
 <body>
 
-    <div class="header">
-        <div class="header-left">
-            <div class="menu-icon dw dw-menu"></div>
-            {% if is_view_payroll %}
-            <h6 class="text-primary" style="padding-left: 20px;">Impersonate Employee: {{data.username}}</h6>
-            {% endif %}
+    <div class="mainSideBarFlex">
+          <div class="left-side-bar">
+        <div class="headBlockMain">
+            <div  class="bgSecMainall">
+    <div class="profileIconDiv">
+        <div  class="profileImgWrapper">
+            <img src="/media/school-logo.png" alt="" >
+        
         </div>
-        <div class="header-right">
-            <div class="dashboard-setting user-notification">
-                <div class="dropdown">
-                    <a class="dropdown-toggle no-arrow" href="javascript:;" data-toggle="right-sidebar">
-                       
-                    </a>
-                </div>
+        <div  class="profiletxt">
+            <span  class="head-name">Edship Technologies</span>
+            <p  class="sub-head">Transport Dashboard</p>
+        </div></div><div  class="school-info">
+            <div  class="flex-container">
+                <div class="schoolInfoImgWrapper">
+                    <img  src="/media/school-image.png" alt="School Logo" class="logo">
+                </div><div  class="schooolInfoDetails">
+                    <h2>Public School</h2>
+                    <div  class="location">
+                        <i  class="bi bi-geo-alt"></i>
+                        <span >Kaloor, Kochi</span></div></div></div></div></div>
+        </div>
+
+      
+       <div class="menu-block customscroll">
+            <div class="sidebar-menu">
+               <ul id="accordion-menu">
+					
+			
+			
+					<li>
+						<a  href="{% url 'personalinfonav' %}" class="dropdown-toggle no-arrow active">
+                          
+                                	<span class="micon dw dw-user1"></span>
+                                    <span class="mtext">My Profile</span>
+                    
+						
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'leave' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-calendar-1"></span>
+                            <span class="mtext">Leave</span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'directory' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-list"></span>
+                            <span class="mtext">Directory</span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'dailylog' %}" class="dropdown-toggle no-arrow">
+							<span class="micon bi bi-check2-square"></span>
+                            <span class="mtext">Attendance</span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'calender' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-calendar"></span>
+                            <span class="mtext">Holiday Calendar</span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'runpayroll_overview' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-money-2"></span>
+                            <span class="mtext">Payroll</span>
+						</a>
+					</li>
+
+
+				</ul>
             </div>
-            <!-- <div class="user-notification">
-                <div class="dropdown">
-                    <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
-                        <i class="icon-copy dw dw-notification"></i>
-                        <span class="badge notification-active"></span>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right">
-                        <div class="notification-list mx-h-350 customscroll">
-                            <ul>
-                                <li>
-                                    <a href="#">
-                                        <img src="static/index/vendors/images/img.jpg" alt="">
-                                        <h3>John Doe</h3>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <img src="static/index/vendors/images/photo1.jpg" alt="">
-                                        <h3>Lea R. Frith</h3>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <img src="static/index/vendors/images/photo2.jpg" alt="">
-                                        <h3>Erik L. Richards</h3>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <img src="static/index/vendors/images/photo3.jpg" alt="">
-                                        <h3>John Doe</h3>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <img src="static/index/vendors/images/photo4.jpg" alt="">
-                                        <h3>Renee data. Hansen</h3>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <img src="static/index/vendors/images/img.jpg" alt="">
-                                        <h3>Vicki M. Coleman</h3>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
-            <div class="user-info-dropdown">
-                <div class="dropdown">
-                    <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-                        <span class="user-icon">
-                             
-                        {% if k.image %}
-                            <img src="{{ k.image.url }}" alt="" style="width: 100%; height:100% ">
-                        {% else %}
-                        <img src="/static/logo/userlogo.png" id="photo" style="width: 100%; height:100% ">
-                        {% endif %}   
-                        </span>
-                        <span class="user-name">{{request.user.username}}</span>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-                        <a class="dropdown-item" href="{% url 'createpersonalinfo' %}"><i class="dw dw-user1"></i> Profile</a>
-                        <a class="dropdown-item" href="{% url 'department' %}" data-toggle="right-sidebar"><i class="dw dw-settings2"></i> Settings</a>
-                        <a class="dropdown-item" href="{% url 'help_page' %}"><i class="dw dw-help"></i> Help</a>
-                        <a class="dropdown-item" href="{% url 'logout' %}"><i class="dw dw-logout"></i> Logout</a>
-                    </div>
-                </div>
-            </div>
-            <!--<div class="github-link">
-                <a href="https://github.com/dropways/deskapp" target="_blank"><img src="static/index/vendors/images/github.svg" alt=""></a>
-            </div>-->
         </div>
     </div>
+ 
+    
 
     <!-- <div class="right-sidebar"> -->
         <!-- <div class="sidebar-title"> -->
@@ -255,85 +235,55 @@
         </div> -->
     <!-- </div> -->
    
-    <div class="left-side-bar">
-        <div class="brand-logo mt-3">
-        <a href="{% url 'dashboard' %}">
-            {% if request.user.company_type %}
-				{% if request.user.company_type.inverse_logo %}
-				<img src="{{ request.user.company_type.inverse_logo.url }}" style="width: 100%; height: 100%;">
-				{% else %}
-				<img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
-				{% endif %}
-				{% else %}
-				<img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
-			{% endif %}
-        </a>
-        <div class="close-sidebar" data-toggle="left-sidebar-close">
-           <i class="ion-close-round"></i>
-        </div>
-     </div>
-      
-       <div class="menu-block customscroll">
 
-            <div class="sidebar-menu">
-                <ul id="accordion-menu">
-					
-					<br>
-					<li class="btn-primary active" style="background-color:black">
-						<a href="{% url 'dashboard' %}" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-house-1"></span><span class="mtext"><b>Dashboard</b></span>
-						</a>
-					</li>
-					
-					<li>
-						<a href="{% url 'companyprofile' %}" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-building"></span><span class="mtext"><b>Company Profile</b></span>
-						</a>
-					</li>
-					<li>
-						<a href="{% url 'personalinfonav' %}" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-user1"></span><span class="mtext"><b>My Profile</b></span>
-						</a>
-					</li>
-					<li>
-						<a href="{% url 'leave' %}" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-calendar-1"></span><span class="mtext"><b>Leave</b></span>
-						</a>
-					</li>
-					<li>
-						<a href="{% url 'directory' %}" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-list"></span><span class="mtext"><b>Directory</b></span>
-						</a>
-					</li>
-					<li>
-						<a href="{% url 'dailylog' %}" class="dropdown-toggle no-arrow">
-							<span class="micon bi bi-check2-square"></span><span class="mtext"><b>Attendance</b></span>
-						</a>
-					</li>
-					<li>
-						<a href="{% url 'calender' %}" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-calendar"></span><span class="mtext"><b>Holiday Calendar</b></span>
-						</a>
-					</li>
-					<li>
-						<a href="{% url 'runpayroll_overview' %}" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-money-2"></span><span class="mtext"><b>Payroll</b></span>
-						</a>
-					</li>
-
-
-				</ul>
-            </div>
-        </div>
-    </div>
   
 
     <div class="mobile-menu-overlay"></div>
 
     <div class="main-container">
+
+           <div class="header">
+        <div class="header-left">
+            <div class="menu-icon dw dw-menu"></div>
+            
+        </div>
+        <div class="header-right">
+            <div class="dashboard-setting user-notification">
+                <div class="dropdown">
+                    <a class="dropdown-toggle no-arrow" href="javascript:;" data-toggle="right-sidebar">
+                        
+                    </a>
+                </div>
+            </div>
+          
+            <div class="user-info-dropdown">
+                <div class="dropdown">
+                    <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                        <span class="user-icon">
+                         
+                            {% if myprofile.image %}
+                            <img src="{{ myprofile.image.url }}" alt="" >
+                            {% else %}
+                            <img src="/static/logo/userlogo.png" id="photo" >
+                            {% endif %} 
+                        </span>
+                        <span class="user-name">{{request.user.username}}</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                        <a class="dropdown-item" href="{% url 'createpersonalinfo' %}"><i class="dw dw-user1"></i> Profile</a>
+                        <a class="dropdown-item" href="{% url 'department' %}" data-toggle="right-sidebar"><i class="dw dw-settings2"></i> Settings</a>
+                        <a class="dropdown-item" href="{% url 'help_page' %}"><i class="dw dw-help"></i> Help</a>
+                        <a class="dropdown-item" href="{% url 'logout' %}"><i class="dw dw-logout"></i> Logout</a>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
         <!-- <div class="pd-ltr-20 xs-pd-20-10">
             <div class="min-height-200px"> -->
-        <div class="card-box height-100-px overflow-hidden">
+            <div class="scrollMainAllWidth">
+                  <div class="card-box educationHedaer">
             <ul class="nav nav-tabs customtab" role="tablist" >
                 {% if is_view_payroll %}
 
@@ -886,7 +836,10 @@
                 </div> -->
             </div>
         </div>
+            </div>
+      
     </div>
+       </div>
     <!-- js -->
     <script src="static/index/vendors/scripts/core.js"></script>
 	<script src="static/index/vendors/scripts/script.min.js"></script>

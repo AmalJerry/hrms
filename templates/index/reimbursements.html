@@ -132,14 +132,14 @@
         .ag-header-cell {
             white-space: nowrap;
             text-align: left !important;
-            background-color: #3f51b5;
+           
         }
        
 
         .ag-header-cell:hover {
             background-color: #ffffff;
             color: rgb(13, 13, 13);
-            border-right: 1px solid #5c6bc0;
+            
             padding: 10px 8px;
         }
 
@@ -167,25 +167,111 @@
     </style>
 </head>
 <body>
-    <div class="header">
+
+     <div class="mainSideBarFlex">
+    <div class="left-side-bar">
+        <div class="headBlockMain">
+            <div  class="bgSecMainall">
+    <div class="profileIconDiv">
+        <div  class="profileImgWrapper">
+            <img src="/media/school-logo.png" alt="" >
+        
+        </div>
+        <div  class="profiletxt">
+            <span  class="head-name">Edship Technologies</span>
+            <p  class="sub-head">Transport Dashboard</p>
+        </div></div><div  class="school-info">
+            <div  class="flex-container">
+                <div class="schoolInfoImgWrapper">
+                    <img  src="/media/school-image.png" alt="School Logo" class="logo">
+                </div><div  class="schooolInfoDetails">
+                    <h2>Public School</h2>
+                    <div  class="location">
+                        <i  class="bi bi-geo-alt"></i>
+                        <span >Kaloor, Kochi</span></div></div></div></div></div>
+        </div>
+
+      
+       <div class="menu-block customscroll">
+            <div class="sidebar-menu">
+               <ul id="accordion-menu">
+					
+			
+			
+					<li>
+						<a  href="{% url 'personalinfonav' %}" class="dropdown-toggle no-arrow active">
+                          
+                                	<span class="micon dw dw-user1"></span>
+                                    <span class="mtext">My Profile</span>
+                    
+						
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'leave' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-calendar-1"></span>
+                            <span class="mtext">Leave</span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'directory' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-list"></span>
+                            <span class="mtext">Directory</span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'dailylog' %}" class="dropdown-toggle no-arrow">
+							<span class="micon bi bi-check2-square"></span>
+                            <span class="mtext">Attendance</span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'calender' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-calendar"></span>
+                            <span class="mtext">Holiday Calendar</span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'runpayroll_overview' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-money-2"></span>
+                            <span class="mtext">Payroll</span>
+						</a>
+					</li>
+
+
+				</ul>
+            </div>
+        </div>
+    </div>
+    
+
+    
+
+    <div class="main-container">
+               <div class="header">
         <div class="header-left">
             <div class="menu-icon dw dw-menu"></div>
+            
         </div>
         <div class="header-right">
             <div class="dashboard-setting user-notification">
                 <div class="dropdown">
-                    <a class="dropdown-toggle no-arrow" href="javascript:;" data-toggle="right-sidebar"></a>
+                    <a class="dropdown-toggle no-arrow" href="javascript:;" data-toggle="right-sidebar">
+                        
+                    </a>
                 </div>
             </div>
+          
             <div class="user-info-dropdown">
                 <div class="dropdown">
                     <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
                         <span class="user-icon">
-                            {% if profile.image %}
-                            <img src="{{ profile.image.url }}" alt="" style="width: 100%; height:100% ">
+                         
+                            {% if myprofile.image %}
+                            <img src="{{ myprofile.image.url }}" alt="" >
                             {% else %}
-                            <img src="/static/logo/userlogo.png" id="photo" style="width: 100%; height:100% ">
-                            {% endif %}
+                            <img src="/static/logo/userlogo.png" id="photo" >
+                            {% endif %} 
                         </span>
                         <span class="user-name">{{request.user.username}}</span>
                     </a>
@@ -193,82 +279,15 @@
                         <a class="dropdown-item" href="{% url 'createpersonalinfo' %}"><i class="dw dw-user1"></i> Profile</a>
                         <a class="dropdown-item" href="{% url 'department' %}" data-toggle="right-sidebar"><i class="dw dw-settings2"></i> Settings</a>
                         <a class="dropdown-item" href="{% url 'help_page' %}"><i class="dw dw-help"></i> Help</a>
-                        <a class="dropdown-item" href="{% url 'logout' %}"><i class="dw dw-logout"></i> Logout</script>
+                        <a class="dropdown-item" href="{% url 'logout' %}"><i class="dw dw-logout"></i> Logout</a>
                     </div>
                 </div>
             </div>
+            
         </div>
     </div>
-
-    <div class="left-side-bar">
-        <div class="brand-logo mt-3">
-            <a href="{% url 'dashboard' %}">
-                {% if request.user.company_type %}
-                {% if request.user.company_type.inverse_logo %}
-                <img src="{{ request.user.company_type.inverse_logo.url }}" style="width: 100%; height: 100%;">
-                {% else %}
-                <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
-                {% endif %}
-                {% else %}
-                <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
-                {% endif %}
-            </a>
-            <div class="close-sidebar" data-toggle="left-sidebar-close">
-                <i class="ion-close-round"></i>
-            </div>
-        </div>
-        <div class="menu-block customscroll">
-            <div class="sidebar-menu">
-                <ul id="accordion-menu">
-                    <br>
-                    <li class="btn-primary active" style="background-color:black">
-                        <a href="{% url 'dashboard' %}" class="dropdown-toggle no-arrow">
-                            <span class="micon dw dw-house-1"></span><span class="mtext"><b>Dashboard</b></span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'companyprofile' %}" class="dropdown-toggle no-arrow">
-                            <span class="micon dw dw-building"></span><span class="mtext"><b>Company Profile</b></span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'personalinfonav' %}" class="dropdown-toggle no-arrow">
-                            <span class="micon dw dw-user1"></span><span class="mtext"><b>My Profile</b></span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'leave' %}" class="dropdown-toggle no-arrow">
-                            <span class="micon dw dw-calendar-1"></span><span class="mtext"><b>Leave</b></span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'directory' %}" class="dropdown-toggle no-arrow">
-                            <span class="micon dw dw-list"></span><span class="mtext"><b>Directory</b></span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'dailylog' %}" class="dropdown-toggle no-arrow">
-                            <span class="micon bi bi-check2-square"></span><span class="mtext"><b>Attendance</b></span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'calender' %}" class="dropdown-toggle no-arrow">
-                            <span class="micon dw dw-calendar"></span><span class="mtext"><b>Holiday Calendar</b></span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'runpayroll_overview' %}" class="dropdown-toggle no-arrow">
-                            <span class="micon dw dw-money-2"></span><span class="mtext"><b>Payroll</b></span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
-    <div class="main-container">
-        <div class="card-box height-100-p overflow-hidden">
-            <ul class="nav nav-tabs customtab" role="tablist">
+        <div class="card-box height-100-p overflow-hidden spaceDivBottom">
+            <ul class="nav nav-tabs customtab spaceDivBottom" role="tablist  ">
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'runpayroll_overview' %}">Run Payroll</a>
                 </li>
@@ -279,17 +298,17 @@
                     <a class="nav-link active" href="{% url 'payroll_dec' %}">Declaration</a>
                 </li>
             </ul>
-            <div class="min-height-100px">
+            <!-- <div class="min-height-100px">
                 <ul class="nav nav-tabs customtab" role="tablist">
                     <li class="nav-item">
                         <a class="nav-link active" href="{% url 'payroll_dec' %}">Reimbursements</a>
                     </li>
                 </ul>
-            </div>
+            </div> -->
 
             <div class="pd-20 card-box">
                 <div class="row">
-                    <div class="col-md-10">
+                    <div class="col-md-12">
                         <h6>Financial Year</h6>
                     </div>
                 </div>

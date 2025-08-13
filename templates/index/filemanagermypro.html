@@ -38,26 +38,17 @@
             margin-bottom: 20px; /* Add space below pagination */
         }
         .ag-header {
-            background-color: #3f51b5;
-            /* Change to match your theme */
-            color: white;
+            color: #000;
             font-weight: 600;
             border-bottom: 2px solid #e0e0e0;
         }
 
         .ag-header-cell {
-            background-color: #3f51b5;
-            color: white;
-            border-right: 1px solid #5c6bc0;
+            color: #000;
             padding: 10px 8px;
         }
 
-        .ag-header-cell:hover {
-            background-color: #ffffff;
-            color: rgb(13, 13, 13);
-            border-right: 1px solid #5c6bc0;
-            padding: 10px 8px;
-        }
+       
     </style>
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -81,25 +72,112 @@
     </script>
 </head>
 <body>
-    <div class="header">
+     <div class="mainSideBarFlex">
+        <div class="left-side-bar">
+        <div class="headBlockMain">
+            <div  class="bgSecMainall">
+    <div class="profileIconDiv">
+        <div  class="profileImgWrapper">
+            <img src="/media/school-logo.png" alt="" >
+        
+        </div>
+        <div  class="profiletxt">
+            <span  class="head-name">Edship Technologies</span>
+            <p  class="sub-head">Transport Dashboard</p>
+        </div></div><div  class="school-info">
+            <div  class="flex-container">
+                <div class="schoolInfoImgWrapper">
+                    <img  src="/media/school-image.png" alt="School Logo" class="logo">
+                </div><div  class="schooolInfoDetails">
+                    <h2>Public School</h2>
+                    <div  class="location">
+                        <i  class="bi bi-geo-alt"></i>
+                        <span >Kaloor, Kochi</span></div></div></div></div></div>
+        </div>
+
+      
+       <div class="menu-block customscroll">
+            <div class="sidebar-menu">
+               <ul id="accordion-menu">
+					
+			
+			
+					<li>
+						<a  href="{% url 'personalinfonav' %}" class="dropdown-toggle no-arrow active">
+                          
+                                	<span class="micon dw dw-user1"></span>
+                                    <span class="mtext">My Profile</span>
+                    
+						
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'leave' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-calendar-1"></span>
+                            <span class="mtext">Leave</span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'directory' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-list"></span>
+                            <span class="mtext">Directory</span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'dailylog' %}" class="dropdown-toggle no-arrow">
+							<span class="micon bi bi-check2-square"></span>
+                            <span class="mtext">Attendance</span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'calender' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-calendar"></span>
+                            <span class="mtext">Holiday Calendar</span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'runpayroll_overview' %}" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-money-2"></span>
+                            <span class="mtext">Payroll</span>
+						</a>
+					</li>
+
+
+				</ul>
+            </div>
+        </div>
+    </div>
+ 
+
+
+ 
+
+    <div class="main-container">
+
+               <div class="header">
         <div class="header-left">
             <div class="menu-icon dw dw-menu"></div>
+            
         </div>
         <div class="header-right">
             <div class="dashboard-setting user-notification">
                 <div class="dropdown">
-                    <a class="dropdown-toggle no-arrow" href="javascript:;" data-toggle="right-sidebar"></a>
+                    <a class="dropdown-toggle no-arrow" href="javascript:;" data-toggle="right-sidebar">
+                        
+                    </a>
                 </div>
             </div>
+          
             <div class="user-info-dropdown">
                 <div class="dropdown">
                     <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
                         <span class="user-icon">
-                            {% if k.image %}
-                                <img src="{{ k.image.url }}" alt="" style="width: 100%; height:100% ">
+                         
+                            {% if myprofile.image %}
+                            <img src="{{ myprofile.image.url }}" alt="" >
                             {% else %}
-                                <img src="/static/logo/userlogo.png" id="photo" style="width: 100%; height:100% ">
-                            {% endif %}
+                            <img src="/static/logo/userlogo.png" id="photo" >
+                            {% endif %} 
                         </span>
                         <span class="user-name">{{request.user.username}}</span>
                     </a>
@@ -111,77 +189,10 @@
                     </div>
                 </div>
             </div>
+            
         </div>
     </div>
-
-    <div class="left-side-bar">
-        <div class="brand-logo mt-3">
-            <a href="{% url 'dashboard' %}">
-                {% if request.user.company_type %}
-                    {% if request.user.company_type.inverse_logo %}
-                        <img src="{{ request.user.company_type.inverse_logo.url }}" style="width: 100%; height: 100%;">
-                    {% else %}
-                        <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
-                    {% endif %}
-                {% else %}
-                    <img src="/static/logo/deskapp-logo-white.svg" alt="" class="light-logo">
-                {% endif %}
-            </a>
-            <div class="close-sidebar" data-toggle="left-sidebar-close">
-                <i class="ion-close-round"></i>
-            </div>
-        </div>
-        <div class="menu-block customscroll">
-            <div class="sidebar-menu">
-                <ul id="accordion-menu">
-                    <br>
-                    <li class="btn-primary active" style="background-color:black">
-                        <a href="{% url 'dashboard' %}" class="dropdown-toggle no-arrow">
-                            <span class="micon dw dw-house-1"></span><span class="mtext"><b>Dashboard</b></span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'companyprofile' %}" class="dropdown-toggle no-arrow">
-                            <span class="micon dw dw-building"></span><span class="mtext"><b>Company Profile</b></span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'personalinfonav' %}" class="dropdown-toggle no-arrow">
-                            <span class="micon dw dw-user1"></span><span class="mtext"><b>My Profile</b></span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'leave' %}" class="dropdown-toggle no-arrow">
-                            <span class="micon dw dw-calendar-1"></span><span class="mtext"><b>Leave</b></span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'directory' %}" class="dropdown-toggle no-arrow">
-                            <span class="micon dw dw-list"></span><span class="mtext"><b>Directory</b></span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'dailylog' %}" class="dropdown-toggle no-arrow">
-                            <span class="micon bi bi-check2-square"></span><span class="mtext"><b>Attendance</b></span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'calender' %}" class="dropdown-toggle no-arrow">
-                            <span class="micon dw dw-calendar"></span><span class="mtext"><b>Holiday Calendar</b></span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'runpayroll_overview' %}" class="dropdown-toggle no-arrow">
-                            <span class="micon dw dw-money-2"></span><span class="mtext"><b>Payroll</b></span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
-    <div class="main-container">
-        <div class="card-box height-100-px overflow-hidden">
+        <div class="card-box educationHedaer">
             <ul class="nav nav-tabs customtab" role="tablist">
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'personalinfonav' %}">Personal</a>
@@ -217,7 +228,7 @@
                     <a class="nav-link" href="{% url 'list_generated_certificates' %}">Experience Certificates</a>
                 </li>
             </ul>
-
+<div class="scrollMainAllWidth">
             <div class="pd-20 card-box">
                 <h6 style="padding-left: 0px;">FILE MANAGER</h6>
                 <hr>
@@ -266,7 +277,9 @@
                 </div>
             </div>
         </div>
+        </div>
     </div>
+        </div>
 
     <!-- js -->
     <script src="static/index/vendors/scripts/core.js"></script>
